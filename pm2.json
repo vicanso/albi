@@ -1,0 +1,14 @@
+{
+  "name": "albi",
+  "instances": 2,
+  "merge_logs": true,
+  "max_memory_restart": "200M",
+  "script": "app.js",
+  "log_file": "/vicanso/pm2/log/albi.log",
+  "error_file": "/vicanso/pm2/log/albi-error.log",
+  "out_file": "/vicanso/pm2/log/albi-out.log",
+  "env": {
+    "NODE_ENV": "production",
+    "appVersion": "2015-04-17T09:30:46+08:00"
+  }
+}
