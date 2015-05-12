@@ -2,13 +2,11 @@
 @import './constant'
 
 headerContainerCss()
-  height $HEADER_HEIGHT
-  line-height @height
   background-color #fcfcfc
   border-bottom 1px solid #cbccce
+  padding 10px 15px
+  line-height 35px
   .functions
-    line-height 30px
-    margin-top (($HEADER_HEIGHT - @line-height) / 2)
     li
       list-style none
       display inline-block
@@ -18,9 +16,8 @@ headerContainerCss()
       a
         color #717171
         font-size 13px
-  h3
-    margin 0
-    line-height $HEADER_HEIGHT
+  .searchContainer
+    width 300px
       
       
 

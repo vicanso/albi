@@ -3,7 +3,6 @@ var _ = require('lodash');
 var debug = require('../helpers/debug');
 var config = require('../config');
 var router = require('koa-router')();
-var views = require('koa-views');
 var jade = require('koa-jade');
 var fs = require('fs');
 var path = require('path');

@@ -6,7 +6,9 @@ block bodyContainer
       ul.pull-right.functions
         li.login: a(href='javascript:;', ng-click='app.login()') 登录
         li.register: a(href='javascript:;', ng-click='app.register()') 注册
-      h3.text-center Albi
+      .searchContainer.input-group
+        .input-group-addon: i.glyphicon.glyphicon-search
+        input.form-control(type='text', placeholder='keyword')
 
   
   
