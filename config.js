@@ -8,6 +8,8 @@ exports.appUrlPrefix = env === 'development'? '' : '/rest';
 
 exports.env = env;
 
+exports.version = process.env.APP_VERSION || 'unknown';
+
 exports.sessionKey = 'vicanso';
 
 exports.uuidKey = 'jtuuid';

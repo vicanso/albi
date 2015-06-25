@@ -1,6 +1,7 @@
 'use strict';
 const config = require('./config');
 const util = require('util');
+const debug = require('./helpers/debug');
 
 initServer(10000);
 
