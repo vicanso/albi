@@ -56,7 +56,7 @@ function getRouterConfigs() {
         middleware = [middleware];
       }
       result.middleware = _.map(middleware, function(name) {
-        return middlewares[name];
+        return _.get(middlewares, name);
       });
     }
     arr.push(result);

@@ -19,6 +19,17 @@ function initServer(port) {
     yield next;
   });
 
+  app.use(mount('/ping', function *() {
+    this.body = config.version;
+  }));
+
+  // http log for dev
+  if(config.env === 'development'){
+    app.use(require('koa-logger')());
+  }
+  app.use(require('koa-log')(config.processName));
+
+  app.use(require('./middlewares/http-stats'));
 
   // 超时，单位ms
   let timeout = 30 * 1000;
@@ -27,8 +38,10 @@ function initServer(port) {
   }
   app.use(require('koa-timeout')(timeout));
 
+
   // methodOverride(由于旧的浏览器不支持delete等方法)
   app.use(require('koa-methodoverride')());
+
 
   // 限制并发请求数
   app.use(require('koa-connection-limit')({
@@ -36,16 +49,9 @@ function initServer(port) {
     high : 500
   }));
 
-  // http log for dev
-  if(config.env === 'development'){
-    app.use(require('koa-logger')());
-  }
-
-  app.use(require('koa-log')(config.processName));
 
   // fresh的处理
   app.use(require('koa-fresh')());
-
   // etag的处理
   app.use(require('koa-etag')());
 
