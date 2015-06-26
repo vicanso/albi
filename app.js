@@ -13,13 +13,20 @@ function initServer(port) {
 
   app.keys = config.keys;
 
-  // http response默认为不缓存
+  // http response默认为不缓存，并添加X-
   app.use(function *(next) {
-    this.set('Cache-Control', 'must-revalidate, max-age=0');
+    let ctx = this;
+    let processList = ctx.headers['x-process'] || '';
+    ctx.set('X-Process', processList + ', node-' + (process.env.NAME || 'unknown'));
+    ctx.set('Cache-Control', 'must-revalidate, max-age=0');
     yield next;
   });
 
+  // healthy check
   app.use(mount('/ping', function *() {
+    yield function(done) {
+      setImmediate(done);
+    };
     this.body = config.version;
   }));
 

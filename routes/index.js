@@ -6,6 +6,10 @@ const koaRouter = require('koa-router');
 
 module.exports = getRoutes();
 
+/**
+ * [getRoutes 获取路由处理列表]
+ * @return {[type]} [description]
+ */
 function getRoutes() {
   let routerConfigs = getRouterConfigs();
   let router = koaRouter();
@@ -40,6 +44,10 @@ function getRoutes() {
   return router.routes();
 }
 
+/**
+ * [getRouterConfigs 读取当前目录下的所有路由处理配置，生成处理列表]
+ * @return {[type]} [description]
+ */
 function getRouterConfigs() {
   let routesInfos = requireTree('./');
   let controllers = requireTree('../controllers');

@@ -4,5 +4,9 @@ module.exports = [
     route : '/version',
     middleware : 'no-cache',
     handler : 'system.version'
+  },
+  {
+    route : '/http-stats',
+    handler : 'system.httpStats'
   }
 ];
