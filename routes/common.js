@@ -1,12 +1,11 @@
 'use strict';
 module.exports = [
   {
-    route : '/version',
-    middleware : 'no-cache',
+    route : '/sys/version',
     handler : 'system.version'
   },
   {
-    route : '/http-stats',
-    handler : 'system.httpStats'
+    route : '/sys/stats',
+    handler : 'system.stats'
   }
 ];

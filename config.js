@@ -19,4 +19,4 @@ exports.keys = [exports.sessionKey, exports.uuidKey];
 
 exports.app = pkg.name;
 
-exports.processName = (process.env.NAME || 'unknown') +  '-pm2-' + (process.env.pm_id || '');
+exports.processName = (process.env.NAME || 'unknown') +  '-pm2-' + (process.env.pm_id || 'unknown');
