@@ -1,4 +1,5 @@
 'use strict';
+const errors = require('../errors');
 module.exports = user;
 /**
  * [user description]
