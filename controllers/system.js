@@ -8,8 +8,12 @@ const v8 = require('v8');
 const bytes = require('bytes');
 const moment = require('moment');
 const toobusy = require('toobusy-js');
+const util = require('util');
+const spawn = require('child_process').spawn;
+
 exports.version = version;
 exports.stats = stats;
+exports.restart = restart;
 
 /**
  * [version 返回代码版本与执行版本]
@@ -38,6 +42,27 @@ function *getVersion() {
     code : _.get(pm2Json, 'env.APP_VERSION'),
     exec : config.version
   };
+}
+
+function *restart() {
+  /*jshint validthis:true */
+  let ctx = this;
+  setTimeout(function () {
+    let pm2 = spawn('pm2', ['gracefulReload', config.app]);
+    pm2.on('close', function(code) {
+      if (code === 0) {
+        console.info('gracefulReload ' + config.app + ' successful');
+      } else {
+        console.error('gracefulReload ' + config.app + ' fail');
+      }
+    });
+  }, 1000);
+  ctx.body = util.format('%s will restart soon.', config.app);
+  // console.dir('restart');
+  // body...
+  //
+  // spawn('grep', ['ssh']);
+
 }
 
 /**

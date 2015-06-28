@@ -7,5 +7,11 @@ module.exports = [
   {
     route : '/sys/stats',
     handler : 'system.stats'
+  },
+  {
+    route : '/sys/restart',
+    method : 'post',
+    middleware : 'authority.admin',
+    handler : 'system.restart'
   }
 ];
