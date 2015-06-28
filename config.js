@@ -13,6 +13,8 @@ exports.version = process.env.APP_VERSION || 'unknown';
 
 exports.sessionKey = 'vicanso';
 
+exports.token = '6a3f4389a53c889b623e67f385f28ab8e84e5029';
+
 exports.uuidKey = 'jtuuid';
 
 exports.keys = [exports.sessionKey, exports.uuidKey];

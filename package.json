@@ -21,6 +21,7 @@
     "bytes": "^2.1.0",
     "debug": "^2.2.0",
     "koa": "^0.21.0",
+    "koa-bodyparser": "^2.0.0",
     "koa-connection-limit": "0.0.4",
     "koa-etag": "^2.0.0",
     "koa-fresh": "0.0.3",

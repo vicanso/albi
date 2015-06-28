@@ -50,6 +50,20 @@ function initServer(port) {
   app.use(require('koa-methodoverride')());
 
 
+  // bodyparser的处理
+  app.use(require('koa-bodyparser')());
+
+
+  // 从请求中的query中获取debug的相关参数
+  app.use(require('./middlewares/debug')({
+    DEBUG : '_debug',
+    pretty : '_pretty',
+    pattern : '_pattern',
+    MOCK : '_mock'
+  }));
+
+  
+
   // 限制并发请求数
   app.use(require('koa-connection-limit')({
     mid : 100,
