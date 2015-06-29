@@ -18,6 +18,6 @@ function *admin(next) {
   if (key !== config.token) {
     ctx.throw(403);
   } else {
-    yield next;
+    yield* next;
   }
 }

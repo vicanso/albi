@@ -57,12 +57,10 @@ function *restart() {
       }
     });
   }, 1000);
+  yield function(done) {
+    setImmediate(done);
+  };
   ctx.body = util.format('%s will restart soon.', config.app);
-  // console.dir('restart');
-  // body...
-  //
-  // spawn('grep', ['ssh']);
-
 }
 
 /**

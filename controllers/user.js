@@ -11,6 +11,7 @@ function *user(){
   yield function(done) {
     setImmediate(done);
   };
+  
   ctx.body = {
     name : 'vicanso'
   };

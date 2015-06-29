@@ -37,5 +37,5 @@ function *httpStats(next) {
     res.removeListener('finish', onfinish);
     res.removeListener('close', onclose);
   }
-  yield next;
+  yield* next;
 }

@@ -4,6 +4,7 @@ const util = require('util');
 const debug = require('./helpers/debug');
 
 initServer(10000);
+require('./helpers/monitor').run(60 * 1000);
 
 function initServer(port) {
   const koa = require('koa');
@@ -19,7 +20,7 @@ function initServer(port) {
     let processList = ctx.headers['x-process'] || '';
     ctx.set('X-Process', processList + ', node-' + (process.env.NAME || 'unknown'));
     ctx.set('Cache-Control', 'must-revalidate, max-age=0');
-    yield next;
+    yield* next;
   });
 
   // healthy check
@@ -62,7 +63,6 @@ function initServer(port) {
     MOCK : '_mock'
   }));
 
-  
 
   // 限制并发请求数
   app.use(require('koa-connection-limit')({
@@ -76,16 +76,19 @@ function initServer(port) {
   // etag的处理
   app.use(require('koa-etag')());
 
+
   if (config.appUrlPrefix) {
     app.use(mount(config.appUrlPrefix), require('./routes'));
   } else {
     app.use(require('./routes'));
   }
 
+
   app.on('error', function appOnError(err, ctx) {
     let str = util.format('code:%s, error:%s, stack:%s', err.code || '0', err.message, err.stack);
     console.error(str);
   });
+
 
   app.listen(port);
   console.info('server listen on:%s', port);

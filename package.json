@@ -34,7 +34,9 @@
     "lodash": "^3.9.3",
     "moment": "^2.10.3",
     "require-tree": "^1.0.1",
-    "toobusy-js": "^0.4.2"
+    "superagent": "^1.2.0",
+    "toobusy-js": "^0.4.2",
+    "url-join": "0.0.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",

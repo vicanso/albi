@@ -11,15 +11,20 @@ module.exports = function (params) {
     let ctx = this;
     let state = ctx.state;
     let query = ctx.query;
+    let covert = {
+      'true' : true,
+      'false' : false
+    };
     _.forEach(params, function (v, k) {
       if (_.has(query, v)) {
         if (query[v]) {
-          state[k] = query[v];
+          v = query[v];
+          state[k] = covert[v] || v;
         } else {
           state[k] = true;
         }
       }
     });
-    yield next;
-  }
-}
+    yield* next;
+  };
+};

@@ -13,8 +13,8 @@ function *noCache(next) {
   let ctx = this;
   let headers = ctx.headers;
   if (headers['cache-control'] === 'no-cache') {
-    yield next;
+    yield* next;
   } else {
-    yield noCacheQuery.call(this, next);
+    yield* noCacheQuery.call(this, next);
   }
 }
