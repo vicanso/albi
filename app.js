@@ -2,9 +2,11 @@
 const config = require('./config');
 const util = require('util');
 const debug = require('./helpers/debug');
+const path = require('path');
 
 initServer(10000);
 require('./helpers/monitor').run(60 * 1000);
+initMongodb('mongodb://localhost:27017/test');
 
 function initServer(port) {
   const koa = require('koa');
@@ -92,4 +94,14 @@ function initServer(port) {
 
   app.listen(port);
   console.info('server listen on:%s', port);
+}
+
+/**
+ * [initMongodb description]
+ * @param  {[type]} uri [description]
+ * @return {[type]}     [description]
+ */
+function initMongodb(uri) {
+  let modelPath = path.join(__dirname, 'models');
+  require('./helpers/mongodb').init(uri, modelPath);
 }

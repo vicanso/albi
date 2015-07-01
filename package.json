@@ -33,6 +33,7 @@
     "koa-timeout": "^0.1.1",
     "lodash": "^3.9.3",
     "moment": "^2.10.3",
+    "mongoose": "^4.0.6",
     "require-tree": "^1.0.1",
     "superagent": "^1.2.0",
     "toobusy-js": "^0.4.2",

@@ -1,17 +1,23 @@
 'use strict';
 const errors = require('../errors');
-module.exports = user;
+const user = require('../services/user');
+module.exports = get;
 /**
  * [user description]
  * @return {[type]} [description]
  */
-function *user(){
+function *get(){
   /*jshint validthis:true */
   let ctx = this;
   yield function(done) {
     setImmediate(done);
   };
-  
+  yield user.create({
+    account : 'vicanso',
+    password : '123456',
+    name : 'tree.xie'
+  });
+
   ctx.body = {
     name : 'vicanso'
   };
