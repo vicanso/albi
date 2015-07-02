@@ -1,13 +1,15 @@
 'use strict';
 const request = require('superagent');
 const urlJoin = require('url-join');
+const config = require('../config');
 const _ = require('lodash');
-exports.url = 'http://localhost:4001/v2';
+exports.url = config.etcdUrl;
 exports.timeout = 3000;
 exports.add = add;
 exports.get = get;
 exports.del = del;
 exports.update = update;
+exports.list = list;
 /**
  * [getUrl description]
  * @param  {[type]} tmp [description]
@@ -45,22 +47,17 @@ function *add(key, data, ttl) {
 /**
  * [get description]
  * @param  {[type]} key [description]
+ * @param  {[type]} dir [description]
  * @return {[type]}     [description]
  */
-function *get(key) {
+function *get(key, dir) {
   let res = yield function (done) {
     request.get(getUrl(key))
       .timeout(exports.timeout)
       .end(done);
   };
-  let data = _.get(res, 'body.node.nodes');
-  _.forEach(data, function(tmp) {
-    try {
-      tmp.value = JSON.parse(tmp.value);
-    } catch (err) {
-      console.error(err);
-    }
-  });
+  let data = _.get(res, 'body.node');
+  data.value = JSON.parse(data.value);
   return data;
 }
 
@@ -101,4 +98,27 @@ function *update(key, data, ttl) {
     req.end(done);
   };
   return _.get(res, 'body');
+}
+
+
+/**
+ * [list description]
+ * @param  {[type]} key [description]
+ * @return {[type]}     [description]
+ */
+function *list(key) {
+  let res = yield function (done) {
+    request.get(getUrl(key))
+      .timeout(exports.timeout)
+      .end(done);
+  };
+  let data = _.get(res, 'body.node.nodes');
+  _.forEach(data, function(tmp) {
+    try {
+      tmp.value = JSON.parse(tmp.value);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  return data;
 }
