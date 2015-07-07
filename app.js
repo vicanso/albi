@@ -3,18 +3,40 @@ const config = require('./config');
 const util = require('util');
 const debug = require('./helpers/debug');
 const path = require('path');
+const co = require('co');
+const etcd = require('./services/etcd');
+const globals = require('./globals');
 
-initServer(10000);
-require('./helpers/monitor').run(60 * 1000);
-initMongodb('mongodb://localhost:27017/test');
+// initServer(10000);
+// require('./helpers/monitor').run(60 * 1000);
+// initMongodb('mongodb://localhost:27017/test');
+co(function *() {
+  if (config.env === 'development') {
+    let result = require('./setting');
+    globals.set('config', result);
+  } else {
+    let result = yield etcd.get(config.etcdNode);
+    if (result && result.value) {
+      globals.set('config', result.value);
+    } else {
+      console.error('%s is empty!', config.etcdNode);
+    }
+  }
 
-function initServer(port) {
+  initServer();
+}).catch(function (err) {
+  console.error(err);
+});
+
+function initServer() {
   const koa = require('koa');
   const mount = require('koa-mount');
-
+  let port = globals.get('config.port');
   let app = koa();
 
-  app.keys = config.keys;
+  app.keys = [globals.get('config.sessionKey'), globals.get('config.uuidKey')];
+
+  app.use(require('./middlewares/error'));
 
   // http response默认为不缓存，并添加X-
   app.use(function *(next) {
@@ -72,12 +94,12 @@ function initServer(port) {
     high : 500
   }));
 
-
   // fresh的处理
   app.use(require('koa-fresh')());
   // etag的处理
   app.use(require('koa-etag')());
 
+  app.use(require('./middlewares/picker')('_fields'));
 
   if (config.appUrlPrefix) {
     app.use(mount(config.appUrlPrefix), require('./routes'));

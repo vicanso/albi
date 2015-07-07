@@ -4,5 +4,9 @@ module.exports = {
   '1' : {
     cn : '服务器繁忙，请稍候再试。',
     en : 'The server is busy, please try again later.'
+  },
+  '10' : {
+    cn : '数据库未初始化',
+    en : 'the db is not initialized!'
   }
 };

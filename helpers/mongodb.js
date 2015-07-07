@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const requireTree = require('require-tree');
 const debug = require('./debug');
+const errors = require('../errors');
 let client = null;
 
 exports.init = _.once(init);
@@ -165,7 +166,7 @@ function stats(name, op, type){
  */
 function model(name) {
   if(!client){
-    throw new Error('the db is not init!');
+    throw errors.get(10);
   }
   return client.model(name);
 }

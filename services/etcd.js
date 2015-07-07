@@ -16,7 +16,7 @@ exports.list = list;
  * @return {[type]}     [description]
  */
 function getUrl(tmpUrl) {
-  return urlJoin(exports.url, 'keys', tmpUrl);
+  return urlJoin(exports.url, 'v2/keys', tmpUrl);
 }
 
 
@@ -47,10 +47,9 @@ function *add(key, data, ttl) {
 /**
  * [get description]
  * @param  {[type]} key [description]
- * @param  {[type]} dir [description]
  * @return {[type]}     [description]
  */
-function *get(key, dir) {
+function *get(key) {
   let res = yield function (done) {
     request.get(getUrl(key))
       .timeout(exports.timeout)
@@ -69,6 +68,7 @@ function *get(key, dir) {
  */
 function *del(key) {
   let res = yield function(done) {
+    console.dir(getUrl(key));
     request.del(getUrl(key))
       .timeout(exports.timeout)
       .end(done);

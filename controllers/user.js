@@ -24,6 +24,6 @@ function *get(){
       anonymous : true
     };
   }
-
+  ctx.header('Cache-Control', 'public, max-age=60');
   ctx.body = result;
 }
