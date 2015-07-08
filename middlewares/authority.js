@@ -15,7 +15,8 @@ function *admin(next) {
   let data = ctx.request.body;
   let shasum = crypto.createHash('sha1');
   let key = shasum.update(data['jt-key']).digest('hex');
-  if (key !== globals.get('config.token')) {
+  let token = globals.get('config.token') || Date.now();
+  if (key !== token) {
     ctx.throw(403);
   } else {
     yield* next;

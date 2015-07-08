@@ -1,41 +1,43 @@
 'use strict';
-const globals = require('../globals');
-let requestTotal = 0;
-let handlingReqTotal = 0;
-let responseTimeList = [];
+const sdc = require('../helpers/sdc');
+const _ = require('lodash');
 module.exports = httpStats;
 
 /**
- * [httpStats 统计http请求数，当前处理数，最近20次请求处理时间]
+ * [httpStats 统计http请求数，当前处理数，请求处理时间]
  * @param  {Function} next [description]
  * @return {[type]}        [description]
  */
-function *httpStats(next) {
-  /*jshint validthis:true */
-  let ctx = this;
-  let start = Date.now();
-  handlingReqTotal++;
-  requestTotal++;
-  let res = ctx.res;
-  let onfinish = done.bind(null, 'finish');
-  let onclose = done.bind(null, 'close');
-  res.once('finish', onfinish);
-  res.once('close', onclose);
+function httpStats(options) {
+  const timeArr = _.get(options, 'time');
+  const sizeArr = _.get(options, 'size');
+  return function *httpStats(next) {
+    /*jshint validthis:true */
+    let ctx = this;
+    let start = Date.now();
+    let res = ctx.res;
+    let onfinish = done.bind(null, 'finish');
+    let onclose = done.bind(null, 'close');
+    res.once('finish', onfinish);
+    res.once('close', onclose);
+    sdc.increment('http.processing');
+    sdc.increment('http.processTotal');
+    function done(event){
+      let use = Date.now() - start;
+      sdc.decrement('http.processing');
+      sdc.increment('http.status.' + ctx.status);
+      // TODO 是否如果是出错的请求则不记录？
+      sdc.timing('http.use', use);
+      if (timeArr) {
+        sdc.increment('http.timeLevel.' + _.sortedIndex(timeArr, use));
+      }
+      if (sizeArr) {
+        sdc.increment('http.sizeLevel.' + _.sortedIndex(sizeArr, ctx.length));
+      }
 
-  globals.set('http-stats', {
-    handlingReqTotal : handlingReqTotal,
-    requestTotal : requestTotal,
-    responseTimeList : responseTimeList
-  });
-  function done(event){
-    handlingReqTotal--;
-    let use = Date.now() - start;
-    responseTimeList.push(use);
-    if (responseTimeList.length > 20) {
-      responseTimeList.shift();
+      res.removeListener('finish', onfinish);
+      res.removeListener('close', onclose);
     }
-    res.removeListener('finish', onfinish);
-    res.removeListener('close', onclose);
-  }
-  yield* next;
+    yield* next;
+  };
 }

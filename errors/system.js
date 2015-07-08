@@ -8,5 +8,9 @@ module.exports = {
   '10' : {
     cn : '数据库未初始化',
     en : 'the db is not initialized!'
+  },
+  '11' : {
+    cn : '参数<%= params %>不能为空',
+    en : '<%= params %> can not be null'
   }
 };

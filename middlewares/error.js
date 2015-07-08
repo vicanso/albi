@@ -10,6 +10,8 @@ function *error(next) {
   try {
     yield next;
   } catch (err) {
+    /*jshint validthis:true */
+    let ctx = this;
     this.status = err.status || 500;
     this.body = {
       code : err.code || 0,

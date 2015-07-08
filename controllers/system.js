@@ -44,6 +44,10 @@ function *getVersion() {
   };
 }
 
+/**
+ * [restart 重启pm2]
+ * @return {[type]} [description]
+ */
 function *restart() {
   /*jshint validthis:true */
   let ctx = this;
@@ -71,15 +75,9 @@ function *stats() {
   /*jshint validthis:true */
   let ctx = this;
   let version = yield getVersion();
-  let httpStats = globals.get('http-stats');
   ctx.set({
     'Cache-Control' : 'public, max-age=5'
   });
-  let average = 0;
-  if (httpStats.responseTimeList.length) {
-    average = Math.ceil(_.sum(httpStats.responseTimeList) / httpStats.responseTimeList.length);
-  }
-  httpStats.average = average;
 
   let heap = v8.getHeapStatistics();
   _.forEach(heap, function(v, k) {
@@ -111,7 +109,6 @@ function *stats() {
 
   let uptime = Math.ceil(process.uptime());
   ctx.body = {
-    httpStats : httpStats,
     version : version,
     heap : heap,
     uptime : formatTime(uptime),

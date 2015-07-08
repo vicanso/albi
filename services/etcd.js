@@ -21,7 +21,19 @@ function getUrl(tmpUrl) {
 
 
 /**
- * [add description]
+ * [handle description]
+ * @param  {[type]} req [description]
+ * @return {[type]}     [description]
+ */
+function *handle(req) {
+  let res = yield function(done) {
+    req.timeout(exports.timeout).end(done);
+  };
+  return res;
+}
+
+/**
+ * [add 添加node节点数据]
  * @param {[type]} key  [description]
  * @param {[type]} data [description]
  * @param {[type]} ttl  [description]
@@ -30,55 +42,48 @@ function *add(key, data, ttl) {
   if (_.isObject(data)) {
     data = JSON.stringify(data);
   }
-  let res = yield function(done) {
-    let req = request.post(getUrl(key))
-      .timeout(exports.timeout)
-      .send('value=' + data);
-    if (!_.isUndefined(ttl)) {
-      req.send('ttl=' + ttl);
-    }
-    req.end(done);
-
-  };
+  let req = request.post(getUrl(key))
+    .send('value=' + data);
+  if (!_.isUndefined(ttl)) {
+    req.send('ttl=' + ttl);
+  }
+  let res = yield handle(req);
   return _.get(res, 'body');
 }
 
 
 /**
- * [get description]
+ * [get 获取node节点数据]
  * @param  {[type]} key [description]
  * @return {[type]}     [description]
  */
 function *get(key) {
-  let res = yield function (done) {
-    request.get(getUrl(key))
-      .timeout(exports.timeout)
-      .end(done);
-  };
+  let req = request.get(getUrl(key));
+  let res = yield handle(req);
   let data = _.get(res, 'body.node');
-  data.value = JSON.parse(data.value);
+  try {
+    data.value = JSON.parse(data.value);
+  } catch (err) {
+  }
+
   return data;
 }
 
 
 /**
- * [del description]
+ * [del 删除数据]
  * @param  {[type]} key [description]
  * @return {[type]}     [description]
  */
 function *del(key) {
-  let res = yield function(done) {
-    console.dir(getUrl(key));
-    request.del(getUrl(key))
-      .timeout(exports.timeout)
-      .end(done);
-  };
+  let req = request.del(getUrl(key));
+  let res = yield handle(req);
   return _.get(res, 'body');
 }
 
 
 /**
- * [update description]
+ * [update 更新数据]
  * @param  {[type]} key  [description]
  * @param  {[type]} data [description]
  * @param  {[type]} ttl  [description]
@@ -88,36 +93,30 @@ function *update(key, data, ttl) {
   if (_.isObject(data)) {
     data = JSON.stringify(data);
   }
-  let res = yield function(done) {
-    let req = request.put(getUrl(key))
-      .timeout(exports.timeout)
-      .send('value=' + data);
-    if (!_.isUndefined(ttl)) {
-      req.send('ttl=' + ttl);
-    }
-    req.end(done);
-  };
+
+  let req = request.put(getUrl(key))
+    .send('value=' + data);
+  if (!_.isUndefined(ttl)) {
+    req.send('ttl=' + ttl);
+  }
+  let res = yield handle(req);
   return _.get(res, 'body');
 }
 
 
 /**
- * [list description]
+ * [list 列出dir目录下面所有节点数据]
  * @param  {[type]} key [description]
  * @return {[type]}     [description]
  */
 function *list(key) {
-  let res = yield function (done) {
-    request.get(getUrl(key))
-      .timeout(exports.timeout)
-      .end(done);
-  };
+  let req = request.get(getUrl(key));
+  let res = yield handle(req);
   let data = _.get(res, 'body.node.nodes');
   _.forEach(data, function(tmp) {
     try {
       tmp.value = JSON.parse(tmp.value);
     } catch (err) {
-      console.error(err);
     }
   });
   return data;

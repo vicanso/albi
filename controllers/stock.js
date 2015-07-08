@@ -19,6 +19,6 @@ function *get() {
       low : tmpArr[3],
       close : tmpArr[4],
       volume : tmpArr[5]
-    }
+    };
   });
 }

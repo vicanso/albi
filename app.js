@@ -1,40 +1,69 @@
 'use strict';
 const config = require('./config');
 const util = require('util');
-const debug = require('./helpers/debug');
 const path = require('path');
 const co = require('co');
-const etcd = require('./services/etcd');
+const _ = require('lodash');
 const globals = require('./globals');
+const debug = require('./helpers/debug');
 
 // initServer(10000);
-// require('./helpers/monitor').run(60 * 1000);
+
 // initMongodb('mongodb://localhost:27017/test');
 co(function *() {
-  if (config.env === 'development') {
-    let result = require('./setting');
-    globals.set('config', result);
-  } else {
-    let result = yield etcd.get(config.etcdNode);
-    if (result && result.value) {
-      globals.set('config', result.value);
-    } else {
-      console.error('%s is empty!', config.etcdNode);
-    }
-  }
-
-  initServer();
+  initLogger();
+  let setting = yield getSetting();
+  _.forEach(setting, function (v, k) {
+    globals.set(k, v);
+  });
+  initApp();
 }).catch(function (err) {
   console.error(err);
 });
 
+/**
+ * [initApp description]
+ * @param  {[type]} argument [description]
+ * @return {[type]}          [description]
+ */
+function initApp() {
+  initServer();
+  initMongodb();
+  let statsdConfig = globals.get('statsd');
+  if (statsdConfig) {
+    statsdConfig.prefix = statsdConfig.prefix || config.app;
+    require('./helpers/sdc').init(statsdConfig);
+  }
+
+  let redisConfig = globals.get('redis');
+  if (redisConfig) {
+    require('./middlewares/session').init(redisConfig, globals.get('config.session'));
+  }
+  require('./helpers/monitor').run(60 * 1000);
+}
+
+
+/**
+ * [initLogger description]
+ * @return {[type]} [description]
+ */
+function initLogger() {
+  require('./helpers/logger');
+}
+
+/**
+ * [initServer description]
+ * @return {[type]} [description]
+ */
 function initServer() {
   const koa = require('koa');
   const mount = require('koa-mount');
   let port = globals.get('config.port');
   let app = koa();
 
-  app.keys = [globals.get('config.sessionKey'), globals.get('config.uuidKey')];
+  app.keys = ['secret_secret', 'i like io.js'];
+
+  app.proxy = true;
 
   app.use(require('./middlewares/error'));
 
@@ -61,14 +90,18 @@ function initServer() {
   }
   app.use(require('koa-log')(config.processName));
 
-  app.use(require('./middlewares/http-stats'));
+  app.use(require('./middlewares/http-stats')({
+    time : [300, 500, 1000, 3000],
+    size : [1024, 10240, 51200, 102400]
+  }));
 
   // 超时，单位ms
   let timeout = 30 * 1000;
   if (config.env === 'development') {
     timeout = 5 * 1000;
   }
-  app.use(require('koa-timeout')(timeout));
+  // TODO:如果tiemout了，但是还有调用未完成，koa不会把数据返回给浏览器，这部分需要特别处理
+  // app.use(require('koa-timeout')(timeout));
 
 
   // methodOverride(由于旧的浏览器不支持delete等方法)
@@ -101,8 +134,9 @@ function initServer() {
 
   app.use(require('./middlewares/picker')('_fields'));
 
-  if (config.appUrlPrefix) {
-    app.use(mount(config.appUrlPrefix), require('./routes'));
+  let appUrlPrefix = globals.get('config.appUrlPrefix');
+  if (appUrlPrefix) {
+    app.use(mount(appUrlPrefix), require('./routes'));
   } else {
     app.use(require('./routes'));
   }
@@ -120,10 +154,60 @@ function initServer() {
 
 /**
  * [initMongodb description]
- * @param  {[type]} uri [description]
  * @return {[type]}     [description]
  */
-function initMongodb(uri) {
-  let modelPath = path.join(__dirname, 'models');
-  require('./helpers/mongodb').init(uri, modelPath);
+function initMongodb() {
+  let uri = globals.get('mongodb');
+  if (uri) {
+    let modelPath = path.join(__dirname, 'models');
+    require('./helpers/mongodb').init(uri, modelPath);
+  }
+
+}
+
+
+function *getSetting() {
+  const etcd = require('./services/etcd');
+  const parallel = require('co-parallel');
+  let configs = {
+    // key : etcd中对应的key
+    config : config.app,
+    statsd : 'statsd',
+    mongodb : 'mongodb',
+    redis : 'redis'
+  };
+
+  let result = {
+    statsd : {
+      host : '127.0.0.1',
+      port : 8124
+    },
+    mongodb : 'mongodb://192.168.2.1:27017/test',
+    redis : {
+      host : '192.168.2.1',
+      port : 6379
+    },
+    config : {
+      token : '6a3f4389a53c889b623e67f385f28ab8e84e5029',
+      port : 10000,
+      session : {
+        // ttl : 3600 * 1000,
+        key : 'vicanso'
+      }
+    }
+  };
+
+  if (config.env !== 'development') {
+    let reqs = _.map(configs, etcd.get);
+    let keys = _.keys(configs);
+    let res = yield parallel(reqs);
+    result = {};
+    _.forEach(res, function (item, index) {
+      result[keys[index]] = item.value;
+    });
+  }
+
+  debug('app setting:%j', result);
+
+  return result;
 }

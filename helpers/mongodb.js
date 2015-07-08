@@ -5,13 +5,14 @@ const Schema = mongoose.Schema;
 const requireTree = require('require-tree');
 const debug = require('./debug');
 const errors = require('../errors');
+const sdc = require('./sdc');
 let client = null;
 
 exports.init = _.once(init);
 exports.model = model;
 
 /**
- * [init description]
+ * [init 初始化数据库]
  * @param  {[type]} uri       [description]
  * @param  {[type]} options   [description]
  * @param  {[type]} modelPath [description]
@@ -73,7 +74,7 @@ function initModels(modelPath) {
  * @param {[type]} name   [description]
  */
 function addStats(schema, name) {
-  var opList = [
+  let opList = [
     'remove',
     'find',
     'findById',
@@ -93,6 +94,7 @@ function addStats(schema, name) {
     initStatsDict(name, op);
     schema.pre(op, function(next){
       debug('mongoose collection:%s pre %s', name, op);
+      sdc.increment('mongodb.processing.' + name + '.' + op);
       this._start = Date.now();
       stats(name, op, 'pre');
       next();
@@ -100,6 +102,9 @@ function addStats(schema, name) {
     schema.post(op, function(){
       let use = Date.now() - this._start;
       delete this._start;
+      sdc.decrement('mongodb.processing.' + name + '.' + op);
+      sdc.increment('mongodb.' + name + '.' + op);
+      sdc.timing('mongodb.use.' + name + '.' + op, use);
       console.info('mongoose collection:%s %s use:%d', name, op, use);
       stats(name, op, 'post');
     });

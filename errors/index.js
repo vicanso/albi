@@ -31,6 +31,7 @@ function getError(code, language, data) {
   }
   let err = new Error(msg);
   err.code = code;
+  err.expose = true;
   return err;
 }
 

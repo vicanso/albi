@@ -3,6 +3,7 @@ const mongodb = require('../helpers/mongodb');
 const moment = require('moment');
 const errors = require('../errors');
 const debug = require('../helpers/debug');
+const _ = require('lodash');
 exports.create = create;
 exports.get = get;
 /**
@@ -11,9 +12,13 @@ exports.get = get;
  * @return {[type]}      [description]
  */
 function *create(data) {
+  let keys = ['account', 'password', 'name'];
   if (!data || !data.account || !data.password || !data.name) {
-    throw new Error('account, password and name can not be null');
+    throw errors.get(11, {
+      params : keys
+    });
   }
+  data = _.pick(data, keys);
   debug('create user:%j', data);
   data.createdAt = moment().format();
   data.lastLoginedAt = data.createdAt;
@@ -41,6 +46,13 @@ function *create(data) {
  * @return {[type]}            [description]
  */
 function *get(conditions) {
+  let keys = ['account', 'password'];
+  if (!conditions || !conditions.account || !conditions.password) {
+    throw errors.get(11, {
+      params : keys
+    });
+  }
+  conditions = _.get(conditions, keys);
   debug('get user by conditions:%j', conditions);
   let User = mongodb.model('User');
   let doc = yield User.findOne(conditions);
