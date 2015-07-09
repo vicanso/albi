@@ -3,6 +3,7 @@ const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
 const debug = require('../helpers/debug');
 const _ = require('lodash');
+const zipkin = require('../helpers/zipkin');
 let sessionParser = null;
 exports.init = init;
 exports.get = get;
@@ -36,6 +37,13 @@ function *get(next) {
   if (!sessionParser) {
     yield* next;
   } else {
-    yield* sessionParser.call(ctx, next);
+    let options = ctx.zipkinTrace;
+    let done = zipkin.childTrace('session', options).done;
+    let fn = function *() {
+      done();
+      yield* next;
+    };
+    yield* sessionParser.call(ctx, fn());
+
   }
 }

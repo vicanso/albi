@@ -1,5 +1,6 @@
 'use strict';
 const sdc = require('../helpers/sdc');
+const zipkin = require('../helpers/zipkin');
 const _ = require('lodash');
 module.exports = httpStats;
 
@@ -11,6 +12,7 @@ module.exports = httpStats;
 function httpStats(options) {
   const timeArr = _.get(options, 'time');
   const sizeArr = _.get(options, 'size');
+  const cookies = _.get(options, 'cookie');
   return function *httpStats(next) {
     /*jshint validthis:true */
     let ctx = this;
@@ -22,6 +24,10 @@ function httpStats(options) {
     res.once('close', onclose);
     sdc.increment('http.processing');
     sdc.increment('http.processTotal');
+    let result = zipkin.trace(ctx.method);
+    let traceDone = result.done;
+    delete result.done;
+    ctx.zipkinTrace = result;
     function done(event){
       let use = Date.now() - start;
       sdc.decrement('http.processing');
@@ -34,9 +40,19 @@ function httpStats(options) {
       if (sizeArr) {
         sdc.increment('http.sizeLevel.' + _.sortedIndex(sizeArr, ctx.length));
       }
-
       res.removeListener('finish', onfinish);
       res.removeListener('close', onclose);
+      let traceData = {
+        status : ctx.status,
+        uri : ctx.originalUrl
+      };
+      _.forEach(cookies, function(name) {
+        let v = ctx.cookies.get(name);
+        if (v) {
+          traceData[name] = v;
+        }
+      });
+      traceDone(traceData);
     }
     yield* next;
   };

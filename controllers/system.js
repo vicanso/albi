@@ -34,9 +34,15 @@ function *version() {
  * @return {[type]} [description]
  */
 function *getVersion() {
-  let pm2Json = yield function(done) {
-    fs.readFile(path.join(__dirname, '../pm2.json'), done);
-  };
+  let pm2Json = yield new Promise(function(resolve, reject) {
+    fs.readFile(path.join(__dirname, '../pm2.json'), function (err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
   pm2Json = JSON.parse(pm2Json);
   return {
     code : _.get(pm2Json, 'env.APP_VERSION'),
@@ -61,9 +67,7 @@ function *restart() {
       }
     });
   }, 1000);
-  yield function(done) {
-    setImmediate(done);
-  };
+  yield Promise.resolve();
   ctx.body = util.format('%s will restart soon.', config.app);
 }
 

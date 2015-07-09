@@ -26,9 +26,15 @@ function getUrl(tmpUrl) {
  * @return {[type]}     [description]
  */
 function *handle(req) {
-  let res = yield function(done) {
-    req.timeout(exports.timeout).end(done);
-  };
+  let res = new Promise(function(resolve, reject) {
+    req.timeout(exports.timeout).end(function (err, res) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
   return res;
 }
 

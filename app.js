@@ -40,6 +40,11 @@ function initApp() {
     require('./middlewares/session').init(redisConfig, globals.get('config.session'));
   }
   require('./helpers/monitor').run(60 * 1000);
+
+  let zipkinConfig = globals.get('zipkin');
+  if (zipkinConfig) {
+    require('./helpers/zipkin').init(zipkinConfig);
+  }
 }
 
 
@@ -78,9 +83,7 @@ function initServer() {
 
   // healthy check
   app.use(mount('/ping', function *() {
-    yield function(done) {
-      setImmediate(done);
-    };
+    yield Promise.resolve();
     this.body = config.version;
   }));
 
@@ -92,7 +95,8 @@ function initServer() {
 
   app.use(require('./middlewares/http-stats')({
     time : [300, 500, 1000, 3000],
-    size : [1024, 10240, 51200, 102400]
+    size : [1024, 10240, 51200, 102400],
+    cookie : [config.trackKey]
   }));
 
   // 超时，单位ms
@@ -182,6 +186,15 @@ function *getSetting() {
       host : '127.0.0.1',
       port : 8124
     },
+    zipkin : {
+      host : '10.2.124.163',
+      port : 9410,
+      endPoint : {
+        host : '127.0.0.1',
+        port : 3000,
+        service : 'albi-zipkin'
+      }
+    },
     mongodb : 'mongodb://192.168.2.1:27017/test',
     redis : {
       host : '192.168.2.1',
@@ -191,8 +204,11 @@ function *getSetting() {
       token : '6a3f4389a53c889b623e67f385f28ab8e84e5029',
       port : 10000,
       session : {
-        // ttl : 3600 * 1000,
-        key : 'vicanso'
+        ttl : 3600 * 1000,
+        key : 'vicanso',
+        cookie : {
+          maxAge : null
+        }
       }
     }
   };

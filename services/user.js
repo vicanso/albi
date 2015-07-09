@@ -4,6 +4,7 @@ const moment = require('moment');
 const errors = require('../errors');
 const debug = require('../helpers/debug');
 const _ = require('lodash');
+const crypto = require('crypto');
 exports.create = create;
 exports.get = get;
 /**
@@ -24,7 +25,6 @@ function *create(data) {
   data.lastLoginedAt = data.createdAt;
   let User = mongodb.model('User');
   let account = data.account;
-  let exists = yield User.findOne({account : account});
   let result;
   try {
     result = yield new User(data).save();
@@ -42,23 +42,28 @@ function *create(data) {
 
 /**
  * [get description]
- * @param  {[type]} conditions [description]
+ * @param  {[type]} account    [description]
+ * @param  {[type]} encryptPwd [description]
+ * @param  {[type]} hashCode   [description]
  * @return {[type]}            [description]
  */
-function *get(conditions) {
-  let keys = ['account', 'password'];
-  if (!conditions || !conditions.account || !conditions.password) {
+function *get(account, encryptPwd, hashCode) {
+  if (!account || !encryptPwd || !hashCode) {
     throw errors.get(11, {
-      params : keys
+      params : ['account', 'password', 'hashCode']
     });
   }
-  conditions = _.get(conditions, keys);
-  debug('get user by conditions:%j', conditions);
+  debug('get user:%s password:%s', account, encryptPwd);
   let User = mongodb.model('User');
-  let doc = yield User.findOne(conditions);
-  if (doc) {
-    doc = doc.toObject();
-    debug('get user:%j', doc);
+  let doc = yield User.findOne({account : account});
+  if (!doc) {
+    throw errors.get(204);
+  }
+  doc = doc.toObject();
+  debug('get user:%j', doc);
+  let shasum = crypto.createHash('sha1');
+  if (shasum.update(doc.password + hashCode).digest('hex') !== encryptPwd) {
+    throw errors.get(204);
   }
   return doc;
 }

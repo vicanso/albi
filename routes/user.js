@@ -15,6 +15,16 @@ let routes = [
     route : '/1/login',
     middleware : 'no-cache',
     handler : 'user.login'
+  },
+  {
+    route : '/1/logout',
+    method : 'post',
+    handler : 'user.logout'
+  },
+  {
+    // 测试环境使用，将密码加密
+    route : '/1/encrypt/:password',
+    handler : 'user.encrypt'
   }
 ];
 
