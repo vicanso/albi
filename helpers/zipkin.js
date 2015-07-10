@@ -1,17 +1,19 @@
 'use strict';
-const zipkin = require('zipkin');
-console.dir(zipkin);
+
 exports.init = init;
 exports.trace = trace;
 exports.childTrace = childTrace
+let zipkinInitialized = false
 /**
  * [init 初始化]
  * @param  {[type]} options [description]
  * @return {[type]}         [description]
  */
 function init(options) {
-  // options.debug = true;
+  // 如果不使用到zipkin，则不会require
+  let zipkin = require('zipkin');
   zipkin.initialize(options);
+  zipkinInitialized = true;
 }
 
 /**
@@ -21,7 +23,11 @@ function init(options) {
  * @return {[type]}         [description]
  */
 function trace(service, options) {
-  return zipkin.trace(service, options);
+  if (zipkinInitialized) {
+    // 如果不使用到zipkin，则不会require
+    let zipkin = require('zipkin');
+    return zipkin.trace(service, options);
+  }
 }
 
 /**
@@ -31,5 +37,9 @@ function trace(service, options) {
  * @return {[type]}         [description]
  */
 function childTrace(service, options) {
-  return zipkin.childTrace(service, options);
+  if (zipkinInitialized) {
+    // 如果不使用到zipkin，则不会require
+    let zipkin = require('zipkin');
+    return zipkin.childTrace(service, options);
+  }
 }

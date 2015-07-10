@@ -1,5 +1,4 @@
 'use strict';
-const SDC = require('statsd-client');
 const _ = require('lodash');
 const util = require('util');
 let client = null;
@@ -28,5 +27,6 @@ _.forEach('gauge gaugeDelta set counter increment decrement timing'.split(' '), 
  * @return {[type]}         [description]
  */
 function init(options) {
+  const SDC = require('statsd-client');
   client = new SDC(options);
 }

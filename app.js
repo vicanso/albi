@@ -28,23 +28,38 @@ co(function *() {
  */
 function initApp() {
   initServer();
-  initMongodb();
+
+
+  // mongodb 初始化连接
+  let mongodbUri = globals.get('mongodb');
+  if (mongodbUri) {
+    initMongodb(mongodbUri);
+  }
+
+
+  // statsd 初始化
   let statsdConfig = globals.get('statsd');
   if (statsdConfig) {
     statsdConfig.prefix = statsdConfig.prefix || config.app;
     require('./helpers/sdc').init(statsdConfig);
   }
 
+
+  // redis session初始化
   let redisConfig = globals.get('redis');
   if (redisConfig) {
     require('./middlewares/session').init(redisConfig, globals.get('config.session'));
   }
-  require('./helpers/monitor').run(60 * 1000);
 
+
+  // zipkin 初始化
   let zipkinConfig = globals.get('zipkin');
   if (zipkinConfig) {
     require('./helpers/zipkin').init(zipkinConfig);
   }
+
+
+  require('./helpers/monitor').run(60 * 1000);
 }
 
 
@@ -91,7 +106,7 @@ function initServer() {
   if(config.env === 'development'){
     app.use(require('koa-logger')());
   }
-  app.use(require('koa-log')(config.processName));
+  app.use(require('koa-log')(['_track']));
 
   app.use(require('./middlewares/http-stats')({
     time : [300, 500, 1000, 3000],
@@ -106,6 +121,12 @@ function initServer() {
   }
   // TODO:如果tiemout了，但是还有调用未完成，koa不会把数据返回给浏览器，这部分需要特别处理
   // app.use(require('koa-timeout')(timeout));
+
+  // 限制并发请求数
+  app.use(require('koa-connection-limit')({
+    mid : 100,
+    high : 500
+  }));
 
 
   // methodOverride(由于旧的浏览器不支持delete等方法)
@@ -124,13 +145,6 @@ function initServer() {
     MOCK : '_mock'
   }));
 
-
-  // 限制并发请求数
-  app.use(require('koa-connection-limit')({
-    mid : 100,
-    high : 500
-  }));
-
   // fresh的处理
   app.use(require('koa-fresh')());
   // etag的处理
@@ -138,18 +152,15 @@ function initServer() {
 
   app.use(require('./middlewares/picker')('_fields'));
 
+  // 在middleware/error中已经处理了error的出错显示之类，因为绑定空函数，避免error的重复输出
+  app.on('error', _.noop);
+
   let appUrlPrefix = globals.get('config.appUrlPrefix');
   if (appUrlPrefix) {
     app.use(mount(appUrlPrefix), require('./routes'));
   } else {
     app.use(require('./routes'));
   }
-
-
-  app.on('error', function appOnError(err, ctx) {
-    let str = util.format('code:%s, error:%s, stack:%s', err.code || '0', err.message, err.stack);
-    console.error(str);
-  });
 
 
   app.listen(port);
@@ -160,12 +171,9 @@ function initServer() {
  * [initMongodb description]
  * @return {[type]}     [description]
  */
-function initMongodb() {
-  let uri = globals.get('mongodb');
-  if (uri) {
-    let modelPath = path.join(__dirname, 'models');
-    require('./helpers/mongodb').init(uri, modelPath);
-  }
+function initMongodb(uri) {
+  let modelPath = path.join(__dirname, 'models');
+  require('./helpers/mongodb').init(uri, modelPath);
 
 }
 
@@ -183,8 +191,8 @@ function *getSetting() {
 
   let result = {
     statsd : {
-      host : '127.0.0.1',
-      port : 8124
+      host : '10.2.124.163',
+      port : 8125
     },
     zipkin : {
       host : '10.2.124.163',
@@ -195,9 +203,9 @@ function *getSetting() {
         service : 'albi-zipkin'
       }
     },
-    mongodb : 'mongodb://192.168.2.1:27017/test',
+    mongodb : 'mongodb://10.2.124.163:27017/test',
     redis : {
-      host : '192.168.2.1',
+      host : '10.2.124.163',
       port : 6379
     },
     config : {
@@ -213,13 +221,23 @@ function *getSetting() {
     }
   };
 
-  if (config.env !== 'development') {
-    let reqs = _.map(configs, etcd.get);
+  if (config.env === 'development') {
+    let get = function *get(key) {
+      let result;
+      try {
+        result = yield etcd.get(key);
+      } catch (err) {
+        console.error('get config:%s fail, error:%s', key, err.message);
+      }
+      return result;
+    }
+    let reqs = _.map(configs, get);
     let keys = _.keys(configs);
     let res = yield parallel(reqs);
-    result = {};
     _.forEach(res, function (item, index) {
-      result[keys[index]] = item.value;
+      if (item) {
+        result[keys[index]] = item.value;
+      }
     });
   }
 

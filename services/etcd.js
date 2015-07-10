@@ -67,11 +67,12 @@ function *get(key) {
   let req = request.get(getUrl(key));
   let res = yield handle(req);
   let data = _.get(res, 'body.node');
-  try {
-    data.value = JSON.parse(data.value);
-  } catch (err) {
+  if (data) {
+    try {
+      data.value = JSON.parse(data.value);
+    } catch (err) {
+    }
   }
-
   return data;
 }
 
