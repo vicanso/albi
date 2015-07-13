@@ -17,10 +17,15 @@ function picker(field) {
     if (!v) {
       return;
     }
+    let pickerFn = 'pick';
+    if (v.charAt(0) === '-') {
+      pickerFn = 'omit';
+      v = v.substring(1);
+    }
     let arr = v.split(',');
     let data = ctx.body;
     let fn = function (item) {
-      return _.pick(item, arr);
+      return _[pickerFn](item, arr);
     };
     if (_.isArray(data)) {
       data = _.map(data, fn);

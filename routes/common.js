@@ -13,5 +13,15 @@ module.exports = [
     method : 'post',
     middleware : 'authority.admin',
     handler : 'system.restart'
+  },
+  {
+    route : '/sys/statistics',
+    method : 'post',
+    handler : 'system.statistics'
+  },
+  {
+    route : '/sys/http-log',
+    method : 'post',
+    handler : 'system.httpLog'
   }
 ];

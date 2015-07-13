@@ -1,4 +1,4 @@
-albi是基于koa的web开发框架，集成了常用的middleware，添加了statsD做系统统计，使用zipkin做服务追踪，更简单的mognodb操作与session的使用，简单构建node.js项目。
+albi是基于koa的web开发框架，集成了常用的middleware，添加了statsD做系统统计，使用zipkin做服务追踪，更简单的mongodb操作与session的使用，简单构建node.js项目。
 
 ## Installation
 
@@ -37,3 +37,208 @@ X-Process先获取request header中的X-Process（由haproxy，nginx或varnish�
 
 设置当如果正在处理的请求时超过多少之后，直接返回error
 
+
+### file picker
+
+当接口返回的数据比较多，可以只挑选需要用到的数据，减少传输的数据量
+
+```
+// data
+{
+  "name" : "my-name",
+  "account" : "my-account",
+  "address" : "",
+  "phone" : ""
+}
+
+// GET /user?_fields=name,account
+
+// return
+
+{
+  "name" : "my-name",
+  "account" : "my-account"
+}
+
+```
+
+
+### no cache
+
+用于判断请求是否为no-cache的，主要为了方便varnish更快速的判断no cache的请求，做pass操作
+
+
+### session
+
+从redis中获取用户信息
+
+
+
+## 目录结构
+
+### controllers
+
+响应http请求，调用相应的服务，获取数据之后，返回给浏览器，下面是获取用户信息的代码：
+
+
+```
+/**
+ * [get 从session中获取用户信息]
+ * @return {[type]} [description]
+ */
+function *get(){
+  /*jshint validthis:true */
+  let ctx = this;
+  let sess = ctx.session;
+  let result = sess.user || {
+    anonymous : true,
+    hashCode : uuid.v4()
+  };
+  // 用户跟踪cookie
+  let track = ctx.cookies.get(config.trackKey);
+  if (!track) {
+    ctx.cookies.set(config.trackKey, uuid.v4(), {
+      signed : false,
+      maxAge : 365 * 24 * 3600 * 1000
+    });
+  }
+
+  sess.user = result;
+  yield Promise.resolve();
+  ctx.body = pick(result);
+}
+```
+
+
+
+### errors
+
+定义的错误返回，有对应的出错code和message，如看下面的出错信息配置：
+
+
+```
+'use strict';
+// 定义用户相关的出错信息 201-300
+
+module.exports = {
+  '201' : {
+    cn : '该用户已存在。',
+    en : 'the account is exists.'
+  },
+  '202' : {
+    cn : '创建用户失败。',
+    en : 'create account fail.'
+  },
+  '203' : {
+    cn : '用户不存在。',
+    en : 'account is not exist'
+  },
+  '204' : {
+    cn : '登录失败，密码或用户名错误。',
+    en : 'login fail, user or password is wrong'
+  }
+};
+
+```
+
+
+### helpers
+
+
+
+### middlewares
+
+koa的middleware，有http-stats，session，picker，可以增加更多的middleware
+
+
+### models
+
+mongodb的model定义，下面是user的定义
+
+
+```
+module.exports = {
+  schema : {
+    account : {
+      type : String,
+      required : true,
+      unique : true
+    },
+    password : {
+      type : String,
+      required : true
+    },
+    name : {
+      type : String,
+      required : true,
+      unique : true
+    },
+    createdAt : {
+      type : String,
+      required : true
+    },
+    lastLoginedAt : {
+      type : String,
+      required : true
+    },
+    loginTimes : {
+      type : Number,
+      'default' : 0
+    }
+  },
+  // 索引数组
+  indexes : [
+    {
+      account : 1
+    },
+    {
+      account : 1,
+      lastLoginedAt : 1
+    }
+  ]
+};
+
+```
+
+
+### routes
+
+路由配置文件，下面通过user的配置方式来详解一下：
+
+```
+{
+  route : '/1/users/me',
+  middleware : ['no-cache', 'session.get'],
+  handler : 'user.get'
+},
+{
+  route : '/1/users',
+  middleware : 'session.get',
+  method : 'post',
+  handler : 'user.create'
+},
+{
+  route : ['/1/login', '/1/user/login'],
+  middleware : ['no-cache', 'session.get'],
+  handler : 'user.login'
+},
+{
+  route : '/1/logout',
+  middleware : 'session.get',
+  method : 'post',
+  handler : 'user.logout'
+}
+```
+
+- route：可以为String和Array，url的形式就是koa的方式
+
+- middleware：可以为String或者Array，对应middlewares目录下的middleware方法
+
+- method：可以为String或者Array，http的method，如果不配置，默认为get
+
+- handler：String，对应controllers目录下的处理方法
+
+
+## services
+
+提供调用数据库之类的服务

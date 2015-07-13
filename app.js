@@ -6,6 +6,7 @@ const co = require('co');
 const _ = require('lodash');
 const globals = require('./globals');
 const debug = require('./helpers/debug');
+const urlJoin = require('url-join');
 
 // initServer(10000);
 
@@ -79,6 +80,12 @@ function initServer() {
   const koa = require('koa');
   const mount = require('koa-mount');
   let port = globals.get('config.port');
+  let appUrlPrefix = globals.get('config.appUrlPrefix');
+  let staticUrlPrefix = config.staticUrlPrefix;
+  if (appUrlPrefix) {
+    staticUrlPrefix = urlJoin(appUrlPrefix, staticUrlPrefix);
+  }
+  globals.set('config.staticUrlPrefix', staticUrlPrefix);
   let app = koa();
 
   app.keys = ['secret_secret', 'i like io.js'];
@@ -128,6 +135,16 @@ function initServer() {
     high : 500
   }));
 
+  let staticParser;
+  let maxAge = 30 * 24 * 3600;
+  if (config.env === 'development') {
+    staticParser = require('static-parser');
+    maxAge = 0;
+  }
+  let serve = require('koa-static-serve')(config.staticPath, {
+    maxAge : maxAge
+  }, staticParser);
+  app.use(mount(staticUrlPrefix, serve));
 
   // methodOverride(由于旧的浏览器不支持delete等方法)
   app.use(require('koa-methodoverride')());
@@ -150,16 +167,18 @@ function initServer() {
   // etag的处理
   app.use(require('koa-etag')());
 
+  // 添加常量或者一些工具方法到state中
+  app.use(require('./middlewares/state')());
+
   app.use(require('./middlewares/picker')('_fields'));
 
   // 在middleware/error中已经处理了error的出错显示之类，因为绑定空函数，避免error的重复输出
   app.on('error', _.noop);
 
-  let appUrlPrefix = globals.get('config.appUrlPrefix');
   if (appUrlPrefix) {
-    app.use(mount(appUrlPrefix), require('./routes'));
+    app.use(mount(appUrlPrefix), require('./routes')());
   } else {
-    app.use(require('./routes'));
+    app.use(require('./routes')());
   }
 
 
@@ -221,7 +240,7 @@ function *getSetting() {
     }
   };
 
-  if (config.env === 'development') {
+  if (config.env !== 'development') {
     let get = function *get(key) {
       let result;
       try {

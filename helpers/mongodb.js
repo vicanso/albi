@@ -62,6 +62,19 @@ function initModels(modelPath) {
         schema.index(indexOptions);
       });
     }
+    let hook = function (type) {
+      _.forEach(model[type], function (fn, key) {
+        if (!_.isArray(fn)) {
+          fn = [fn];
+        }
+        _.forEach(fn, function (fn) {
+          schema[type](key, fn);
+        });
+      });
+    };
+    hook('pre');
+    hook('post');
+
     client.model(name, schema);
   });
 }

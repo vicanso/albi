@@ -21,8 +21,6 @@ function *create(data) {
   }
   data = _.pick(data, keys);
   debug('create user:%j', data);
-  data.createdAt = moment().format();
-  data.lastLoginedAt = data.createdAt;
   let User = mongodb.model('User');
   let account = data.account;
   let result;

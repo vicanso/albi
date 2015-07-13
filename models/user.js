@@ -1,3 +1,4 @@
+'use strict';
 module.exports = {
   schema : {
     account : {
@@ -15,11 +16,11 @@ module.exports = {
       unique : true
     },
     createdAt : {
-      type : String,
+      type : Number,
       required : true
     },
     lastLoginedAt : {
-      type : String,
+      type : Number,
       required : true
     },
     loginTimes : {
@@ -31,6 +32,22 @@ module.exports = {
   indexes : [
     {
       account : 1
+    },
+    {
+      account : 1,
+      lastLoginedAt : 1
     }
-  ]
+  ],
+  pre : {
+    validate : function(next) {
+      let now = Date.now();
+      if (!this.createdAt) {
+        this.createdAt = now;
+        this.lastLoginedAt = now;
+      }
+      next();
+    }
+  }
+  // 定义在mongodb中collection的名字
+  // name : 'xxx'
 };

@@ -14,6 +14,8 @@ const spawn = require('child_process').spawn;
 exports.version = version;
 exports.stats = stats;
 exports.restart = restart;
+exports.statistics = statistics;
+exports.httpLog = httpLog;
 
 /**
  * [version 返回代码版本与执行版本]
@@ -118,5 +120,63 @@ function *stats() {
     uptime : formatTime(uptime),
     startedAt : moment(Date.now() - uptime * 1000).format(),
     lag : toobusy.lag()
+  };
+}
+
+
+/**
+ * [statistics description]
+ * @return {[type]} [description]
+ */
+function *statistics() {
+  /*jshint validthis:true */
+  let ctx = this;
+  let data = ctx.request.body;
+  console.info(JSON.stringify(data));
+  let timing = data.timing;
+  if (timing) {
+    let result = {
+      loadEvent : timing.loadEventEnd - timing.loadEventStart,
+      domContentLoadedEvent : timing.domContentLoadedEventEnd - timing.domContentLoadedEventStart,
+      response : timing.responseEnd - timing.responseStart,
+      firstByte : timing.responseStart - timing.requestStart,
+      connect : timing.connectEnd - timing.connectStart,
+      domainLookup : timing.domainLookupEnd - timing.domainLookupStart,
+      fetch : timing.responseEnd - timing.fetchStart,
+      request : timing.responseEnd - timing.requestStart,
+      dom : timing.domComplete - timing.domLoading
+    };
+  }
+  yield Promise.resolve();
+  ctx.body = {
+    msg : 'success'
+  };
+}
+
+
+/**
+ * [httpLog description]
+ * @param  {[type]} argument [description]
+ * @return {[type]}          [description]
+ */
+function *httpLog() {
+  /*jshint validthis:true */
+  let ctx = this;
+  let ua = ctx.get('user-agent');
+  let data = ctx.request.body;
+  let ip = ctx.ips[0] || ctx.ip;
+  if (data) {
+    let log = 'ip:' + ip + ', ua:' + ua;
+    _.forEach(data.success, function(tmp) {
+      console.info('%s, url:%s, method:%s, use:%d', log, tmp.url, tmp.method, tmp.use);
+    });
+
+    _.forEach(data.error, function(tmp) {
+      console.error('%s, url:%s, method:%s, status:%d, use:%d', log, tmp.url, tmp.method, tmp.status, tmp.use);
+    });
+  }
+  yield Promise.resolve();
+  ctx.body = {
+    msg : 'success'
   };
 }
