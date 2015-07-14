@@ -209,24 +209,24 @@ function *getSetting() {
   };
 
   let result = {
-    statsd : {
-      host : '10.2.124.163',
-      port : 8125
-    },
-    zipkin : {
-      host : '10.2.124.163',
-      port : 9410,
-      endPoint : {
-        host : '127.0.0.1',
-        port : 3000,
-        service : 'albi-zipkin'
-      }
-    },
-    mongodb : 'mongodb://10.2.124.163:27017/test',
-    redis : {
-      host : '10.2.124.163',
-      port : 6379
-    },
+    // statsd : {
+    //   host : '10.2.124.163',
+    //   port : 8125
+    // },
+    // zipkin : {
+    //   host : '10.2.124.163',
+    //   port : 9410,
+    //   endPoint : {
+    //     host : '127.0.0.1',
+    //     port : 3000,
+    //     service : 'albi-zipkin'
+    //   }
+    // },
+    // mongodb : 'mongodb://10.2.124.163:27017/test',
+    // redis : {
+    //   host : '10.2.124.163',
+    //   port : 6379
+    // },
     config : {
       token : '6a3f4389a53c889b623e67f385f28ab8e84e5029',
       port : 10000,
