@@ -33,7 +33,7 @@ function *handle(req) {
   let start = Date.now();
   processing++;
   processedTotal++;
-  sdc.increment('requst.processing');
+  sdc.increment('request.processing');
   try {
     res = yield function (done) {
       req.timeout(exports.timeout).end(done);
@@ -47,7 +47,7 @@ function *handle(req) {
     let use = Date.now() - start;
     let str = util.format('request "%s %s" %d %d %dms %d-%d', req.method, req.url, statusCode, length, use, processing, processedTotal);
 
-    sdc.decrement('requst.processing');
+    sdc.decrement('request.processing');
     sdc.increment('request.status.' + statusCode);
     sdc.timing('request.use', use);
     console.info(str);

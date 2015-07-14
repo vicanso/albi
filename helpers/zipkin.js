@@ -27,6 +27,10 @@ function trace(service, options) {
     // 如果不使用到zipkin，则不会require
     let zipkin = require('zipkin');
     return zipkin.trace(service, options);
+  } else {
+    return {
+      done : _.noop;
+    }
   }
 }
 
@@ -41,5 +45,9 @@ function childTrace(service, options) {
     // 如果不使用到zipkin，则不会require
     let zipkin = require('zipkin');
     return zipkin.childTrace(service, options);
+  } else {
+    return {
+      done : _.noop;
+    }
   }
 }

@@ -239,6 +239,37 @@ module.exports = {
 - handler：String，对应controllers目录下的处理方法
 
 
-## services
+### services
 
 提供调用数据库之类的服务
+
+
+## stats收集
+
+- request.processing 当前请求其它rest server的总数
+
+- request.status.[statsCode] 返回状态码的统计
+
+- request.use 请求处理时间
+
+- mongodb.processing.[collection].[fn] 当前collection正在处理中的操作（find,findById,findOne,save and so on.）
+
+- mongodb.[collection].[fn] collection调用fn的次数总数
+
+- mongodb.use.[collection].[fn] 函数调用完成时间统计
+
+- lag 当前node的滞后程度（使用toobusy-js的返回值）
+
+- memory.exec  v8.getHeapStatistics返回
+
+- memory.physical  v8.getHeapStatistics返回
+
+- http.processing 当前正在处理的请求数
+
+- http.status.[statusCode] 返回状态码的统计
+
+- http.use 请求的处理时间
+
+- http.timeLevel.[level]  处理时间所处的区间（如：[300, 500, 1000, 3000],如果时间小于第一个值，则为0，如此，我们则关注较慢的请求数有多少）
+
+- http.sizeLevel.[level] 返回数据量所处的区间，如timeLevel
