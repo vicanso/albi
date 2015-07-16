@@ -94,6 +94,7 @@ function *login() {
 function *logout() {
   /*jshint validthis:true */
   let ctx = this;
+  yield Promise.resolve();
   ctx.session = null;
   ctx.body = {
     anonymous : true,
@@ -109,6 +110,7 @@ function *logout() {
 function *encrypt() {
   /*jshint validthis:true */
   let ctx = this;
+  yield Promise.resolve();
   let password = ctx.params.password;
   let hashCode = _.get(ctx, 'session.user.hashCode');
   if (!hashCode) {

@@ -2,8 +2,8 @@
 const _ = require('lodash');
 exports.init = init;
 exports.trace = trace;
-exports.childTrace = childTrace
-let zipkinInitialized = false
+exports.childTrace = childTrace;
+let zipkinInitialized = false;
 /**
  * [init 初始化]
  * @param  {[type]} options [description]
@@ -30,7 +30,7 @@ function trace(service, options) {
   } else {
     return {
       done : _.noop
-    }
+    };
   }
 }
 
@@ -48,6 +48,6 @@ function childTrace(service, options) {
   } else {
     return {
       done : _.noop
-    }
+    };
   }
 }

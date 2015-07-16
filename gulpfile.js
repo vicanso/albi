@@ -7,7 +7,7 @@ var fs = require('fs');
 
 
 gulp.task('jshint', function() {
-  return gulp.src(['*.js', '**/*.js', '!node_modules/*.js', '!node_modules/**/*.js'])
+  return gulp.src(['*.js', '**/*.js', '!node_modules/*.js', '!node_modules/**/*.js', '!statics/src/component/*.js'])
     .pipe(jshint({
       predef : ['require', 'module'],
       node : true,

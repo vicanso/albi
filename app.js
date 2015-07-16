@@ -249,7 +249,7 @@ function *getSetting() {
         console.error('get config:%s fail, error:%s', key, err.message);
       }
       return result;
-    }
+    };
     let reqs = _.map(configs, get);
     let keys = _.keys(configs);
     let res = yield parallel(reqs);

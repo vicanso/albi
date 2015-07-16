@@ -25,8 +25,8 @@ function getUrl(tmpUrl) {
  * @param  {[type]} req [description]
  * @return {[type]}     [description]
  */
-function *handle(req) {
-  let res = new Promise(function(resolve, reject) {
+function handle(req) {
+  return new Promise(function(resolve, reject) {
     req.timeout(exports.timeout).end(function (err, res) {
       if (err) {
         reject(err);
@@ -35,7 +35,6 @@ function *handle(req) {
       }
     });
   });
-  return res;
 }
 
 /**

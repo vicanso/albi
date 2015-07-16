@@ -49,5 +49,5 @@ function getImgUrl(staticUrlPrefix) {
       }
       return urlJoin(staticUrlPrefix, file);
     }
-  }
+  };
 }
