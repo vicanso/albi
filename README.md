@@ -273,3 +273,6 @@ module.exports = {
 - http.timeLevel.[level]  处理时间所处的区间（如：[300, 500, 1000, 3000],如果时间小于第一个值，则为0，如此，我们则关注较慢的请求数有多少）
 
 - http.sizeLevel.[level] 返回数据量所处的区间，如timeLevel
+
+
+注：redis mongodb statsd zipkin 依赖的库并没有添加到默认的package.json中，如果有需要则npm xxx --save
