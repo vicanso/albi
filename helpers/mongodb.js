@@ -26,6 +26,8 @@ function init(uri, options, modelPath) {
   if (!modelPath) {
     throw new Error('modelPath can not be null');
   }
+  const mongoose = require('mongoose');
+  const Schema = mongoose.Schema;
   options = _.extend({
     db : {
       native_parser : true
