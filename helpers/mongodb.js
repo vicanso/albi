@@ -17,8 +17,6 @@ exports.model = model;
  * @return {[type]}           [description]
  */
 function init(uri, options, modelPath) {
-  const mongoose = require('mongoose');
-  const Schema = mongoose.Schema;
   if (_.isString(options)) {
     modelPath = options;
     options = null;
