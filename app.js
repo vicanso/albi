@@ -173,7 +173,7 @@ function initServer() {
   app.on('error', _.noop);
 
   if (appUrlPrefix) {
-    app.use(mount(appUrlPrefix), require('./routes')());
+    app.use(mount(appUrlPrefix, require('./routes')()));
   } else {
     app.use(require('./routes')());
   }
