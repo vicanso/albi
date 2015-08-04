@@ -1,4 +1,5 @@
 'use strict';
+require('./init');
 const config = require('./config');
 const util = require('util');
 const path = require('path');
@@ -9,7 +10,6 @@ const debug = require('./helpers/debug');
 const urlJoin = require('url-join');
 
 co(function *() {
-  initLogger();
   let setting = yield getSetting();
   _.forEach(setting, function (v, k) {
     globals.set(k, v);
@@ -105,12 +105,11 @@ function initServer() {
     yield Promise.resolve();
     this.body = config.version;
   }));
-
-  // http log for dev
-  if(config.env === 'development'){
-    app.use(require('koa-logger')());
+  let logType = 'dev';
+  if (config.env !== 'development') {
+    logType = ':remote-addr - :cookie[_JTTrack] ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"';
   }
-  app.use(require('koa-log')(['_track']));
+  app.use(require('koa-log')(logType));
 
   app.use(require('./middlewares/http-stats')({
     time : [300, 500, 1000, 3000],
