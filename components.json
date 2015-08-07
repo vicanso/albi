@@ -7,7 +7,6 @@
       "/css/home.css"
     ],
     "js": [
-      "/component/debug.js",
       "/component/jquery.js",
       "/component/angular.js",
       "/component/lodash.js",
@@ -21,6 +20,6 @@
       "/js/global.js",
       "/js/home.js"
     ],
-    "modifiedAt": "2015-08-04T23:01:44.176"
+    "modifiedAt": "2015-08-07T09:22:24.755"
   }
 }

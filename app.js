@@ -10,10 +10,6 @@ const debug = require('./helpers/debug');
 const urlJoin = require('url-join');
 
 co(function *() {
-  let setting = yield getSetting();
-  _.forEach(setting, function (v, k) {
-    globals.set(k, v);
-  });
   initApp();
 }).catch(function (err) {
   console.error(err);
@@ -26,7 +22,6 @@ co(function *() {
  */
 function initApp() {
   initServer();
-
 
   // mongodb 初始化连接
   let mongodbUri = globals.get('mongodb');
@@ -62,27 +57,15 @@ function initApp() {
 
 
 /**
- * [initLogger description]
- * @return {[type]} [description]
- */
-function initLogger() {
-  require('./helpers/logger');
-}
-
-/**
  * [initServer description]
  * @return {[type]} [description]
  */
 function initServer() {
   const koa = require('koa');
   const mount = require('koa-mount');
-  let port = globals.get('config.port');
-  let appUrlPrefix = globals.get('config.appUrlPrefix');
+  let port = config.port;
+  let appUrlPrefix = config.appUrlPrefix;
   let staticUrlPrefix = config.staticUrlPrefix;
-  if (appUrlPrefix) {
-    staticUrlPrefix = urlJoin(appUrlPrefix, staticUrlPrefix);
-  }
-  globals.set('config.staticUrlPrefix', staticUrlPrefix);
   let app = koa();
 
   app.keys = ['secret_secret', 'i like io.js'];
@@ -94,7 +77,7 @@ function initServer() {
   // http response默认为不缓存，并添加X-
   app.use(function *(next) {
     let ctx = this;
-    let processList = ctx.headers['x-process'] || '';
+    let processList = ctx.headers['x-process'] || 'unknown';
     ctx.set('X-Process', processList + ', node-' + (process.env.NAME || 'unknown'));
     ctx.set('Cache-Control', 'must-revalidate, max-age=0');
     yield* next;
@@ -107,7 +90,7 @@ function initServer() {
   }));
   let logType = 'dev';
   if (config.env !== 'development') {
-    logType = ':remote-addr - :cookie[_JTTrack] ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"';
+    logType = ':remote-addr - :cookie[' + config.trackKey + '] ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"';
   }
   app.use(require('koa-log')(logType));
 
@@ -222,18 +205,7 @@ function *getSetting() {
     // redis : {
     //   host : '10.2.124.163',
     //   port : 6379
-    // },
-    config : {
-      token : '6a3f4389a53c889b623e67f385f28ab8e84e5029',
-      port : 10000,
-      session : {
-        ttl : 3600 * 1000,
-        key : 'vicanso',
-        cookie : {
-          maxAge : null
-        }
-      }
-    }
+    // }
   };
 
   if (config.env !== 'development') {

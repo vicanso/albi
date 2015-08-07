@@ -6,10 +6,9 @@ const urlJoin = require('url-join');
 const path = require('path');
 const crc32Infos = require('../crc32.json');
 const pm2Json = require('../pm2.json');
-const globals = require('../globals');
 module.exports = function() {
-  let appUrlPrefix = globals.get('config.appUrlPrefix') || '';
-  let staticUrlPrefix = globals.get('config.staticUrlPrefix');
+  let appUrlPrefix = config.appUrlPrefix;
+  let staticUrlPrefix = config.staticUrlPrefix;
   let imgUrlFn = getImgUrl(staticUrlPrefix);
   let anchorUrlFn = function(url) {
     return urlJoin(appUrlPrefix, url);

@@ -28,23 +28,28 @@ function pick(data) {
 function *get(){
   /*jshint validthis:true */
   let ctx = this;
-  let sess = ctx.session;
-  let result = sess.user || {
-    anonymous : true,
-    hashCode : uuid.v4()
-  };
+  // let sess = ctx.session;
+  // let result = sess.user || {
+  //   anonymous : true,
+  //   hashCode : uuid.v4()
+  // };
   // 用户跟踪cookie
   let track = ctx.cookies.get(config.trackKey);
   if (!track) {
-    ctx.cookies.set(config.trackKey, uuid.v4(), {
+    let trackUUID = uuid.v4().replace(/-/g, '') + '_' + Date.now();
+    ctx.cookies.set(config.trackKey, trackUUID, {
       signed : false,
       maxAge : 365 * 24 * 3600 * 1000
     });
   }
 
-  sess.user = result;
+  // sess.user = result;
   yield Promise.resolve();
-  ctx.body = pick(result);
+  ctx.body = {
+    anonymous : true,
+    hashCode : uuid.v4()
+  };
+  // ctx.body = pick(result);
 }
 
 /**
