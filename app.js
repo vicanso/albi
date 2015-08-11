@@ -8,7 +8,6 @@ const _ = require('lodash');
 const globals = require('./globals');
 const debug = require('./helpers/debug');
 const urlJoin = require('url-join');
-
 initApp();
 
 /**
@@ -130,12 +129,7 @@ function initServer() {
 
 
   // 从请求中的query中获取debug的相关参数
-  app.use(require('./middlewares/debug')({
-    DEBUG : '_debug',
-    pretty : '_pretty',
-    pattern : '_pattern',
-    MOCK : '_mock'
-  }));
+  app.use(require('./middlewares/debug')());
 
   // fresh的处理
   app.use(require('koa-fresh')());
