@@ -8,6 +8,6 @@
   "error_file": "/var/log/albi-error.log",
   "out_file": "/var/log/albi-out.log",
   "env": {
-    "APP_VERSION": "2015-08-10T17:38:07.861"
+    "APP_VERSION": "2015-08-12T22:44:47.627"
   }
 }

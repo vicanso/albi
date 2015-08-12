@@ -8,7 +8,13 @@ const _ = require('lodash');
 const globals = require('./globals');
 const debug = require('./helpers/debug');
 const urlJoin = require('url-join');
-initApp();
+co(function *() {
+  initApp();
+  yield require('./helpers/consul').register();
+}).catch(function (err) {
+  console.error(err);
+});
+
 
 /**
  * [initApp description]

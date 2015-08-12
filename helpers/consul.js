@@ -19,7 +19,7 @@ function *register() {
   let reg = new RegExp('((?:[0-9]{1,3}\.){3}[0-9]{1,3})\\s*' + hostName);
   let address = _.get(reg.exec(hosts), 1);
   if (!address) {
-    throw new Error('cat not get address');
+    throw new Error('can not get address');
   }
   let registerData = {
     Node : hostName,
