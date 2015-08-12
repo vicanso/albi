@@ -10,7 +10,9 @@ const debug = require('./helpers/debug');
 const urlJoin = require('url-join');
 co(function *() {
   initApp();
-  yield require('./helpers/consul').register();
+  if (config.env !== 'development') {
+    yield require('./helpers/consul').register();
+  }
 }).catch(function (err) {
   console.error(err);
 });
