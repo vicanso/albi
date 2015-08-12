@@ -6,6 +6,7 @@ const koaRouter = require('koa-router');
 const jade = require('koa-jade');
 const config = require('../config');
 const globals = require('../globals');
+const urlJoin = require('url-join');
 
 module.exports = getRoutes;
 
@@ -70,7 +71,7 @@ function getRouterConfigs() {
     viewPath : config.viewPath
   });
   let importerOptions = {
-    prefix : config.staticUrlPrefix
+    prefix : urlJoin(config.appUrlPrefix, config.staticUrlPrefix)
   };
   if (config.env !== 'development') {
     importerOptions.merge = require('../merge');

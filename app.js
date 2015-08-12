@@ -71,7 +71,14 @@ function initServer() {
 
   // http response默认为不缓存，并添加X-
   app.use(function *(next) {
+    /*jshint validthis:true */
     let ctx = this;
+
+    let url = ctx.url;
+    if (appUrlPrefix && url.substring(0, appUrlPrefix.length) === appUrlPrefix) {
+      ctx.url = url.substring(appUrlPrefix.length);
+    }
+
     let processList = ctx.headers['x-process'] || 'unknown';
     ctx.set('X-Process', processList + ', node-' + (process.env.NAME || 'unknown'));
     ctx.set('Cache-Control', 'must-revalidate, max-age=0');
@@ -144,11 +151,9 @@ function initServer() {
   // 在middleware/error中已经处理了error的出错显示之类，因为绑定空函数，避免error的重复输出
   app.on('error', _.noop);
 
-  if (appUrlPrefix) {
-    app.use(mount(appUrlPrefix, require('./routes')()));
-  } else {
-    app.use(require('./routes')());
-  }
+
+
+  app.use(require('./routes')());
 
 
   app.listen(port);

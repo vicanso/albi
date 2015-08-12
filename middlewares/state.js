@@ -8,7 +8,7 @@ const crc32Infos = require('../crc32.json');
 const pm2Json = require('../pm2.json');
 module.exports = function() {
   let appUrlPrefix = config.appUrlPrefix;
-  let staticUrlPrefix = config.staticUrlPrefix;
+  let staticUrlPrefix = urlJoin(appUrlPrefix,  config.staticUrlPrefix);
   let imgUrlFn = getImgUrl(staticUrlPrefix);
   let anchorUrlFn = function(url) {
     return urlJoin(appUrlPrefix, url);
@@ -17,8 +17,8 @@ module.exports = function() {
     /*jshint validthis:true */
     let ctx = this;
     let state = ctx.state;
-    state.STATIC_URL_PREFIX = staticUrlPrefix || '';
-    state.APP_URL_PREFIX = appUrlPrefix || '';
+    state.STATIC_URL_PREFIX = staticUrlPrefix;
+    state.APP_URL_PREFIX = appUrlPrefix;
     state.ENV = config.env;
     state._ = _;
     state.moment = moment;

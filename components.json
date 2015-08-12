@@ -1,12 +1,14 @@
 {
   "home": {
     "css": [
-      "/component/bootstrap.css",
+      "/component/pure.css",
+      "/component/glyphicons.css",
       "/css/global.css",
       "/css/nav.css",
       "/css/home.css"
     ],
     "js": [
+      "/component/debug.js",
       "/component/jquery.js",
       "/component/angular.js",
       "/component/lodash.js",
@@ -20,6 +22,6 @@
       "/js/global.js",
       "/js/home.js"
     ],
-    "modifiedAt": "2015-08-11T14:17:07.271"
+    "modifiedAt": "2015-08-12T22:09:30.545"
   }
 }

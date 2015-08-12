@@ -19,7 +19,7 @@ exports.trackKey = '_track';
 exports.appUrlPrefix = env === 'development'? '' : '/albi';
 
 // 静态文件前缀
-exports.staticUrlPrefix = urlJoin(exports.appUrlPrefix, '/static');
+exports.staticUrlPrefix = '/static';
 //静态文件源码目录
 exports.staticPath = env === 'development'? path.join(__dirname, 'statics/src') : path.join(__dirname, 'statics/dest');
 
