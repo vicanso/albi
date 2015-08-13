@@ -39,4 +39,4 @@ exports.appSetting = {
   }
 };
 
-exports.consulServers = ['http://192.168.1.10:8500'];
+exports.consul = process.env.CONSUL ||  'http://192.168.1.10:8500';

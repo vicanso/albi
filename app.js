@@ -84,11 +84,11 @@ function initServer() {
 
     let url = ctx.url;
     if (appUrlPrefix && url.substring(0, appUrlPrefix.length) === appUrlPrefix) {
-      ctx.url = url.substring(appUrlPrefix.length);
+      ctx.url = url.substring(appUrlPrefix.length) || '/';
     }
 
     let processList = ctx.headers['x-process'] || 'unknown';
-    ctx.set('X-Process', processList + ', node-' + (process.env.NAME || 'unknown'));
+    ctx.set('X-Process', processList + ', node-' + (process.env.HOSTNAME || 'unknown'));
     ctx.set('Cache-Control', 'must-revalidate, max-age=0');
     yield* next;
   });

@@ -32,11 +32,12 @@ function *register() {
       ID : hostName,
       Service : config.app,
       Port : config.port,
+      Address : address,
       tags : tags
     }
   };
-
-  yield put('/v1/catalog/register', registerData);
+  let url = urlJoin(config.consul, '/v1/catalog/register');
+  yield put(url, registerData);
 }
 
 
@@ -46,7 +47,7 @@ function *register() {
  * @return {[type]}          [description]
  */
 function *put(url, data) {
-  url = urlJoin(config.consulServers[0], url);
+
   return yield new Promise(function(resolve, reject) {
     request.put(url).send(data).end(function (err, data) {
       if (err) {
