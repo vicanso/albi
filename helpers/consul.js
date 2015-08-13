@@ -21,6 +21,10 @@ function *register() {
   if (!address) {
     throw new Error('can not get address');
   }
+  let tags = ['http-backend'];
+  if (config.appUrlPrefix) {
+    tags.push('prefix:' + config.appUrlPrefix);
+  }
   let registerData = {
     Node : hostName,
     Address : address,
@@ -28,11 +32,11 @@ function *register() {
       ID : hostName,
       Service : config.app,
       Port : config.port,
-      tags : ['product', 'v1']
+      tags : tags
     }
   };
-  yield consulPut('/v1/catalog/register', registerData);
 
+  yield put('/v1/catalog/register', registerData);
 }
 
 

@@ -12,7 +12,7 @@ exports.etcdUrl = process.env.ETCD || 'http://localhost:4001';
 
 exports.app = pkg.name;
 
-exports.port = 10000;
+exports.port = env === 'development'? 5000 : 80;
 
 exports.trackKey = '_track';
 
@@ -30,7 +30,6 @@ exports.processName = (process.env.NAME || 'unknown') +  '-pm2-' + (process.env.
 
 exports.appSetting = {
   token : '6a3f4389a53c889b623e67f385f28ab8e84e5029',
-  port : 10000,
   session : {
     ttl : 3600 * 1000,
     key : 'vicanso',
