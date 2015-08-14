@@ -177,30 +177,3 @@ function initMongodb(uri) {
   require('./helpers/mongodb').init(uri, modelPath);
 
 }
-
-
-
-
-
-/**
- * [keepServiceAlive description]
- * @return {[type]} [description]
- */
-function keepServiceAlive() {
-  const etcd = require('./helpers/etcd');
-  let appUrlPrefix = globals.get('config.appUrlPrefix');
-  let arr = process.env.APP_HOST.split(':');
-  let data = {
-    name : config.app,
-    ip : arr[0],
-    port : parseInt(arr[1])
-  };
-  if (appUrlPrefix) {
-    data.prefix = appUrlPrefix;
-  }
-  co(function *() {
-    yield etcd.add(process.env.SERVICE_KEY, data, 300);
-  }).catch(function (err) {
-    console.error(err);
-  });
-}

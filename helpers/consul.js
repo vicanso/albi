@@ -21,10 +21,11 @@ function *register() {
   if (!address) {
     throw new Error('can not get address');
   }
-  let tags = ['http-backend'];
+  let tags = ['http-backend', config.env];
   if (config.appUrlPrefix) {
     tags.push('prefix:' + config.appUrlPrefix);
   }
+  tags.push('http-ping');
   let registerData = {
     Node : hostName,
     Address : address,
@@ -33,7 +34,7 @@ function *register() {
       Service : config.app,
       Port : config.port,
       Address : address,
-      tags : tags
+      tags : _.uniq(tags)
     }
   };
   let url = urlJoin(config.consul, '/v1/catalog/register');

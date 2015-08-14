@@ -8,7 +8,6 @@ exports.env = env;
 
 exports.version = process.env.APP_VERSION || 'unknown';
 
-exports.etcdUrl = process.env.ETCD || 'http://localhost:4001';
 
 exports.app = pkg.name;
 

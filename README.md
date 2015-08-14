@@ -6,7 +6,7 @@ albi是基于koa的web开发框架，集成了常用的middleware，添加了sta
 git clone https://github.com/vicanso/albi.git
 cd albi
 npm install // 如果生产环境，使用npm install --production
-node app.js // 配置文件从ectd中获取，如果需要指定etcd服务器的地址：ETCD=http://etcdServer:4001 node app.js
+node app.js
 ```
 
 ## middleware
