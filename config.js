@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV || 'development';
 
 exports.env = env;
 
-exports.version = process.env.APP_VERSION || 'unknown';
+exports.version = pkg.appVersion;
 
 
 exports.app = pkg.name;

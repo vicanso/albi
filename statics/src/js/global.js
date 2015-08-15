@@ -41,7 +41,7 @@ app.config(['localStorageServiceProvider', function(localStorageServiceProvider)
 }]);
 
 
-app.run(['$http', '$timeout', '$window', 'CONST', 'debug', run]);
+app.run(['$http', '$timeout', '$window', 'localStorageService', 'CONST', 'debug', run]);
 
 
 /**
@@ -84,13 +84,15 @@ function error($log, $injector, CONST){
 
 /**
  * [run description]
- * @param  {[type]} $http    [description]
- * @param  {[type]} $timeout [description]
- * @param  {[type]} $window  [description]
- * @param  {[type]} debug    [description]
- * @return {[type]}          [description]
+ * @param  {[type]} $http               [description]
+ * @param  {[type]} $timeout            [description]
+ * @param  {[type]} $window             [description]
+ * @param  {[type]} localStorageService [description]
+ * @param  {[type]} CONST               [description]
+ * @param  {[type]} debug               [description]
+ * @return {[type]}                     [description]
  */
-function run($http, $timeout, $window, CONST, debug){
+function run($http, $timeout, $window, localStorageService, CONST, debug){
   TIMING.end('js');
   debug = debug('app.run');
   var statistics = function(){
@@ -101,8 +103,32 @@ function run($http, $timeout, $window, CONST, debug){
         height : $window.screen.height,
         innerHeight : $window.innerHeight,
         innerWidth : $window.innerWidth
-      }
+      },
+      // 在deploy之后，非第一次加载
+      load : 2,
     }, $window.performance);
+    if (localStorageService.getStorageType() === 'localStorage') {
+      // 判断该页面是不是在版本更新之后第一次加载
+      // （第一次加载需加载静态文件，时间较长）
+      var appVersion = localStorageService.get('appVersion');
+      if (CONFIG.appVersion !== appVersion) {
+        localStorageService.set('appVersion', CONFIG.appVersion);
+        localStorageService.set('loadTemplateList', []);
+      }
+      var tmpList = localStorageService.get('loadTemplateList') || [];
+      if (tmpList.indexOf(CONFIG.template) === -1) {
+        if (appVersion) {
+          // 有之前的版本号，非第一次打开
+          result.load = 1;
+        } else {
+          // 无任何之前的版本号，第一次打开
+          result.load = 0;
+        }
+        tmpList.push(CONFIG.template);
+        localStorageService.set('loadTemplateList', tmpList);
+      }
+    }
+
     $http.post('/sys/statistics', result);
   };
 
