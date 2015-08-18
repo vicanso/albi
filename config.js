@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const pkg = require('./package');
+const pkg = localRequire('package');
 const urlJoin = require('url-join');
 const env = process.env.NODE_ENV || 'development';
 

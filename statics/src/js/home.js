@@ -4,7 +4,7 @@
 ctrl.$inject = ['$scope', '$http', 'debug', 'user'];
 
 angular.module('jtApp')
-  .controller('HomePageController', fn);
+  .controller('HomePageController', ctrl);
 
 function ctrl($scope, $http, debug, user) {
   user.session().then(function(res){

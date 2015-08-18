@@ -1,8 +1,8 @@
 'use strict';
 const _ = require('lodash');
 const util = require('util');
-const config = require('../config');
-let client = null;
+const config = localRequire('config');
+var client = null;
 
 exports.init = init;
 exports.client = client;
