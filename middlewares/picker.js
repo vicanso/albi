@@ -9,15 +9,16 @@ module.exports = picker;
  * @return {[type]}       [description]
  */
 function picker(field) {
-  return function *picker(next) {
-    yield *next;
+  return function* picker(next) {
     /*jshint validthis:true */
     let ctx = this;
     let v = ctx.query[field];
     delete ctx.query[field];
-    if (!v) {
+    yield * next;
+    if (!v || !ctx.body) {
       return;
     }
+    ctx._pickerField = v;
     let pickerFn = 'pick';
     if (v.charAt(0) === '-') {
       pickerFn = 'omit';
@@ -25,7 +26,7 @@ function picker(field) {
     }
     let arr = v.split(',');
     let data = ctx.body;
-    let fn = function (item) {
+    let fn = function(item) {
       return _[pickerFn](item, arr);
     };
     if (_.isArray(data)) {

@@ -22,15 +22,19 @@ function getRoutes() {
     let middlewareArr = routerConfig.middleware || [];
     let routes = routerConfig.route;
     if (!routes) {
+      console.error('*************start*************');
       console.error('route is undefined, ' + JSON.stringify(routerConfig));
+      console.error('**************end**************');
       return;
     }
     if (!_.isArray(routes)) {
       routes = [routes];
     }
-    _.forEach(routes, function (tmp) {
+    _.forEach(routes, function(tmp) {
       if (_.indexOf(routeList, tmp) !== -1) {
+        console.error('*************start*************');
         console.error('route:%s is repetitionary', tmp);
+        console.error('**************end**************');
       } else {
         routeList.push(tmp);
       }
@@ -41,7 +45,9 @@ function getRoutes() {
     }
     let handler = routerConfig.handler;
     if (!handler) {
+      console.error('*************start*************');
       console.error('handler is undefined, ' + JSON.stringify(routerConfig));
+      console.error('**************end**************');
       return;
     }
     _.forEach(routes, function(route) {
@@ -68,10 +74,10 @@ function getRouterConfigs() {
   debug('routes:%j', routes);
   let arr = [];
   let jadeRender = jade.middleware({
-    viewPath : config.viewPath
+    viewPath: config.viewPath
   });
   let importerOptions = {
-    prefix : urlJoin(config.appUrlPrefix, config.staticUrlPrefix)
+    prefix: urlJoin(config.appUrlPrefix, config.staticUrlPrefix)
   };
   if (config.env !== 'development') {
     importerOptions.merge = require('../merge');
