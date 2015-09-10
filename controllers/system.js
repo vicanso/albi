@@ -115,6 +115,7 @@ function* stats() {
   }
 
   let uptime = Math.ceil(process.uptime());
+
   ctx.body = {
     version: version,
     heap: heap,

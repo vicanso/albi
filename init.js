@@ -4,17 +4,14 @@ global.localRequire = localRequire;
 const path = require('path');
 const config = localRequire('config');
 const Joi = require('joi');
-
-if (config.env !== 'development') {
-  localRequire('helpers/logger');
-}
+localRequire('helpers/logger');
 
 /**
  * [validateThrow 如果校验失败，throw error，如果成功，返回转换后的数据]
  * @param  {[type]} argument [description]
  * @return {[type]}          [description]
  */
-Joi.validateThrow = function () {
+Joi.validateThrow = function() {
   let result = Joi.validate.apply(Joi, arguments);
   let err = result.error;
   if (err) {

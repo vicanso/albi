@@ -3,9 +3,8 @@ const requireTree = require('require-tree');
 const _ = require('lodash');
 const debug = localRequire('helpers/debug');
 const koaRouter = require('koa-router');
-const jade = require('koa-jade');
+const Jade = require('koa-jade');
 const config = localRequire('config');
-const globals = localRequire('globals');
 const urlJoin = require('url-join');
 
 module.exports = getRoutes;
@@ -73,9 +72,9 @@ function getRouterConfigs() {
   let routes = _.flatten(_.values(routesInfos));
   debug('routes:%j', routes);
   let arr = [];
-  let jadeRender = jade.middleware({
+  let jadeRender = (new Jade({
     viewPath: config.viewPath
-  });
+  })).middleware;
   let importerOptions = {
     prefix: urlJoin(config.appUrlPrefix, config.staticUrlPrefix)
   };
