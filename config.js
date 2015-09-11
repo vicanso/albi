@@ -39,4 +39,6 @@ exports.appSetting = {
   }
 };
 
+exports.udpLog = process.env.UDP_LOG || 'udp://127.0.0.1:2000';
+
 exports.consul = process.env.CONSUL || 'http://192.168.1.10:8500';
