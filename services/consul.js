@@ -5,7 +5,12 @@ const config = localRequire('config');
 const urlJoin = require('url-join');
 const util = require('util');
 const _ = require('lodash');
-const consul = require('consul-simple-client');
+const consulInfo = require('url').parse(config.consul);
+const ConsulClient = require('consul-simple-client');
+const consul = new ConsulClient({
+  host: consulInfo.hostname,
+  port: consulInfo.port
+});
 
 exports.register = register;
 

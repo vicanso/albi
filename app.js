@@ -14,7 +14,7 @@ co(function*() {
   const server = localRequire('helpers/server');
   initServer();
   if (config.env !== 'development') {
-    yield localRequire('helpers/consul').register();
+    yield localRequire('services/consul').register();
   }
   // yield server.initMongodb();
   // yield server.initStatsd();
