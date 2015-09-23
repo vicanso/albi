@@ -1,6 +1,8 @@
 'use strict';
 const _ = require('lodash');
-let globals = {};
+let globals = {
+  performance: {}
+};
 exports.get = get;
 exports.set = set;
 

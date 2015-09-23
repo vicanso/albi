@@ -74,9 +74,20 @@ function initServer() {
   app.use(require('koa-log')(logType));
 
   app.use(require('./middlewares/http-stats')({
-    time: [300, 500, 1000, 3000],
-    size: [1024, 10240, 51200, 102400],
-    cookie: [config.trackKey]
+    time: {
+      v: [300, 500, 1000, 3000],
+      desc: ['puma', 'tiger', 'deer', 'rabbit', 'turtle']
+    },
+    size: {
+      v: [10240, 51200, 102400, 307200, 1024000],
+      desc: ['10KB', '50KB', '100KB', '300KB', '1MB', '>1MB'],
+    },
+    status: {
+      v: [199, 299, 399, 499, 999],
+      desc: ['10x', '20x', '30x', '40x', '50x']
+    },
+    cookie: [config.trackKey],
+    interval: 30 * 60 * 1000
   }));
 
   // 超时，单位ms

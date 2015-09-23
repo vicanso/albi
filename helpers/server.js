@@ -38,6 +38,7 @@ function* initStatsd() {
  * @return {Boolean} [description]
  */
 function* initRedisSession() {
+  yield Promise.resolve();
   let redisConfig = {
     host: 'redis',
     port: 6379
@@ -51,5 +52,5 @@ function* initRedisSession() {
  * @return {[type]} [description]
  */
 function* initZipkin() {
-  // body...
+  yield Promise.resolve();
 }

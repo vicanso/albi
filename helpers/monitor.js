@@ -5,7 +5,7 @@ const toobusy = require('toobusy-js');
 const _ = require('lodash');
 const config = localRequire('config');
 const sdc = localRequire('helpers/sdc');
-
+const globals = localRequire('globals');
 exports.run = _.once(run);
 
 /**
@@ -20,12 +20,22 @@ function run(interval) {
   let physicalTotal = bytes(data.total_physical_size);
   let usedHeapSize = bytes(data.used_heap_size);
   let lag = toobusy.lag();
-  if (config.env === 'development' || data.total_physical_size > 150 * 1024 * 1024 || lag > 70) {
-    console.info('MONITOR %s memory exec:%s use:%s total:%s physical:%s lag:%d', config.processName, totalHeapSizeExec, usedHeapSize, totalHeapSize, physicalTotal, lag);
+  if (config.env === 'development' || data.total_physical_size > 150 * 1024 *
+    1024 || lag > 70) {
+    console.info('MONITOR %s memory exec:%s use:%s total:%s physical:%s lag:%d',
+      config.processName, totalHeapSizeExec, usedHeapSize, totalHeapSize,
+      physicalTotal, lag);
   }
   sdc.set('lag', lag);
   sdc.set('memory.exec', parseInt(totalHeapSizeExec));
   sdc.set('memory.physical', parseInt(physicalTotal));
+
+  globals.set('performance.lag', lag);
+  globals.set('performance.memory', {
+    exec: totalHeapSizeExec,
+    physical: physicalTotal
+  });
+
   let timer = setTimeout(function() {
     run(interval);
   }, interval);

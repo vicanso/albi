@@ -9,6 +9,7 @@ const moment = require('moment');
 const toobusy = require('toobusy-js');
 const util = require('util');
 const spawn = require('child_process').spawn;
+const globals = localRequire('globals');
 
 exports.version = version;
 exports.stats = stats;
@@ -115,14 +116,11 @@ function* stats() {
   }
 
   let uptime = Math.ceil(process.uptime());
-
-  ctx.body = {
+  ctx.body = _.extend({
     version: version,
-    heap: heap,
     uptime: formatTime(uptime),
-    startedAt: moment(Date.now() - uptime * 1000).format(),
-    lag: toobusy.lag()
-  };
+    startedAt: new Date(Date.now() - uptime * 1000).toISOString()
+  }, globals.get('performance'));
 }
 
 
