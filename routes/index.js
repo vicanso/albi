@@ -6,6 +6,7 @@ const koaRouter = require('koa-router');
 const Jade = require('koa-jade');
 const config = localRequire('config');
 const urlJoin = require('url-join');
+const globals = localRequire('globals');
 
 module.exports = getRoutes;
 
@@ -13,10 +14,13 @@ module.exports = getRoutes;
  * [getRoutes 获取路由处理列表]
  * @return {[type]} [description]
  */
-function getRoutes() {
+function getRoutes(interval) {
   let routerConfigs = getRouterConfigs();
   let router = koaRouter();
   let routeList = [];
+  resetRoutePerformance();
+  let timer = setInterval(resetRoutePerformance, interval);
+  timer.unref();
   _.forEach(routerConfigs, function(routerConfig) {
     let middlewareArr = routerConfig.middleware || [];
     let routes = routerConfig.route;
@@ -52,6 +56,17 @@ function getRoutes() {
     _.forEach(routes, function(route) {
       _.forEach(methods, function(method) {
         method = method.toLowerCase();
+        middlewareArr.unshift(function*(next) {
+          let routePerformance = globals.get(
+            'performance.route');
+          let key = method.toUpperCase() + route;
+          if (!routePerformance[key]) {
+            routePerformance[key] = 1;
+          } else {
+            routePerformance[key]++;
+          }
+          yield * next;
+        });
         let params = [route].concat(middlewareArr);
         params.push(handler);
         router[method].apply(router, params);
@@ -106,4 +121,14 @@ function getRouterConfigs() {
     arr.push(result);
   });
   return arr;
+}
+
+/**
+ * [resetRoutePerformance description]
+ */
+function resetRoutePerformance() {
+  globals.set('performance.route-old', globals.get('performance.route'));
+  globals.set('performance.route', {
+    createdAt: (new Date()).toISOString()
+  });
 }

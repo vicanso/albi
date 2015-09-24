@@ -22,10 +22,11 @@ function httpStats(options) {
     return tmp.desc[index];
   }
 
-  function resetPerformanceHttp() {
+  function resetHttpPerformance() {
     let result = {
       createdAt: (new Date()).toISOString(),
-      total: 0
+      reqTotal: 0,
+      resSizeTotal: 0
     };
     _.forEach(options, function(item, k) {
       if (_.isArray(item.v) && _.isArray(item.desc)) {
@@ -36,12 +37,14 @@ function httpStats(options) {
         });
       }
     });
+    globals.set('performance.http-old', globals.get('performance.http'));
     globals.set('performance.http', result);
   }
 
-  resetPerformanceHttp();
-  let timer = setInterval(resetPerformanceHttp, interval);
+  resetHttpPerformance();
+  let timer = setInterval(resetHttpPerformance, interval);
   timer.unref();
+  let connectingTotal = 0;
   return function* httpStats(next) {
     /*jshint validthis:true */
     let ctx = this;
@@ -57,10 +60,13 @@ function httpStats(options) {
     let traceDone = result.done;
     delete result.done;
     ctx.zipkinTrace = result;
+    connectingTotal++;
+    globals.set('connectingTotal', connectingTotal);
 
     function done(event) {
       let use = Date.now() - start;
-
+      connectingTotal--;
+      globals.set('connectingTotal', connectingTotal);
       // TODO 是否如果是出错的请求则不记录？
       sdc.timing('http.use', use);
 
@@ -79,6 +85,7 @@ function httpStats(options) {
         httpPerformance.time[timeDesc]++;
       }
       let sizeDesc = getDesc('size', ctx.length);
+      httpPerformance.resSizeTotal += ctx.length;
       if (sizeDesc) {
         sdc.increment('http.sizeLevel.' + sizeDesc);
         httpPerformance.size[sizeDesc]++;
@@ -95,7 +102,7 @@ function httpStats(options) {
           traceData[name] = v;
         }
       });
-      httpPerformance.total++;
+      httpPerformance.reqTotal++;
       traceDone(traceData);
     }
     yield * next;

@@ -10,7 +10,6 @@ const toobusy = require('toobusy-js');
 const util = require('util');
 const spawn = require('child_process').spawn;
 const globals = localRequire('globals');
-
 exports.version = version;
 exports.stats = stats;
 exports.restart = restart;
@@ -26,9 +25,7 @@ function* version() {
   /*jshint validthis:true */
   let ctx = this;
   let data = yield getVersion();
-  ctx.set({
-    'Cache-Control': 'public, max-age=60'
-  });
+  ctx.set('Cache-Control', 'public, max-age=5');
   ctx.body = data;
 }
 
@@ -36,22 +33,23 @@ function* version() {
  * [getVersion 获取代码版本与运行版本]
  * @return {[type]} [description]
  */
-function* getVersion() {
-  let data = yield new Promise(function(resolve, reject) {
+function getVersion() {
+  return new Promise(function(resolve, reject) {
     fs.readFile(path.join(__dirname, '../package.json'), function(err,
       data) {
       if (err) {
         reject(err);
       } else {
+        let json = JSON.parse(data);
+        data = {
+          code: json.appVersion,
+          exec: config.version
+        };
         resolve(data);
       }
     });
   });
-  let json = JSON.parse(data);
-  return {
-    code: json.appVersion,
-    exec: config.version
-  };
+
 }
 
 /**
@@ -61,18 +59,12 @@ function* getVersion() {
 function* restart() {
   /*jshint validthis:true */
   let ctx = this;
-  setTimeout(function() {
-    let pm2 = spawn('pm2', ['gracefulReload', config.app]);
-    pm2.on('close', function(code) {
-      if (code === 0) {
-        console.info('gracefulReload ' + config.app + ' successful');
-      } else {
-        console.error('gracefulReload ' + config.app + ' fail');
-      }
-    });
-  }, 1000);
+  globals.set('restart', true);
   yield Promise.resolve();
-  ctx.body = util.format('%s will restart soon.', config.app);
+  let str = util.format('%s will restart soon.', config.app);
+  console.info(str);
+  ctx.body = str;
+  checkToRestart(2);
 }
 
 /**
@@ -83,10 +75,6 @@ function* stats() {
   /*jshint validthis:true */
   let ctx = this;
   let version = yield getVersion();
-  ctx.set({
-    'Cache-Control': 'public, max-age=5'
-  });
-
   let heap = v8.getHeapStatistics();
   _.forEach(heap, function(v, k) {
     heap[k] = bytes(v);
@@ -116,11 +104,16 @@ function* stats() {
   }
 
   let uptime = Math.ceil(process.uptime());
-  ctx.body = _.extend({
+  let performance = globals.get('performance');
+  performance.http.resSizeTotalDesc = bytes(performance.http.resSizeTotal);
+
+  let result = _.extend({
     version: version,
     uptime: formatTime(uptime),
     startedAt: new Date(Date.now() - uptime * 1000).toISOString()
-  }, globals.get('performance'));
+  }, performance);
+  ctx.set('Cache-Control', 'public, max-age=5');
+  ctx.body = result;
 }
 
 
@@ -148,9 +141,7 @@ function* statistics() {
     };
   }
   yield Promise.resolve();
-  ctx.body = {
-    msg: 'success'
-  };
+  ctx.body = null;
 }
 
 
@@ -178,9 +169,7 @@ function* httpLog() {
     });
   }
   yield Promise.resolve();
-  ctx.body = {
-    msg: 'success'
-  };
+  ctx.body = null;
 }
 
 function* exception(argument) {
@@ -190,7 +179,26 @@ function* exception(argument) {
   let data = ctx.request.body;
   console.error('exception, ua:%s, data:%s', ua, JSON.stringify(data));
   yield Promise.resolve();
-  ctx.body = {
-    msg: 'success'
-  };
+  ctx.body = null;
+}
+
+/**
+ * [checkToRestart 判断是否还有连接，如果无则重启]
+ * @param  {[type]} times [description]
+ * @return {[type]}       [description]
+ */
+function checkToRestart(times) {
+  if (!times) {
+    process.exit();
+    return;
+  }
+  let timer = setTimeout(function() {
+    let connectingTotal = globals.get('connectingTotal');
+    if (!connectingTotal) {
+      process.exit();
+      return;
+    }
+    checkToRestart(--times);
+  }, 15 * 1000);
+  timer.unref();
 }

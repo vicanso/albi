@@ -8,7 +8,7 @@ const _ = require('lodash');
 const globals = localRequire('globals');
 const debug = localRequire('helpers/debug');
 const urlJoin = require('url-join');
-
+const errors = localRequire('errors');
 co(function*() {
   localRequire('helpers/monitor').run(60 * 1000);
   const server = localRequire('helpers/server');
@@ -64,7 +64,12 @@ function initServer() {
   // healthy check
   app.use(mount('/ping', function*() {
     yield Promise.resolve();
-    this.body = config.version;
+    if (globals.get('restart')) {
+      throw errors.get('the server will restart soon!');
+    } else {
+      this.body = 'OK';
+    }
+
   }));
   let logType = 'dev';
   if (config.env !== 'development') {
@@ -141,7 +146,7 @@ function initServer() {
 
 
 
-  app.use(require('./routes')());
+  app.use(require('./routes')(30 * 60 * 1000));
 
 
   app.listen(port);
