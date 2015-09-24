@@ -105,7 +105,9 @@ function* stats() {
 
   let uptime = Math.ceil(process.uptime());
   let performance = globals.get('performance');
-  performance.http.resSizeTotalDesc = bytes(performance.http.resSizeTotal);
+  if (performance.http) {
+    performance.http.resSizeTotalDesc = bytes(performance.http.resSizeTotal);
+  }
 
   let result = _.extend({
     version: version,
