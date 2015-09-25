@@ -29,7 +29,7 @@ function trace(service, options) {
     return zipkin.trace(service, options);
   } else {
     return {
-      done : _.noop
+      done: _.noop
     };
   }
 }
@@ -47,7 +47,7 @@ function childTrace(service, options) {
     return zipkin.childTrace(service, options);
   } else {
     return {
-      done : _.noop
+      done: _.noop
     };
   }
 }

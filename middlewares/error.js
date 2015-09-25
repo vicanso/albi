@@ -32,6 +32,12 @@ function* error(next) {
         code: err.code || 0,
         error: err.message
       };
+      if (err.type) {
+        data.type = err.type;
+      }
+      if (err.extra) {
+        data.extra = err.extra;
+      }
       if (config.env !== 'production') {
         data.stack = err.stack;
       }

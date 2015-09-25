@@ -24,7 +24,6 @@ co(function*() {
 });
 
 
-
 /**
  * [initServer description]
  * @return {[type]} [description]

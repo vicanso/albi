@@ -17,7 +17,9 @@ exports.encrypt = encrypt;
  * @return {[type]}      [description]
  */
 function pick(data) {
-  let keys = ['account', 'name', 'lastLoginedAt', 'loginTimes', 'anonymous', 'hashCode'];
+  let keys = ['account', 'name', 'lastLoginedAt', 'loginTimes', 'anonymous',
+    'hashCode'
+  ];
   return _.pick(data, keys);
 }
 
@@ -25,7 +27,7 @@ function pick(data) {
  * [get 从session中获取用户信息]
  * @return {[type]} [description]
  */
-function *get(){
+function* get() {
   /*jshint validthis:true */
   let ctx = this;
   // let sess = ctx.session;
@@ -38,16 +40,16 @@ function *get(){
   if (!track) {
     let trackUUID = uuid.v4().replace(/-/g, '') + '_' + Date.now();
     ctx.cookies.set(config.trackKey, trackUUID, {
-      signed : false,
-      maxAge : 365 * 24 * 3600 * 1000
+      signed: false,
+      maxAge: 365 * 24 * 3600 * 1000
     });
   }
 
   // sess.user = result;
   yield Promise.resolve();
   ctx.body = {
-    anonymous : true,
-    hashCode : uuid.v4()
+    anonymous: true,
+    hashCode: uuid.v4()
   };
   // ctx.body = pick(result);
 }
@@ -56,7 +58,7 @@ function *get(){
  * [create 创建用户]
  * @return {[type]} [description]
  */
-function *create() {
+function* create() {
   /*jshint validthis:true */
   let ctx = this;
   let options = ctx.zipkinTrace;
@@ -74,7 +76,7 @@ function *create() {
  * [login 登录]
  * @return {[type]} [description]
  */
-function *login() {
+function* login() {
   /*jshint validthis:true */
   let ctx = this;
   let hashCode = ctx.session.user.hashCode;
@@ -96,14 +98,14 @@ function *login() {
  * [logout 退出登录]
  * @return {[type]} [description]
  */
-function *logout() {
+function* logout() {
   /*jshint validthis:true */
   let ctx = this;
   yield Promise.resolve();
   ctx.session = null;
   ctx.body = {
-    anonymous : true,
-    hashCode : uuid.v4()
+    anonymous: true,
+    hashCode: uuid.v4()
   };
 }
 
@@ -112,7 +114,7 @@ function *logout() {
  * [encrypt 加密密码]
  * @return {[type]} [description]
  */
-function *encrypt() {
+function* encrypt() {
   /*jshint validthis:true */
   let ctx = this;
   yield Promise.resolve();

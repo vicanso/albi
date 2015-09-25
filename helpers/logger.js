@@ -4,7 +4,7 @@ const jtlogger = require('jtlogger');
 const path = require('path');
 const url = require('url');
 let transports = [];
-if (true || config.env === 'production') {
+if (config.env === 'production') {
   transports.push({
     type: 'file',
     timestamp: true,
