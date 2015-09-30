@@ -11,6 +11,16 @@ module.exports = [{
   middleware: 'authority.admin',
   handler: 'system.restart'
 }, {
+  route: '/sys/pause',
+  method: 'post',
+  middleware: 'authority.admin',
+  handler: 'system.pause'
+}, {
+  route: '/sys/resume',
+  method: 'post',
+  middleware: 'authority.admin',
+  handler: 'system.resume'
+}, {
   route: '/sys/statistics',
   method: 'post',
   handler: 'system.statistics'

@@ -16,6 +16,8 @@ exports.restart = restart;
 exports.statistics = statistics;
 exports.httpLog = httpLog;
 exports.exception = exception;
+exports.pause = pause;
+exports.resume = resume;
 
 /**
  * [version 返回代码版本与执行版本]
@@ -34,8 +36,8 @@ function* version() {
  * @return {[type]} [description]
  */
 function getVersion() {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(path.join(__dirname, '../package.json'), function(err,
+  return new Promise(function (resolve, reject) {
+    fs.readFile(path.join(__dirname, '../package.json'), function (err,
       data) {
       if (err) {
         reject(err);
@@ -49,7 +51,6 @@ function getVersion() {
       }
     });
   });
-
 }
 
 /**
@@ -59,12 +60,40 @@ function getVersion() {
 function* restart() {
   /*jshint validthis:true */
   let ctx = this;
-  globals.set('restart', true);
+  globals.set('status', 'pause');
   yield Promise.resolve();
   let str = util.format('%s will restart soon.', config.app);
   console.info(str);
-  ctx.body = str;
+  ctx.body = null;
   checkToRestart(2);
+}
+
+/**
+ * [pause description]
+ * @return {[type]} [description]
+ */
+function* pause() {
+  /*jshint validthis:true */
+  let ctx = this;
+  globals.set('status', 'pause');
+  let str = util.format('%s will pause.', config.app);
+  console.info(str);
+  yield Promise.resolve();
+  ctx.body = null;
+}
+
+/**
+ * [resume description]
+ * @return {[type]} [description]
+ */
+function* resume() {
+  /*jshint validthis:true */
+  let ctx = this;
+  globals.set('status', 'running');
+  let str = util.format('%s will resume.', config.app);
+  console.info(str);
+  yield Promise.resolve();
+  ctx.body = null;
 }
 
 /**
@@ -76,7 +105,7 @@ function* stats() {
   let ctx = this;
   let version = yield getVersion();
   let heap = v8.getHeapStatistics();
-  _.forEach(heap, function(v, k) {
+  _.forEach(heap, function (v, k) {
     heap[k] = bytes(v);
   });
 
@@ -160,12 +189,12 @@ function* httpLog() {
   let ip = ctx.ips[0] || ctx.ip;
   if (data) {
     let log = 'ip:' + ip + ', ua:' + ua;
-    _.forEach(data.success, function(tmp) {
+    _.forEach(data.success, function (tmp) {
       console.info('%s, url:%s, method:%s, use:%d', log, tmp.url, tmp.method,
         tmp.use);
     });
 
-    _.forEach(data.error, function(tmp) {
+    _.forEach(data.error, function (tmp) {
       console.error('%s, url:%s, method:%s, status:%d, use:%d', log, tmp.url,
         tmp.method, tmp.status, tmp.use);
     });
@@ -194,7 +223,7 @@ function checkToRestart(times) {
     process.exit();
     return;
   }
-  let timer = setTimeout(function() {
+  let timer = setTimeout(function () {
     let connectingTotal = globals.get('connectingTotal');
     if (!connectingTotal) {
       process.exit();
