@@ -40,7 +40,7 @@ function initServer() {
 
   app.proxy = true;
 
-  app.use(require('./middlewares/error'));
+  app.use(localRequire('middlewares/error'));
 
   // http response默认为不缓存，并添加X-
   app.use(function* (next) {
@@ -103,9 +103,25 @@ function initServer() {
   // app.use(require('koa-timeout')(timeout));
 
   // 限制并发请求数
+  let connectionLimitTimer = null;
   app.use(require('koa-connection-limit')({
-    mid: 100,
-    high: 500
+    mid: 2,
+    high: 5,
+    event: function (status) {
+      if (status === 'high') {
+        globals.set('status', 'pause');
+        if (connectionLimitTimer) {
+          clearTimeout(connectionLimitTimer);
+          connectionLimitTimer = null;
+        }
+      } else {
+        // 状态为low或者mid时，延时5秒将服务设置回running
+        connectionLimitTimer = setTimeout(function () {
+          globals.set('status', 'running');
+          connectionLimitTimer = null;
+        }, 5000);
+      }
+    }
   }));
 
   let staticParser;
