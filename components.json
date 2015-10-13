@@ -23,5 +23,46 @@
       "/js/home.js"
     ],
     "modifiedAt": "2015-09-10T10:33:56.453"
+  },
+  "angular/home": {
+    "css": [
+      "/component/pure.css",
+      "/component/glyphicons.css",
+      "/css/global.css",
+      "/css/nav.css",
+      "/css/home.css"
+    ],
+    "js": [
+      "/component/debug.js",
+      "/component/jquery.js",
+      "/component/angular.js",
+      "/component/lodash.js",
+      "/component/angular-local-storage.js",
+      "/component/sha1.js",
+      "/service/const.js",
+      "/service/http-log.js",
+      "/service/debug.js",
+      "/service/user.js",
+      "/js/directive.js",
+      "/js/global.js",
+      "/js/home.js"
+    ],
+    "modifiedAt": "2015-10-13T16:50:42.374"
+  },
+  "react/home": {
+    "css": [
+      "/component/pure.css",
+      "/component/glyphicons.css",
+      "/css/global.css",
+      "/css/nav.css",
+      "/css/home.css"
+    ],
+    "js": [
+      "/component/debug.js",
+      "/component/react.js",
+      "/component/react-dom.js",
+      "/js/home-react.js"
+    ],
+    "modifiedAt": "2015-10-13T18:53:43.280"
   }
 }

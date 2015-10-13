@@ -105,8 +105,8 @@ function initServer() {
   // 限制并发请求数
   let connectionLimitTimer = null;
   app.use(require('koa-connection-limit')({
-    mid: 2,
-    high: 5,
+    mid: 100,
+    high: 500,
     event: function (status) {
       if (status === 'high') {
         globals.set('status', 'pause');

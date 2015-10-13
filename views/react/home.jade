@@ -1,0 +1,10 @@
+extends ./layout
+block bodyContainer
+  .homePage
+    include ../nav
+    header.headerContainer
+      h3.text-center Albi
+      //- img(src='#{IMG_URL("/pic/raise.png")}')
+      #content
+      
+  - importer.import('/css/home.css', '/js/home-react.js');
