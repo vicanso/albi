@@ -50,7 +50,7 @@ function* get(url, headers) {
   let res;
   try {
     res = yield req.done();
-  } catch (e) {
+  } catch (err) {
     err.type = 'http-request';
     err.extra = req.url;
     throw err;
