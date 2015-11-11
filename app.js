@@ -128,7 +128,11 @@ function initServer() {
 		const jtDev = require('jtdev');
 		app.use(mount(staticUrlPrefix, jtDev.defineWrapper(config.staticPath, {
 			basePath: config.staticPath,
-			except: ['/js/global.js', /\/libs\//]
+			except: [
+				'/js/global.js',
+				/\/libs\//,
+				/\/page\//
+			]
 		})));
 
 		app.use(mount(staticUrlPrefix, jtDev.parser(config.staticPath)));

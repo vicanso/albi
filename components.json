@@ -5,10 +5,12 @@
     ],
     "js": [
       "/libs/lodash.js",
+      "/libs/promise.js",
       "/libs/require.js",
-      "/js/global.js"
+      "/js/global.js",
+      "/page/home.js"
     ],
-    "modifiedAt": "2015-11-11T21:17:22.138"
+    "modifiedAt": "2015-11-11T23:28:45.436"
   },
   "angular/home": {
     "css": [
