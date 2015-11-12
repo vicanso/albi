@@ -36,8 +36,8 @@ function* version() {
  * @return {[type]} [description]
  */
 function getVersion() {
-  return new Promise(function (resolve, reject) {
-    fs.readFile(path.join(__dirname, '../package.json'), function (err,
+  return new Promise(function(resolve, reject) {
+    fs.readFile(path.join(__dirname, '../package.json'), function(err,
       data) {
       if (err) {
         reject(err);
@@ -105,7 +105,7 @@ function* stats() {
   let ctx = this;
   let version = yield getVersion();
   let heap = v8.getHeapStatistics();
-  _.forEach(heap, function (v, k) {
+  _.forEach(heap, function(v, k) {
     heap[k] = bytes(v);
   });
 
@@ -157,7 +157,7 @@ function* statistics() {
   let ctx = this;
   let data = ctx.request.body;
   console.info(JSON.stringify(data));
-  let timing = data.timing;
+  let timing = data.performance;
   if (timing) {
     let result = {
       loadEvent: timing.loadEventEnd - timing.loadEventStart,
@@ -189,12 +189,12 @@ function* httpLog() {
   let ip = ctx.ips[0] || ctx.ip;
   if (data) {
     let log = 'ip:' + ip + ', ua:' + ua;
-    _.forEach(data.success, function (tmp) {
+    _.forEach(data.success, function(tmp) {
       console.info('%s, url:%s, method:%s, use:%d', log, tmp.url, tmp.method,
         tmp.use);
     });
 
-    _.forEach(data.error, function (tmp) {
+    _.forEach(data.error, function(tmp) {
       console.error('%s, url:%s, method:%s, status:%d, use:%d', log, tmp.url,
         tmp.method, tmp.status, tmp.use);
     });
@@ -223,7 +223,7 @@ function checkToRestart(times) {
     process.exit();
     return;
   }
-  let timer = setTimeout(function () {
+  let timer = setTimeout(function() {
     let connectingTotal = globals.get('connectingTotal');
     if (!connectingTotal) {
       process.exit();

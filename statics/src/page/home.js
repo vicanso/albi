@@ -1,7 +1,9 @@
 'use strict';
-requirejs(['component/app'], function(app) {
+requirejs(['component/app', 'component/http'], function(app, http) {
+
+	TIMING.end('page');
 	app.run(function() {
-		console.dir('....');
+		http.get('/1/users/me')
 	});
-	console.dir('...xx');
+
 });

@@ -20,6 +20,7 @@ exports.defaults = {
 	}
 };
 exports.get = get;
+exports.post = post;
 exports.urlPrefix = '';
 
 /**
@@ -34,6 +35,21 @@ function get(url, headers) {
 	return end(req);
 }
 
+
+/**
+ * [post description]
+ * @param  {[type]} url     [description]
+ * @param  {[type]} data    [description]
+ * @param  {[type]} headers [description]
+ * @return {[type]}         [description]
+ */
+function post(url, data, headers) {
+	url = exports.urlPrefix + url;
+	var req = request.post(url).send(data);
+	setHeaders(req, headers);
+	return end(req);
+}
+
 /**
  * [end description]
  * @param  {[type]} req [description]
@@ -44,12 +60,12 @@ function end(req) {
 	exports.emit('request', req);
 	return new Promise(function(resolve, reject) {
 		req.end(function(err, res) {
+			res.use = Date.now() - start;
+			exports.emit('response', res);
 			if (err) {
 				exports.emit('error', err);
 				reject(err);
 			} else {
-				res.use = Date.now() - start;
-				exports.emit('response', res);
 				resolve(res);
 			}
 		});
