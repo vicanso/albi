@@ -17,10 +17,10 @@ exports.encrypt = encrypt;
  * @return {[type]}      [description]
  */
 function pick(data) {
-  let keys = ['account', 'name', 'lastLoginedAt', 'loginTimes', 'anonymous',
-    'hashCode'
-  ];
-  return _.pick(data, keys);
+	let keys = ['account', 'name', 'lastLoginedAt', 'loginTimes', 'anonymous',
+		'hashCode'
+	];
+	return _.pick(data, keys);
 }
 
 /**
@@ -28,30 +28,30 @@ function pick(data) {
  * @return {[type]} [description]
  */
 function* get() {
-  /*jshint validthis:true */
-  let ctx = this;
-  // let sess = ctx.session;
-  // let result = sess.user || {
-  //   anonymous : true,
-  //   hashCode : uuid.v4()
-  // };
-  // 用户跟踪cookie
-  let track = ctx.cookies.get(config.trackKey);
-  if (!track) {
-    let trackUUID = uuid.v4().replace(/-/g, '') + '_' + Date.now();
-    ctx.cookies.set(config.trackKey, trackUUID, {
-      signed: false,
-      maxAge: 365 * 24 * 3600 * 1000
-    });
-  }
+	/*jshint validthis:true */
+	let ctx = this;
+	// let sess = ctx.session;
+	// let result = sess.user || {
+	//   anonymous : true,
+	//   hashCode : uuid.v4()
+	// };
+	// 用户跟踪cookie
+	let track = ctx.cookies.get(config.trackKey);
+	if (!track) {
+		let trackUUID = uuid.v4().replace(/-/g, '') + '_' + Date.now();
+		ctx.cookies.set(config.trackKey, trackUUID, {
+			signed: false,
+			maxAge: 365 * 24 * 3600 * 1000
+		});
+	}
 
-  // sess.user = result;
-  yield Promise.resolve();
-  ctx.body = {
-    anonymous: true,
-    hashCode: uuid.v4()
-  };
-  // ctx.body = pick(result);
+	// sess.user = result;
+	yield Promise.resolve();
+	ctx.body = {
+		anonymous: true,
+		hashCode: uuid.v4()
+	};
+	// ctx.body = pick(result);
 }
 
 /**
@@ -59,16 +59,16 @@ function* get() {
  * @return {[type]} [description]
  */
 function* create() {
-  /*jshint validthis:true */
-  let ctx = this;
-  let options = ctx.zipkinTrace;
-  let done = zipkin.childTrace('user.create', options).done;
-  let result = yield user.create(ctx.request.body);
-  done();
-  delete result.password;
-  result.anonymous = false;
-  ctx.session.user = result;
-  ctx.body = pick(result);
+	/*jshint validthis:true */
+	let ctx = this;
+	let options = ctx.zipkinTrace;
+	let done = zipkin.childTrace('user.create', options).done;
+	let result = yield user.create(ctx.request.body);
+	done();
+	delete result.password;
+	result.anonymous = false;
+	ctx.session.user = result;
+	ctx.body = pick(result);
 }
 
 
@@ -77,20 +77,20 @@ function* create() {
  * @return {[type]} [description]
  */
 function* login() {
-  /*jshint validthis:true */
-  let ctx = this;
-  let hashCode = ctx.session.user.hashCode;
-  let query = ctx.query;
-  let account = ctx.query.account;
-  let encryptPwd = ctx.query.password;
-  let options = ctx.zipkinTrace;
-  let done = zipkin.childTrace('user.login', options).done;
-  let result = yield user.get(account, encryptPwd, hashCode);
-  done();
-  delete result.password;
-  result.anonymous = false;
-  ctx.session.user = result;
-  ctx.body = pick(result);
+	/*jshint validthis:true */
+	let ctx = this;
+	let hashCode = ctx.session.user.hashCode;
+	let query = ctx.query;
+	let account = ctx.query.account;
+	let encryptPwd = ctx.query.password;
+	let options = ctx.zipkinTrace;
+	let done = zipkin.childTrace('user.login', options).done;
+	let result = yield user.get(account, encryptPwd, hashCode);
+	done();
+	delete result.password;
+	result.anonymous = false;
+	ctx.session.user = result;
+	ctx.body = pick(result);
 }
 
 
@@ -99,14 +99,14 @@ function* login() {
  * @return {[type]} [description]
  */
 function* logout() {
-  /*jshint validthis:true */
-  let ctx = this;
-  yield Promise.resolve();
-  ctx.session = null;
-  ctx.body = {
-    anonymous: true,
-    hashCode: uuid.v4()
-  };
+	/*jshint validthis:true */
+	let ctx = this;
+	yield Promise.resolve();
+	ctx.session = null;
+	ctx.body = {
+		anonymous: true,
+		hashCode: uuid.v4()
+	};
 }
 
 
@@ -115,16 +115,16 @@ function* logout() {
  * @return {[type]} [description]
  */
 function* encrypt() {
-  /*jshint validthis:true */
-  let ctx = this;
-  yield Promise.resolve();
-  let password = ctx.params.password;
-  let hashCode = _.get(ctx, 'session.user.hashCode');
-  if (!hashCode) {
-    throw new Error('hashCode is undefined');
-  }
-  let shasum = crypto.createHash('sha1');
-  let pwd = shasum.update(password).digest('hex');
-  shasum = crypto.createHash('sha1');
-  ctx.body = shasum.update(pwd + hashCode).digest('hex');
+	/*jshint validthis:true */
+	let ctx = this;
+	yield Promise.resolve();
+	let password = ctx.params.password;
+	let hashCode = _.get(ctx, 'session.user.hashCode');
+	if (!hashCode) {
+		throw new Error('hashCode is undefined');
+	}
+	let shasum = crypto.createHash('sha1');
+	let pwd = shasum.update(password).digest('hex');
+	shasum = crypto.createHash('sha1');
+	ctx.body = shasum.update(pwd + hashCode).digest('hex');
 }

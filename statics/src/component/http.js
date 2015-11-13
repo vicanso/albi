@@ -1,12 +1,9 @@
 'use strict';
 
 var request = require('component/superagent');
-var Emitter = require('component/emitter');
+var util = require('component/util');
 
-var emitter = new Emitter();
-_.forEach(_.functions(emitter), function(fn) {
-	exports[fn] = emitter[fn];
-});
+util.emitterWrapper(exports);
 
 exports.defaults = {
 	common: {

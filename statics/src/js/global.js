@@ -7,6 +7,7 @@ requirejs.onResourceLoad = function(context, map, depArray) {
 	var data = map.timeLine;
 	data.end = Date.now();
 	data.url = map.url;
+	data.type = 'success';
 	TMP.resources.push(data);
 };
 requirejs.onError = function(err) {
@@ -14,20 +15,7 @@ requirejs.onError = function(err) {
 		message: err.toString(),
 		requireModules: err.requireModules,
 		requireType: err.requireType,
-		type: 'resourceLoadError'
+		type: 'fail'
 	};
-	TMP.resourceLoadErrors.push(data);
+	TMP.resources.push(data);
 };
-
-// requirejs(['component/http'], function(http) {
-// http.on('response', function(res) {
-// 	console.dir(res);
-// });
-// http.get('/1/users/me', {
-// 	'Cache-Control': 'no-cache'
-// }).then(function(res) {
-// 	// console.dir(res);
-// }, function(err) {
-// 	console.dir(err);
-// });
-// });

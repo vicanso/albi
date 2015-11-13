@@ -1,32 +1,41 @@
 'use strict';
 
 var http = require('component/http');
-var rest = require('component/rest')
+var rest = require('component/rest');
+var util = require('component/util');
 
-exports.run = run;
+exports.ready = ready;
 
-// 保存run的回调函数，用于当初始化未完成时，先保存回调函数
-var runCbList = [];
+
+// 保存ready的回调函数，用于当初始化未完成时，先保存回调函数
+var readyCbList = [];
 // 表示APP的初始化是否已完成
-var isReady = true;
+var isReady = false;
 
-var sendStatisticsOnce = _.once(sendStatistics);
+var sendExceptionDebounce = getDebounceSendException(1000);
 if (true || CONFIG.env !== 'development') {
 	initErrorCapture();
 	initHttpStats();
+	initRequireResourceLoadStats();
 }
+_.defer(function() {
+	isReady = true;
+	sendStatistics();
+	_.forEach(readyCbList, function(cb) {
+		cb();
+	});
+});
 
 /**
- * [run 注册run的回调事件，预留用于做一些全局的异步处理]
+ * [ready 注册ready的回调事件，预留用于做一些全局的异步处理]
  * @param  {Function} cb [description]
  * @return {[type]}      [description]
  */
-function run(cb) {
+function ready(cb) {
 	if (isReady) {
 		_.defer(cb);
-		sendStatisticsOnce();
 	} else {
-		runCbList.push(cb);
+		readyCbList.push(cb);
 	}
 }
 
@@ -46,18 +55,45 @@ function initErrorCapture() {
 			row: row,
 			msg: msg,
 			stack: stack,
-			type: 'exception'
+			type: 'runtime'
 		};
-		rest.exception(data);
-		// http.post('/sys/exception', data);
-		// send error to rest
+		sendExceptionDebounce(data);
 	};
-	if (TMP.resourceLoadErrors.length) {
-		rest.exception(TMP.resourceLoadErrors);
-		TMP.resourceLoadErrors.length = 0
-	}
 }
 
+/**
+ * [initRequireResourceLoadStats description]
+ * @return {[type]} [description]
+ */
+function initRequireResourceLoadStats() {
+	var postStats = _.debounce(function() {
+		if (TMP.resources.length) {
+			rest.requirejsStats(TMP.resources);
+			TMP.resources.length = 0
+		}
+	}, 1000);
+
+	requirejs.onResourceLoad = function(context, map, depArray) {
+		var data = map.timeLine;
+		data.end = Date.now();
+		data.url = map.url;
+		data.type = 'success';
+		TMP.resources.push(data);
+		postStats();
+	};
+
+	requirejs.onError = function(err) {
+		var data = {
+			message: err.toString(),
+			requireModules: err.requireModules,
+			requireType: err.requireType,
+			type: 'fail'
+		};
+		TMP.resources.push(data);
+		postStats();
+	};
+	postStats();
+}
 
 /**
  * [initHttpStats description]
@@ -66,7 +102,30 @@ function initErrorCapture() {
 function initHttpStats() {
 	var doing = 0;
 	var stats = {};
+	var arr = [];
+	var postStats = _.debounce(function() {
+		if (arr.length) {
+			rest.ajaxStats(arr);
+			arr.length = 0
+		}
+	}, 1000);
+
+	function reject(url) {
+		return !url || url.indexOf('/sys/') === 0 || url.indexOf('/stats/') === 0;
+	}
+
 	http.on('response', function(res) {
+		var url = _.get(res, 'req.url');
+		if (!reject(url)) {
+			arr.push({
+				url: url,
+				method: _.get(res, 'req.method'),
+				use: res.use,
+				statusCode: res.statusCode,
+				doing: doing
+			});
+			postStats();
+		};
 		doing--;
 	});
 	http.on('request', function(req) {
@@ -77,6 +136,12 @@ function initHttpStats() {
 		var count = ++stats[key];
 		if (count > 1) {
 			// 相同的请求同时并发数超过1
+			var data = {
+				key: key,
+				count: count,
+				type: 'parallelRequest'
+			};
+			sendExceptionDebounce(data);
 		}
 		doing++;
 	});
@@ -100,14 +165,22 @@ function sendStatistics() {
 }
 
 
-// var result = angular.extend({
-//   timeline: TIMING.getLogs(),
-//   screen: {
-//     width: $window.screen.width,
-//     height: $window.screen.height,
-//     innerHeight: $window.innerHeight,
-//     innerWidth: $window.innerWidth
-//   },
-//   // 在deploy之后，非第一次加载
-//   load: 2,
-// }, $window.performance);
+/**
+ * [getDebounceSendException description]
+ * @param  {[type]} interval [description]
+ * @return {[type]}          [description]
+ */
+function getDebounceSendException(interval) {
+	var arr = [];
+	var sendException = _.debounce(function() {
+		if (arr.length) {
+			rest.exception(arr);
+			arr.length = 0
+		}
+	}, interval);
+
+	return function(data) {
+		arr.push(data);
+		sendException();
+	};
+}
