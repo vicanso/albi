@@ -3,8 +3,14 @@
 var http = require('component/http');
 var rest = require('component/rest');
 var util = require('component/util');
+var store = require('component/store');
+
 
 exports.ready = ready;
+
+
+// http请求设置urlPrefix
+http.urlPrefix = CONFIG.appUrlPrefix;
 
 
 // 保存ready的回调函数，用于当初始化未完成时，先保存回调函数
@@ -57,6 +63,9 @@ function initErrorCapture() {
 			stack: stack,
 			type: 'runtime'
 		};
+		if (CONFIG.env === 'development') {
+			alert(JSON.stringify(data));
+		}
 		sendExceptionDebounce(data);
 	};
 }
@@ -89,6 +98,9 @@ function initRequireResourceLoadStats() {
 			requireType: err.requireType,
 			type: 'fail'
 		};
+		if (CONFIG.env === 'development') {
+			alert(JSON.stringify(data));
+		}
 		TMP.resources.push(data);
 		postStats();
 	};
@@ -145,9 +157,12 @@ function initHttpStats() {
 		}
 		doing++;
 	});
-	http.on('error', function(err) {
-		console.dir(err);
-	});
+	if (config.env === 'development') {
+		http.on('error', function(err) {
+			alert(err.message);
+		});
+	}
+
 }
 
 
@@ -156,12 +171,35 @@ function initHttpStats() {
  * @return {[type]} [description]
  */
 function sendStatistics() {
+	var appInfo = store.get('appInfo') || {
+		version: '',
+		prevVersion: '',
+		loadTemplates: []
+	};
+	var loadTemplates = appInfo.loadTemplates;
+	if (appInfo.version !== CONFIG.appVersion) {
+		appInfo.prevVersion = appInfo.version;
+		appInfo.version = CONFIG.appVersion;
+	}
+	// 非第一次加载
+	var loadType = 1;
+	var templateTag = CONFIG.template + CONFIG.appVersion;
+	// 第一次加载
+	if (_.indexOf(loadTemplates, templateTag) === -1) {
+		loadType = 2;
+		var index = _.indexOf(loadTemplates, CONFIG.template + appInfo.prevVersion);
+		loadTemplates.splice(index, 1);
+		loadTemplates.push(templateTag);
+	}
 	var data = {
 		timing: TIMING.toJSON(),
 		screen: _.pick(window.screen, 'width height availWidth availHeight'.split(' ')),
-		performance: window.performance.timing
+		performance: window.performance.timing,
+		template: CONFIG.template,
+		loadType: loadType
 	};
 	rest.statistics(data);
+	store.set('appInfo', appInfo);
 }
 
 
@@ -171,7 +209,7 @@ function sendStatistics() {
  * @return {[type]}          [description]
  */
 function getDebounceSendException(interval) {
-	var arr = [];
+	var arr = TMP.errors || [];
 	var sendException = _.debounce(function() {
 		if (arr.length) {
 			rest.exception(arr);
