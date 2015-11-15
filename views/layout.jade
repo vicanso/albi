@@ -13,7 +13,7 @@ html(lang='zh-CN')
     title #{title}
     include ./inlinejs
     //CSS_FILES_CONTAINER
-    - importer.import('/component/pure.css', '/component/font-awesome.css')
+    - importer.import('/component/pure.css', '/component/font-awesome.css', 'http://fonts.googleapis.com/css?family=Raleway:200', '/css/global.css')
     - importer.import('/libs/lodash.js', '/libs/promise.js', '/libs/require.js', '/js/global.js')
 
   body

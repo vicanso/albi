@@ -1,6 +1,18 @@
+mixin Components(items)
+	ul
+		each item in items
+			li
+				a(href=URL('/component/' + item), title='#{item}') #{item}
+
 nav.navContainer
-  ul
-    li: a.text-center.logo(href='javascript:;', title='TimTam') 
-      span.glyphicons.glyphicons-home
-      | Albi
-//- - importer.import('/css/nav.css')
+	a.text-center.logo(href='javascript:;', title='Albi')
+		| Albi
+	ul
+		li
+			a(href='javascript:;', title='Get Started') Get Started
+		li.selected
+			a(href='javascript:;', title='Components') Components
+			- var componentsItems = ['debug', 'emitter', 'http', 'ms', 'rest', 'store', 'superagent', 'url', 'util'];
+			+Components(componentsItems)
+
+	- importer.import('/css/nav.css')

@@ -8,10 +8,12 @@ module.exports = function() {
 	let schemaObject = Joi.object().keys({
 			DEBUG: Joi.boolean().optional(),
 			pretty: Joi.boolean().optional(),
-			MOCK: Joi.string().optional()
+			MOCK: Joi.string().optional(),
+			pattern: Joi.string().optional()
 		})
 		.rename('_debug', 'DEBUG')
 		.rename('_pretty', 'pretty')
+		.rename('_pattern', 'pattern')
 		.rename('_mock', 'MOCK');
 	return function*(next) {
 		/*jshint validthis:true */
@@ -21,7 +23,7 @@ module.exports = function() {
 		let result = Joi.validateThrow(query, schemaObject, {
 			stripUnknown: true
 		});
-		_.forEach(['_debug', '_pretty', '_mock'], function(key) {
+		_.forEach(['_debug', '_pretty', '_mock', '_pattern'], function(key) {
 			delete query[key];
 		});
 		_.extend(state, result);

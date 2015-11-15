@@ -18,4 +18,7 @@ requirejs.onError = function(err) {
 		type: 'fail'
 	};
 	TMP.resources.push(data);
+	if (CONFIG.env === 'development') {
+		alert(JSON.stringify(data));
+	}
 };

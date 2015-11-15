@@ -1,8 +1,10 @@
 'use strict';
 
 var Emitter = require('component/emitter');
+var debug = require('component/debug');
 
 exports.emitterWrapper = emitterWrapper;
+exports.debug = getDebug();
 
 
 /**
@@ -15,4 +17,13 @@ function emitterWrapper(obj) {
 	_.forEach(_.functions(emitter), function(fn) {
 		obj[fn] = emitter[fn];
 	});
+}
+
+
+/**
+ * [getDebug description]
+ * @return {[type]} [description]
+ */
+function getDebug() {
+	return debug('jt.albi');
 }

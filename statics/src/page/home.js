@@ -1,16 +1,10 @@
 'use strict';
-requirejs(['component/app', 'component/rest'], function(app, rest) {
+requirejs(['component/app', 'component/rest', 'component/util'], function(app, rest, util) {
 
 	TIMING.end('page');
 	app.ready(function() {
 		rest.user().then(function(res) {
-			console.dir(res);
-		}, function(err) {
-			console.dir(err);
-		});
-
-		rest.user().then(function(res) {
-			console.dir(res);
+			util.debug('user info:%j', res);
 		}, function(err) {
 			console.dir(err);
 		});

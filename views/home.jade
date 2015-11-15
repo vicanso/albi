@@ -2,9 +2,5 @@ extends ./layout
 block bodyContainer
   .homePage
     include ./nav
-    header.headerContainer
-      h3.text-center Albi
-      //- img(src='#{IMG_URL("/pic/raise.png")}')
-      #content
-      
+
   - importer.import('/page/home.js');

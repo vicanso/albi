@@ -1,1 +1,18 @@
-{}
+{
+  "home": {
+    "css": [
+      "/component/pure.css",
+      "/component/font-awesome.css",
+      "/css/global.css",
+      "/css/nav.css"
+    ],
+    "js": [
+      "/libs/lodash.js",
+      "/libs/promise.js",
+      "/libs/require.js",
+      "/js/global.js",
+      "/page/home.js"
+    ],
+    "modifiedAt": "2015-11-15T10:37:17.024"
+  }
+}

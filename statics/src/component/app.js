@@ -4,13 +4,10 @@ var http = require('component/http');
 var rest = require('component/rest');
 var util = require('component/util');
 var store = require('component/store');
-
+var debug = require('component/debug');
+var url = require('component/url');
 
 exports.ready = ready;
-
-
-// http请求设置urlPrefix
-http.urlPrefix = CONFIG.appUrlPrefix;
 
 
 // 保存ready的回调函数，用于当初始化未完成时，先保存回调函数
@@ -19,11 +16,22 @@ var readyCbList = [];
 var isReady = false;
 
 var sendExceptionDebounce = getDebounceSendException(1000);
-if (true || CONFIG.env !== 'development') {
-	initErrorCapture();
-	initHttpStats();
-	initRequireResourceLoadStats();
+var debugPattern = url('?_pattern') || '';
+
+// http请求设置urlPrefix
+http.urlPrefix = CONFIG.appUrlPrefix;
+// 初始化error capture
+initErrorCapture();
+// 初始化http请求的统计分析
+initHttpStats();
+// 初始化requirejs的加载统计分析
+initRequireResourceLoadStats();
+if (debugPattern) {
+	debug.enable(debugPattern);
+} else if (CONFIG.env === 'development') {
+	debug.enable('*');
 }
+
 _.defer(function() {
 	isReady = true;
 	sendStatistics();
@@ -157,7 +165,7 @@ function initHttpStats() {
 		}
 		doing++;
 	});
-	if (config.env === 'development') {
+	if (CONFIG.env === 'development') {
 		http.on('error', function(err) {
 			alert(err.message);
 		});
