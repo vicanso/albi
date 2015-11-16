@@ -17,7 +17,7 @@ var isReady = false;
 
 var sendExceptionDebounce = getDebounceSendException(1000);
 var debugPattern = url('?_pattern') || '';
-
+var CONFIG = window.CONFIG;
 // http请求设置urlPrefix
 http.urlPrefix = CONFIG.appUrlPrefix;
 // 初始化error capture
@@ -72,7 +72,7 @@ function initErrorCapture() {
 			type: 'runtime'
 		};
 		if (CONFIG.env === 'development') {
-			alert(JSON.stringify(data));
+			window.alert(JSON.stringify(data));
 		}
 		sendExceptionDebounce(data);
 	};
@@ -83,10 +83,11 @@ function initErrorCapture() {
  * @return {[type]} [description]
  */
 function initRequireResourceLoadStats() {
+	var resources = window.TMP.resources;
 	var postStats = _.debounce(function() {
-		if (TMP.resources.length) {
-			rest.requirejsStats(TMP.resources);
-			TMP.resources.length = 0
+		if (resources.length) {
+			rest.requirejsStats(resources);
+			resources.length = 0;
 		}
 	}, 1000);
 
@@ -95,7 +96,7 @@ function initRequireResourceLoadStats() {
 		data.end = Date.now();
 		data.url = map.url;
 		data.type = 'success';
-		TMP.resources.push(data);
+		resources.push(data);
 		postStats();
 	};
 
@@ -107,9 +108,9 @@ function initRequireResourceLoadStats() {
 			type: 'fail'
 		};
 		if (CONFIG.env === 'development') {
-			alert(JSON.stringify(data));
+			window.alert(JSON.stringify(data));
 		}
-		TMP.resources.push(data);
+		resources.push(data);
 		postStats();
 	};
 	postStats();
@@ -126,7 +127,7 @@ function initHttpStats() {
 	var postStats = _.debounce(function() {
 		if (arr.length) {
 			rest.ajaxStats(arr);
-			arr.length = 0
+			arr.length = 0;
 		}
 	}, 1000);
 
@@ -145,7 +146,7 @@ function initHttpStats() {
 				doing: doing
 			});
 			postStats();
-		};
+		}
 		doing--;
 	});
 	http.on('request', function(req) {
@@ -167,7 +168,7 @@ function initHttpStats() {
 	});
 	if (CONFIG.env === 'development') {
 		http.on('error', function(err) {
-			alert(err.message);
+			window.alert(err.message);
 		});
 	}
 
@@ -184,6 +185,7 @@ function sendStatistics() {
 		prevVersion: '',
 		loadTemplates: []
 	};
+	var performance = window.performance;
 	var loadTemplates = appInfo.loadTemplates;
 	if (appInfo.version !== CONFIG.appVersion) {
 		appInfo.prevVersion = appInfo.version;
@@ -200,12 +202,19 @@ function sendStatistics() {
 		loadTemplates.push(templateTag);
 	}
 	var data = {
-		timing: TIMING.toJSON(),
+		timing: window.TIMING.toJSON(),
 		screen: _.pick(window.screen, 'width height availWidth availHeight'.split(' ')),
-		performance: window.performance.timing,
 		template: CONFIG.template,
 		loadType: loadType
 	};
+	if (performance) {
+		data.performance = performance.timing;
+		if (performance.getEntries) {
+			data.entries = _.filter(performance.getEntries(), function(tmp) {
+				return tmp.initiatorType !== 'xmlhttprequest';
+			});
+		}
+	}
 	rest.statistics(data);
 	store.set('appInfo', appInfo);
 }
@@ -217,11 +226,11 @@ function sendStatistics() {
  * @return {[type]}          [description]
  */
 function getDebounceSendException(interval) {
-	var arr = TMP.errors || [];
+	var arr = window.TMP.errors || [];
 	var sendException = _.debounce(function() {
 		if (arr.length) {
 			rest.exception(arr);
-			arr.length = 0
+			arr.length = 0;
 		}
 	}, interval);
 

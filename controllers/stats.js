@@ -17,20 +17,23 @@ function* statistics() {
 	/*jshint validthis:true */
 	let ctx = this;
 	let data = ctx.request.body;
-	console.info(JSON.stringify(data));
-	let timing = data.performance;
-	if (timing) {
+	// console.info(JSON.stringify(data));
+	let performance = data.performance;
+	if (performance) {
 		let result = {
-			loadEvent: timing.loadEventEnd - timing.loadEventStart,
-			domContentLoadedEvent: timing.domContentLoadedEventEnd - timing.domContentLoadedEventStart,
-			response: timing.responseEnd - timing.responseStart,
-			firstByte: timing.responseStart - timing.requestStart,
-			connect: timing.connectEnd - timing.connectStart,
-			domainLookup: timing.domainLookupEnd - timing.domainLookupStart,
-			fetch: timing.responseEnd - timing.fetchStart,
-			request: timing.responseEnd - timing.requestStart,
-			dom: timing.domComplete - timing.domLoading
+			loadEvent: performance.loadEventEnd - performance.loadEventStart,
+			domContentLoadedEvent: performance.domContentLoadedEventEnd - performance.domContentLoadedEventStart,
+			response: performance.responseEnd - performance.responseStart,
+			firstByte: performance.responseStart - performance.requestStart,
+			connect: performance.connectEnd - performance.connectStart,
+			domainLookup: performance.domainLookupEnd - performance.domainLookupStart,
+			fetch: performance.responseEnd - performance.fetchStart,
+			request: performance.responseEnd - performance.requestStart,
+			dom: performance.domComplete - performance.domLoading
 		};
+		_.forEach(result, function(v, k) {
+			sdc.timing('browser.performance.' + k, v);
+		});
 	}
 	yield Promise.resolve();
 	ctx.body = null;
@@ -56,7 +59,6 @@ function* ajax() {
 			} else {
 				console.info(msg);
 			}
-
 		});
 	}
 	yield Promise.resolve();
@@ -98,11 +100,18 @@ function* requirejs() {
 		let type = item.type;
 		delete item.type;
 		sdc.increment('requirejs.' + type);
+		let fetchUse = item.fetchEnd - item.fetchStart;
+		if (fetchUse < 2) {
+			sdc.increment('requirejs.fromCache');
+		} else {
+			sdc.increment('requirejs.fromServer');
+		}
+		sdc.timing('requirejs.fetchUse', fetchUse);
+		sdc.timing('requirejs.use', item.end - item.start);
 		if (item.type === 'fail') {
 			console.error('requirejs fail, err:%s', JSON.stringify(item));
-		} else {
-			console.info('requirejs success, info:%s', JSON.stringify(item));
 		}
 	});
+	yield Promise.resolve();
 	ctx.body = null;
 }

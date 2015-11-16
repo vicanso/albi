@@ -1,185 +1,153 @@
-var gulp = require('gulp');
-var jshint = require('gulp-jshint');
-var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
-var stylus = require('gulp-stylus');
-var base64 = require('gulp-base64');
-var cssmin = require('gulp-cssmin');
-var moment = require('moment');
-var uglify = require('gulp-uglify');
-var through = require('through');
-var bufferCrc32 = require('buffer-crc32');
-var copy = require('gulp-copy');
-var path = require('path');
-var fs = require('fs');
-var del = require('del');
-var nib = require('nib');
-var _ = require('lodash');
+'use strict';
+const rename = require("gulp-rename");
+const gulp = require('gulp');
+const del = require('del');
+const jshint = require('gulp-jshint');
+const stylus = require('gulp-stylus');
+const nib = require('nib');
+const base64 = require('gulp-base64');
+const cssmin = require('gulp-cssmin');
+const jtDev = require('../jtdev');
+const path = require('path');
+const copy = require('gulp-copy');
+const uglify = require('gulp-uglify');
+const through = require('through2');
+const crc32 = require('buffer-crc32');
+const fs = require('fs');
+// 保存静态文件的crc32版本号
+const crc32Versions = {};
 
-function concatFiles(filePath, files) {
-  var savePath = path.join(filePath, 'merge');
-  if (!fs.existsSync(savePath)) {
-    fs.mkdirSync(savePath);
-  }
-  var names = [];
-  var data = [];
-  var ext = path.extname(files[0]);
-  _.forEach(files, function(file) {
-    var desc = '/*' + file + '*/';
-    file = path.join(filePath, file);
-    var buf = fs.readFileSync(file, 'utf8');
-    names.push(path.basename(file, ext));
-    data.push(desc + '\n' + buf);
-  });
-  var name = names.join(',') + ext;
-  fs.writeFileSync(path.join(savePath, name), data.join('\n'));
+const productPath = 'statics/asset';
+
+function version(opts) {
+	function addVersion(file, encoding, cb) {
+		let version = crc32.unsigned(file.contents);
+		let extname = path.extname(file.path);
+		let name = file.path.substring(file.base.length - 1);
+		crc32Versions[name] = version;
+		file.path = file.path.replace(extname, '.' + version + extname);
+		cb(null, file);
+	}
+	return through.obj(addVersion);
 }
 
-gulp.task('jshint', function() {
-  return gulp.src(['*.js', '**/*.js', '!node_modules/*.js',
-      '!node_modules/**/*.js', '!statics/src/component/*.js',
-      '!statics/dest/**/*.js', '!statics/build/**/*.js'
-    ])
-    .pipe(jshint({
-      predef: ['require', 'module', 'localRequire'],
-      node: true,
-      esnext: true
-    }))
-    .pipe(jshint.reporter('default'));
+gulp.task('del:asset', function() {
+	return del([productPath]);
+});
+
+gulp.task('del:build', function() {
+	return del(['statics/build']);
+});
+
+gulp.task('jshint:node', function() {
+	return gulp.src(['*.js', '**/*.js', '!node_modules/**', '!statics/**'])
+		.pipe(jshint({
+			predef: ['require', 'module', 'localRequire'],
+			node: true,
+			esnext: true
+		}))
+		.pipe(jshint.reporter('default'));
+});
+
+gulp.task('jshint:web', ['del:asset', 'del:build'], function() {
+	return gulp.src(['statics/**/*.js', '!statics/**/libs/*.js',
+			'!statics/**/component/debug.js', '!statics/**/component/emitter.js',
+			'!statics/**/component/ms.js', '!statics/**/component/store.js',
+			'!statics/**/component/superagent.js', '!statics/**/component/url.js'
+		])
+		.pipe(jshint({
+			predef: ['require', 'module', 'window', '_', 'requirejs'],
+			node: true,
+			esnext: true
+		}))
+		.pipe(jshint.reporter('default'));
+});
+
+gulp.task('stylus', ['del:asset', 'del:build'], function() {
+	return gulp.src('statics/src/**/*.styl')
+		.pipe(stylus({
+			use: nib()
+		}))
+		.pipe(base64())
+		.pipe(cssmin())
+		.pipe(gulp.dest('statics/build'));
+});
+
+gulp.task('requirejs', ['del:asset', 'del:build'], function() {
+	return gulp.src('statics/src/component/*.js')
+		.pipe(jtDev.requirejs({
+			basePath: path.join(__dirname, 'statics/src')
+		}))
+		.pipe(gulp.dest('statics/build/component'));
+});
+
+gulp.task('copy-others', ['del:asset', 'del:build'], function() {
+	return gulp.src(['statics/**/*', '!statics/**/*.styl', '!statics/src/component/**'])
+		.pipe(copy('statics/build', {
+			prefix: 2
+		}));
+});
+
+gulp.task('static-css', ['stylus'], function() {
+	return gulp.src(['statics/build/**/*.css'])
+		.pipe(base64())
+		.pipe(cssmin())
+		.pipe(version())
+		.pipe(gulp.dest(productPath));
+});
+
+gulp.task('static-js', ['requirejs'], function() {
+	return gulp.src(['statics/build/**/*.js'])
+		.pipe(uglify())
+		.pipe(version())
+		.pipe(gulp.dest(productPath));
+});
+
+gulp.task('static-img', ['copy-others'], function() {
+	let maxSize = 10 * 1024;
+
+	function sizeLimit(file, encoding, cb) {
+		if (file.stat.size > maxSize) {
+			let size = Math.ceil(file.stat.size / 1024);
+			console.error('Warning, the size of ' + file.path + ' is ' +
+				size + 'KB');
+		}
+		cb(null, file);
+	}
+
+	return gulp.src(['statics/build/**/*.png', 'statics/build/**/*.jpg',
+			'statics/build/**/*.gif'
+		])
+		.pipe(through.obj(sizeLimit))
+		.pipe(version())
+		.pipe(gulp.dest('statics/asset'));
+});
+
+gulp.task('crc32', ['static-css', 'static-js', 'static-img'], function(cb) {
+	fs.writeFile(path.join(__dirname, 'crc32.json'), JSON.stringify(crc32Versions, null, 2), cb);
 });
 
 
-gulp.task('version', function(cbf) {
-  var version = (new Date()).toISOString();
-  var file = './package.json';
-  var json = JSON.parse(fs.readFileSync(file));
-  json.appVersion = version;
-  fs.writeFileSync(file, JSON.stringify(json, null, 2));
-  cbf();
-});
+// del:asset 清除生产环境的asset目录
+// del:build 清除buid过程中生成的中间文件
 
-gulp.task('clean:dest', function(cbf) {
-  del(['statics/dest'], cbf);
-});
+// jshint:node node.js代码做jshint检测
+// jshint:web web前端代码做jshint检测，依赖 del:asset, del:build
 
-gulp.task('clean:build', ['static-version'], function(cbf) {
-  del(['statics/build'], cbf);
-});
+// stylus stylus to css，依赖 del:asset, del:build
 
+// requirejs 为requirejs的模块添加define
 
-gulp.task('static-stylus', ['clean:dest', 'static-css'], function() {
-  return gulp.src('statics/src/**/*.styl')
-    .pipe(stylus({
-      use: nib()
-    }))
-    .pipe(base64())
-    .pipe(cssmin())
-    .pipe(gulp.dest('statics/build'));
-});
+// copy-others 复制其它文件到build目录下
 
-gulp.task('static-css', ['clean:dest'], function() {
-  return gulp.src(['statics/src/**/*.css'])
-    .pipe(base64())
-    .pipe(cssmin())
-    .pipe(gulp.dest('statics/build'));
-});
+// static-css 压缩css文件
 
+// static-js 压缩js文件
 
-gulp.task('static-js', ['clean:dest'], function() {
-  return gulp.src('statics/src/**/*.js')
-    .pipe(uglify())
-    .pipe(gulp.dest('statics/build'));
-});
+// static-img 图片处理，依赖于copy-others
 
-gulp.task('static-copy-other', ['clean:dest', 'static-stylus'], function() {
-  return gulp.src(['statics/**/*', '!statics/**/*.styl'])
-    .pipe(copy('statics/dest', {
-      prefix: 2
-    }));
-});
+// crc32 文件版本号，依赖于static-css static-js static-img
 
-gulp.task('static-merge', ['static-css', 'static-js', 'static-stylus'],
-  function(cbf) {
-    var merge = require('./merge');
-    var components = require('./components');
-    var buildPath = 'statics/build';
-    _.forEach(merge.files, function(files) {
-      concatFiles(buildPath, files);
-    });
+// size-limit 依赖crc32
 
-    var filterFiles = [];
-    if (merge.except) {
-      filterFiles.push.apply(filterFiles, merge.except);
-    }
-    if (merge.files) {
-      filterFiles.push.apply(filterFiles, merge.files);
-    }
-    filterFiles = _.flatten(filterFiles);
-    var getRestFiles = function(files) {
-      return _.filter(files, function(file) {
-        return !~_.indexOf(filterFiles, file);
-      });
-    };
-    _.forEach(components, function(component) {
-      var cssFiles = getRestFiles(component.css);
-      if (cssFiles.length > 1) {
-        concatFiles(buildPath, cssFiles);
-      }
-      var jsFiles = getRestFiles(component.js);
-      if (jsFiles.length > 1) {
-        concatFiles(buildPath, jsFiles);
-      }
-    });
-    cbf();
-  });
-
-
-gulp.task('static-version', ['static-merge', 'static-copy-other'], function() {
-  var crc32Infos = {};
-  var crc32 = function(file) {
-    var version = bufferCrc32.unsigned(file.contents);
-    crc32Infos['/' + file.relative] = version;
-    var ext = path.extname(file.path);
-    file.path = file.path.substring(0, file.path.length - ext.length) +
-      '.' + version + ext;
-    this.emit('data', file);
-  };
-
-  return gulp.src(['statics/build/**/*.js', 'statics/build/**/*.css',
-      'statics/dest/**/*.png', 'statics/dest/**/*.jpg',
-      'statics/dest/**/*.gif'
-    ])
-    .pipe(through(crc32, function() {
-      var keys = _.keys(crc32Infos).sort();
-      var result = {};
-      _.forEach(keys, function(key) {
-        result[key] = crc32Infos[key];
-      });
-      fs.writeFileSync('crc32.json', JSON.stringify(result, null, 2));
-      this.emit('end');
-    }))
-    .pipe(gulp.dest('statics/dest'));
-});
-
-
-gulp.task('file-limit', ['static-version'], function() {
-  var limitSize = 2 * 1024;
-  var limit = function(file) {
-    file.contents = null;
-    if (file.stat.size > limitSize) {
-      var size = Math.ceil(file.stat.size / 1024);
-      console.error('Warning, the size of ' + file.history[0] + ' is ' +
-        size + 'KB');
-    }
-  };
-  return gulp.src(['statics/dest/**/*.png', 'statics/dest/**/*.jpg',
-    'statics/dest/**/*.gif'
-  ]).pipe(through(limit, function() {
-    this.emit('end');
-  }));
-});
-
-gulp.task('default', ['clean:dest', 'clean:build', 'jshint',
-  'static-copy-other', 'static-merge', 'static-version', 'clean:build',
-  'version', 'file-limit'
-]);
+gulp.task('default', ['del:asset', 'del:build', 'jshint:node', 'jshint:web', 'stylus', 'requirejs', 'copy-others', 'static-css', 'static-js', 'static-img', 'crc32']);

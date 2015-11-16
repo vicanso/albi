@@ -17,7 +17,7 @@ co(function*() {
 		yield localRequire('services/consul').register();
 	}
 	// yield server.initMongodb();
-	// yield server.initStatsd();
+	yield server.initStatsd();
 	// yield server.initRedisSession();
 }).catch(function(err) {
 	console.error(err);

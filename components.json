@@ -1,8 +1,8 @@
 {
   "home": {
     "css": [
-      "/component/pure.css",
-      "/component/font-awesome.css",
+      "/css/pure.css",
+      "/css/font-awesome.css",
       "/css/global.css",
       "/css/nav.css"
     ],
@@ -13,6 +13,6 @@
       "/js/global.js",
       "/page/home.js"
     ],
-    "modifiedAt": "2015-11-15T10:37:17.024"
+    "modifiedAt": "2015-11-16T21:31:20.901"
   }
 }
