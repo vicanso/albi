@@ -18,14 +18,13 @@
   "main": "app",
   "readmeFilename": "README.md",
   "dependencies": {
-    "bytes": "^2.1.0",
+    "bytes": "^2.2.0",
     "co": "^4.6.0",
     "co-parallel": "^1.0.0",
     "consul-simple-client": "0.0.4",
     "debug": "^2.2.0",
     "joi": "^7.0.0",
     "jtfileimporter": "^0.2.0",
-    "jtlogger": "^0.2.0",
     "koa": "^1.1.2",
     "koa-bodyparser": "^2.0.1",
     "koa-connection-limit": "0.1.0",
@@ -46,6 +45,7 @@
     "require-tree": "^1.0.1",
     "statsd-client": "^0.2.1",
     "superagent-extend": "0.0.1",
+    "timtam-logger": "^0.2.0",
     "toobusy-js": "^0.4.2",
     "url-join": "0.0.1"
   },
@@ -69,5 +69,5 @@
     "through2": "^2.0.0"
   },
   "readme": "backend framework base on koa",
-  "appVersion": "2015-11-16T05:53:35.675Z"
+  "appVersion": "2015-11-17T13:41:10.498Z"
 }

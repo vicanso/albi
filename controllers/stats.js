@@ -17,7 +17,6 @@ function* statistics() {
 	/*jshint validthis:true */
 	let ctx = this;
 	let data = ctx.request.body;
-	// console.info(JSON.stringify(data));
 	let performance = data.performance;
 	if (performance) {
 		let result = {

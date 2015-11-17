@@ -9,6 +9,7 @@ script.
       template: '#{TEMPLATE}',
       startAt: Date.now()
     };
+    global.requirejsComponents = !{JSON.stringify(requirejsComponents)};
     var TIMING = {
       data: {},
       startTimes: {},

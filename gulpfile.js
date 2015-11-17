@@ -7,7 +7,7 @@ const stylus = require('gulp-stylus');
 const nib = require('nib');
 const base64 = require('gulp-base64');
 const cssmin = require('gulp-cssmin');
-const jtDev = require('../jtdev');
+const jtDev = require('jtdev');
 const path = require('path');
 const copy = require('gulp-copy');
 const uglify = require('gulp-uglify');
@@ -88,7 +88,7 @@ gulp.task('copy-others', ['del:asset', 'del:build'], function() {
 		}));
 });
 
-gulp.task('static-css', ['stylus'], function() {
+gulp.task('static-css', ['stylus', 'copy-others'], function() {
 	return gulp.src(['statics/build/**/*.css'])
 		.pipe(base64())
 		.pipe(cssmin())
@@ -96,7 +96,7 @@ gulp.task('static-css', ['stylus'], function() {
 		.pipe(gulp.dest(productPath));
 });
 
-gulp.task('static-js', ['requirejs'], function() {
+gulp.task('static-js', ['requirejs', 'copy-others'], function() {
 	return gulp.src(['statics/build/**/*.js'])
 		.pipe(uglify())
 		.pipe(version())
@@ -116,7 +116,7 @@ gulp.task('static-img', ['copy-others'], function() {
 	}
 
 	return gulp.src(['statics/build/**/*.png', 'statics/build/**/*.jpg',
-			'statics/build/**/*.gif'
+			'statics/build/**/*.gif', 'statics/build/**/*.ico'
 		])
 		.pipe(through.obj(sizeLimit))
 		.pipe(version())
@@ -127,6 +127,12 @@ gulp.task('crc32', ['static-css', 'static-js', 'static-img'], function(cb) {
 	fs.writeFile(path.join(__dirname, 'crc32.json'), JSON.stringify(crc32Versions, null, 2), cb);
 });
 
+gulp.task('app-version', function(cb) {
+	let file = path.join(__dirname, './package.json');
+	var json = JSON.parse(fs.readFileSync(file));
+	json.appVersion = (new Date()).toISOString();
+	fs.writeFile(file, JSON.stringify(json, null, 2), cb);
+});
 
 // del:asset 清除生产环境的asset目录
 // del:build 清除buid过程中生成的中间文件
@@ -140,9 +146,9 @@ gulp.task('crc32', ['static-css', 'static-js', 'static-img'], function(cb) {
 
 // copy-others 复制其它文件到build目录下
 
-// static-css 压缩css文件
+// static-css 压缩css文件，依赖 styls, copy-others
 
-// static-js 压缩js文件
+// static-js 压缩js文件，依赖 requirejs, copy-others
 
 // static-img 图片处理，依赖于copy-others
 
@@ -150,4 +156,6 @@ gulp.task('crc32', ['static-css', 'static-js', 'static-img'], function(cb) {
 
 // size-limit 依赖crc32
 
-gulp.task('default', ['del:asset', 'del:build', 'jshint:node', 'jshint:web', 'stylus', 'requirejs', 'copy-others', 'static-css', 'static-js', 'static-img', 'crc32']);
+// app-version 生成版本号记录在package.json中
+
+gulp.task('default', ['del:asset', 'del:build', 'jshint:node', 'jshint:web', 'stylus', 'requirejs', 'copy-others', 'static-css', 'static-js', 'static-img', 'crc32', 'app-version']);

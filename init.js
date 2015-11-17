@@ -4,7 +4,8 @@ global.localRequire = localRequire;
 const path = require('path');
 const config = localRequire('config');
 const Joi = require('joi');
-localRequire('helpers/logger');
+const logger = require('timtam-logger');
+initLogger();
 
 /**
  * [validateThrow 如果校验失败，throw error，如果成功，返回转换后的数据]
@@ -30,4 +31,28 @@ Joi.validateThrow = function() {
 function localRequire(name) {
   let file = path.join(__dirname, name);
   return require(file);
+}
+
+
+/**
+ * [initLogger description]
+ * @return {[type]} [description]
+ */
+function initLogger() {
+  if (config.env === 'development') {
+    return;
+  }
+  let infos = require('url').parse(config.log);
+  let type = 'udp';
+  if (infos.protocol === 'tcp:') {
+    type = 'tcp';
+  }
+  logger.init({
+    app: config.app
+  });
+  logger.add('console');
+  logger.add(type, {
+    host: infos.hostname,
+    port: parseInt(infos.port)
+  });
 }

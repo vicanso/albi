@@ -26,8 +26,10 @@ exports.urlPrefix = '';
  * @return {[type]}     [description]
  */
 function get(url, headers) {
+	var originalUrl = url;
 	url = exports.urlPrefix + url;
 	var req = request.get(url);
+	req.originalUrl = originalUrl;
 	setHeaders(req, headers);
 	return end(req);
 }
@@ -41,8 +43,10 @@ function get(url, headers) {
  * @return {[type]}         [description]
  */
 function post(url, data, headers) {
+	var originalUrl = url;
 	url = exports.urlPrefix + url;
 	var req = request.post(url).send(data);
+	req.originalUrl = originalUrl;
 	setHeaders(req, headers);
 	return end(req);
 }

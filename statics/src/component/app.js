@@ -136,10 +136,10 @@ function initHttpStats() {
 	}
 
 	http.on('response', function(res) {
-		var url = _.get(res, 'req.url');
+		var url = _.get(res, 'req.originalUrl');
 		if (!reject(url)) {
 			arr.push({
-				url: url,
+				url: _.get(res, 'req.url'),
 				method: _.get(res, 'req.method'),
 				use: res.use,
 				statusCode: res.statusCode,

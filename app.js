@@ -13,14 +13,15 @@ co(function*() {
 	localRequire('helpers/monitor').run(60 * 1000);
 	const server = localRequire('helpers/server');
 	initServer();
-	if (config.env !== 'development') {
-		yield localRequire('services/consul').register();
-	}
 	// yield server.initMongodb();
 	yield server.initStatsd();
 	// yield server.initRedisSession();
+
+	if (config.env !== 'development') {
+		yield localRequire('services/consul').register();
+	}
 }).catch(function(err) {
-	console.error(err);
+	console.error(err.stack);
 });
 
 
@@ -139,7 +140,7 @@ function initServer() {
 	}
 
 
-	let maxAge = 30 * 24 * 3600;
+	let maxAge = 365 * 24 * 3600;
 	if (config.env === 'development') {
 		maxAge = 0;
 	}
@@ -147,6 +148,12 @@ function initServer() {
 		maxAge: maxAge
 	});
 	app.use(mount(staticUrlPrefix, serve));
+
+	// build path
+	let buildServe = require('koa-static-serve')(config.staticBuildPath, {
+		maxAge: 0
+	});
+	app.use(mount(config.staticBuildUrlPrefix, buildServe));
 
 	// methodOverride(由于旧的浏览器不支持delete等方法)
 	app.use(require('koa-methodoverride')());
