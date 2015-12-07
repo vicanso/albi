@@ -1,0 +1,40 @@
+{
+  "name": "albi",
+  "description": "backend framework base on koa",
+  "version": "2.0.0",
+  "author": {
+    "name": "vicanso 小墨鱼",
+    "email": "vicansocanbico@gmail.com"
+  },
+  "keywords": [
+    "koa",
+    "albi"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vicanso/albi.git"
+  },
+  "main": "app",
+  "readmeFilename": "README.md",
+  "scripts": {
+    "test": "node ./node_modules/.bin/jshint ./**.js && node ./node_modules/.bin/_mocha --reporter spec",
+    "test-cov": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --",
+    "test-travis": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly --"
+  },
+  "dependencies": {
+    "joi": "^7.0.1",
+    "koa": "^2.0.0-alpha.3",
+    "lodash": "^3.10.1",
+    "require-tree": "^1.1.1",
+    "statsd-client": "^0.2.1",
+    "timtam-logger": "^0.2.2"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.1",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.4",
+    "supertest": "^1.1.0"
+  },
+  "readme": "backend framework base on koa"
+}
