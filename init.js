@@ -46,7 +46,9 @@ function initLogger() {
 	if (!config.log) {
 		return;
 	}
+	/* istanbul ignore next */
 	const infos = require('url').parse(config.log);
+	/* istanbul ignore next */
 	logger.add('type', {
 		host: infos.hostname,
 		port: parseInt(infos.port)

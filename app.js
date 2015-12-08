@@ -6,34 +6,82 @@ const globals = localRequire('globals');
 const errors = localRequire('errors');
 const middlewares = localRequire('middlewares');
 
-const mounting = require('../koa-mounting');
+/* istanbul ignore if */
+if (require.main === module) {
+	initServer(config.port);
+}
+
 
 exports.initServer = initServer;
 
 function initServer(port) {
+	const mount = require('koa-mounting');
 	const app = new Koa();
-
 	const appUrlPrefix = config.appUrlPrefix;
 
-	app.use(middlewares.entry(appUrlPrefix));
+	app.use(middlewares.entry(appUrlPrefix, config.name));
 
-	app.use(mounting('/ping', ping));
+	// ping for health check
+	app.use(mount('/ping', ping));
 
-	app.use(middlewares['http-stats']({
-		time: {
-			v: [300, 500, 1000, 3000],
-			desc: ['puma', 'tiger', 'deer', 'rabbit', 'turtle']
-		},
-		size: {
-			v: [10240, 51200, 102400, 307200, 1024000],
-			desc: ['10KB', '50KB', '100KB', '300KB', '1MB', '>1MB'],
-		},
-		status: {
-			v: [199, 299, 399, 499, 999],
-			desc: ['10x', '20x', '30x', '40x', '50x']
-		},
-		interval: 30 * 60 * 1000
-	}));
+	// http log
+	app.use(require('koa-log')(config.logType));
+
+	// http stats middleware
+	app.use(middlewares['http-stats'](config.httpStatsResetInterval));
+
+	app.use(middlewares.limit(config.limitOptions, config.limitResetInterval));
+
+	// static file middleware, add default header: Vary
+	app.use(mount(
+		config.staticUrlPrefix,
+		require('koa-static-serve')(
+			config.staticPath, {
+				maxAge: config.staticMaxAge,
+				headers: {
+					'Vary': 'Accept-Encoding'
+				}
+			}
+		)
+	));
+
+	app.use(require('koa-methodoverride')());
+
+	app.use(require('koa-bodyparser')());
+
+	app.use(middlewares.debug());
+
+	const Router = require('koa-router');
+
+	const sysRouter = new Router();
+	sysRouter.get('/sys/versions', function(ctx) {
+		ctx.body = 'OK';
+	});
+	app.use(sysRouter.routes());
+
+
+	const testRouter = new Router();
+	testRouter.post('/test/post', function(ctx) {
+		ctx.body = ctx.request.body;
+	});
+	testRouter.get('/test/debug', function(ctx) {
+		ctx.body = {
+			query: ctx.query,
+			debugParams: ctx.debugParams,
+			url: ctx.url
+		};
+	});
+	testRouter.get('/test/wait/:ms', function(ctx) {
+		const ms = parseInt(ctx.params.ms);
+		return new Promise(function(resolve) {
+			setTimeout(function() {
+				ctx.body = ms;
+				resolve();
+			}, ms);
+		});
+	});
+	app.use(testRouter.routes());
+
 
 	return app.listen(port);
 }

@@ -1,11 +1,11 @@
 'use strict';
 const _ = require('lodash');
 const globals = {
-  // running, pause
-  status: 'running',
-  // 当前连接数
-  connectingTotal: 0,
-  performance: {}
+	// running, pause
+	status: 'running',
+	// 参考middlewares/http-stats
+	performance: {},
+	concurrency: 'low'
 };
 
 exports.get = get;
@@ -17,9 +17,9 @@ exports.set = set;
  * @return {[type]}   [description]
  */
 function get(k) {
-  if (k) {
-    return _.get(globals, k);
-  }
+	if (k) {
+		return _.get(globals, k);
+	}
 }
 
 /**
@@ -28,7 +28,7 @@ function get(k) {
  * @param {[type]} v [description]
  */
 function set(k, v) {
-  if (k) {
-    _.set(globals, k, v);
-  }
+	if (k) {
+		_.set(globals, k, v);
+	}
 }
