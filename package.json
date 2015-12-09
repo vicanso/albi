@@ -18,9 +18,7 @@
   "main": "app",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node ./node_modules/.bin/jshint ./**.js && node ./node_modules/.bin/_mocha --reporter spec",
-    "test-cov": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --",
-    "test-travis": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly --"
+    "test": "make test"
   },
   "dependencies": {
     "debug": "^2.2.0",
@@ -28,16 +26,22 @@
     "koa": "^2.0.0-alpha.3",
     "koa-bodyparser": "^3.0.0",
     "koa-connection-limit": "^2.0.1",
+    "koa-convert": "^1.2.0",
+    "koa-etag": "^2.1.0",
+    "koa-fresh": "0.0.3",
     "koa-http-stats": "^2.0.0",
     "koa-log": "^2.0.0",
     "koa-methodoverride": "^2.0.0",
     "koa-mounting": "^2.0.0",
     "koa-router": "^7.0.0",
+    "koa-router-parser": "^2.0.0",
     "koa-static-serve": "^2.0.0",
     "lodash": "^3.10.1",
+    "moment": "^2.10.6",
     "require-tree": "^1.1.1",
     "statsd-client": "^0.2.1",
-    "timtam-logger": "^0.2.2"
+    "timtam-logger": "^0.2.2",
+    "url-join": "0.0.1"
   },
   "devDependencies": {
     "istanbul": "^0.4.1",
@@ -45,5 +49,6 @@
     "mocha": "^2.3.4",
     "supertest": "^1.1.0"
   },
+  "appVersion": "2015-12-09T01:09:31.170Z",
   "readme": "backend framework base on koa"
 }

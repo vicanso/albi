@@ -60,7 +60,7 @@ describe('albi', function() {
 						const xTime = res.get('X-Time');
 						assert(xTime);
 						done();
-					};
+					}
 				});
 		};
 

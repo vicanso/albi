@@ -5,6 +5,7 @@ const config = localRequire('config');
 const globals = localRequire('globals');
 const errors = localRequire('errors');
 const middlewares = localRequire('middlewares');
+const koaConvert = require('koa-convert');
 
 /* istanbul ignore if */
 if (require.main === module) {
@@ -51,6 +52,18 @@ function initServer(port) {
 
 	app.use(middlewares.debug());
 
+
+
+	app.use(koaConvert(require('koa-fresh')()));
+
+	app.use(koaConvert(require('koa-etag')()));
+
+
+	app.use(middlewares.state(localRequire('versions')));
+
+	app.use(middlewares.picker('_fields'));
+
+
 	const Router = require('koa-router');
 
 	const sysRouter = new Router();
@@ -83,7 +96,13 @@ function initServer(port) {
 	app.use(testRouter.routes());
 
 
-	return app.listen(port);
+	return app.listen(port, function(err) {
+		if (err) {
+			console.error(`server listen on ${port} fail, err:${err.message}`);
+		} else {
+			console.info(`server listen on ${port}`);
+		}
+	});
 }
 
 

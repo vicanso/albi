@@ -1,6 +1,9 @@
 'use strict';
+const pkg = localRequire('package');
 const path = require('path');
 const env = process.env.NODE_ENV || 'development';
+
+exports.version = pkg.appVersion;
 
 exports.env = env;
 
