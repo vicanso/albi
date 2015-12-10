@@ -5,7 +5,7 @@ const util = require('util');
 const assert = require('assert');
 require('../../init');
 
-describe('middleware-limit', () => {
+describe('middleware/limit', () => {
 	it('should set limit middleware successful', done => {
 		const app = new Koa();
 		const server = app.listen();

@@ -5,7 +5,7 @@ const util = require('util');
 const assert = require('assert');
 require('../../init');
 
-describe('middleware-entry', () => {
+describe('middleware/entry', () => {
 	it('should set entry middleware successful', done => {
 		const app = new Koa();
 		const entry = localRequire('middlewares/entry');

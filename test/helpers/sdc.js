@@ -4,7 +4,7 @@ const assert = require('assert');
 const dgram = require('dgram');
 require('../../init');
 
-describe('statsd-client', () => {
+describe('helpers/statsd-client', () => {
 	it('should init statsd-client successful', done => {
 		const server = dgram.createSocket('udp4');
 		const sdc = localRequire('helpers/sdc');
@@ -26,26 +26,3 @@ describe('statsd-client', () => {
 		server.bind();
 	});
 });
-
-
-// var dgram = require("dgram");
-
-// var server = dgram.createSocket("udp4");
-
-// server.on("error", function (err) {
-//   console.log("server error:\n" + err.stack);
-//   server.close();
-// });
-
-// server.on("message", function (msg, rinfo) {
-//   console.log("server got: " + msg + " from " +
-//     rinfo.address + ":" + rinfo.port);
-// });
-
-// server.on("listening", function () {
-//   var address = server.address();
-//   console.log("server listening " +
-//       address.address + ":" + address.port);
-// });
-
-// server.bind(41234);

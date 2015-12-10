@@ -41,3 +41,12 @@ exports.limitOptions = {
 
 // http request concurrency reach high, wait for `limitResetInterval` to reset app 'running'
 exports.limitResetInterval = 5000;
+
+// template options for tempate middleware
+exports.templateOptions = {
+	pretty: false,
+	cache: env !== 'development'
+};
+
+// admin token
+exports.adminToken = '7c4a8d09ca3762af61e59520943dc26494f8941b';

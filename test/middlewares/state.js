@@ -4,7 +4,7 @@ const Koa = require('koa');
 const util = require('util');
 const assert = require('assert');
 require('../../init');
-describe('middleware-state', () => {
+describe('middleware/state', () => {
 	it('should set state params successful', (done) => {
 		const app = new Koa();
 		const state = localRequire('middlewares/state');

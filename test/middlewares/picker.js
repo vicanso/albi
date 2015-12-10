@@ -6,7 +6,7 @@ const assert = require('assert');
 const Joi = require('joi');
 require('../../init');
 
-describe('middleware-picker', () => {
+describe('middleware/picker', () => {
 	it('should pick fields successful', done => {
 		const app = new Koa();
 		const picker = localRequire('middlewares/picker');

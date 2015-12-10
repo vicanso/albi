@@ -5,7 +5,7 @@ const util = require('util');
 const assert = require('assert');
 require('../../init');
 
-describe('middleware-debug', () => {
+describe('middleware/debug', () => {
 	it('should set debug params successful', (done) => {
 		const app = new Koa();
 		const debug = localRequire('middlewares/debug');

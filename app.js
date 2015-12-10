@@ -63,37 +63,12 @@ function initServer(port) {
 
 	app.use(middlewares.picker('_fields'));
 
+	app.use(localRequire('router').routes());
 
-	const Router = require('koa-router');
-
-	const sysRouter = new Router();
-	sysRouter.get('/sys/versions', function(ctx) {
-		ctx.body = 'OK';
+	app.on('error', err => {
+		console.dir(err.expose);
+		console.dir(err);
 	});
-	app.use(sysRouter.routes());
-
-
-	const testRouter = new Router();
-	testRouter.post('/test/post', function(ctx) {
-		ctx.body = ctx.request.body;
-	});
-	testRouter.get('/test/debug', function(ctx) {
-		ctx.body = {
-			query: ctx.query,
-			debugParams: ctx.debugParams,
-			url: ctx.url
-		};
-	});
-	testRouter.get('/test/wait/:ms', function(ctx) {
-		const ms = parseInt(ctx.params.ms);
-		return new Promise(function(resolve) {
-			setTimeout(function() {
-				ctx.body = ms;
-				resolve();
-			}, ms);
-		});
-	});
-	app.use(testRouter.routes());
 
 
 	return app.listen(port, function(err) {

@@ -2,11 +2,14 @@ SRC = *.js \
 	controllers/*.js \
 	helpers/*.js \
 	middlewares/*.js \
+	router/*.js
 
 TESTS = test/init.js \
 	test/globals.js \
 	test/helpers/*.js \
-	test/middlewares/*.js
+	test/middlewares/*.js \
+	test/controllers/*.js \
+	test/router.js
 
 jshint:
 	node ./node_modules/.bin/jshint \

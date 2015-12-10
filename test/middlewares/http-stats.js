@@ -5,7 +5,7 @@ const util = require('util');
 const assert = require('assert');
 require('../../init');
 
-describe('middleware-http-stats', () => {
+describe('middleware/http-stats', () => {
 	it('should set stats middleware successful', done => {
 		const app = new Koa();
 		const stats = localRequire('middlewares/http-stats');
