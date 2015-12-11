@@ -46,6 +46,7 @@
     "require-tree": "^1.1.1",
     "statsd-client": "^0.2.1",
     "timtam-logger": "^0.2.2",
+    "toobusy-js": "^0.4.2",
     "url-join": "0.0.1"
   },
   "devDependencies": {

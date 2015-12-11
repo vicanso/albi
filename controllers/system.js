@@ -69,6 +69,7 @@ function stats(ctx) {
  * @param  {[type]} ctx [description]
  * @return {[type]}     [description]
  */
+/* istanbul ignore next */
 function safeExit(ctx) {
 	globals.set('status', 'pause');
 	console.info(config.name + ' will safeExit soon.');
@@ -95,6 +96,7 @@ function getVersion() {
  * @param  {[type]} times [description]
  * @return {[type]}       [description]
  */
+/* istanbul ignore next */
 function checkToExit(times) {
 	if (!times) {
 		console.error('exit while there are still connections.');

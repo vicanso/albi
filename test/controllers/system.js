@@ -70,12 +70,19 @@ describe('controller/system', () => {
 					uptime: Joi.string().required(),
 					startedAt: Joi.string().required(),
 					performance: Joi.object({
-						createdAt: Joi.string().required(),
-						total: Joi.number().required(),
-						connecting: Joi.number().required(),
-						status: Joi.object().required(),
-						time: Joi.object().required(),
-						size: Joi.object().required()
+						http: Joi.object({
+							createdAt: Joi.string().required(),
+							total: Joi.number().required(),
+							connecting: Joi.number().required(),
+							status: Joi.object().required(),
+							time: Joi.object().required(),
+							size: Joi.object().required()
+						}),
+						lag: Joi.number().required(),
+						memory: Joi.object({
+							exec: Joi.string().required(),
+							physical: Joi.string().required()
+						})
 					})
 				}));
 				done();

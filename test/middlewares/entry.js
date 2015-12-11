@@ -14,6 +14,7 @@ describe('middleware/entry', () => {
 
 
 		app.use(ctx => {
+			assert(!ctx.xhr);
 			ctx.body = ctx.url;
 		});
 
@@ -27,6 +28,33 @@ describe('middleware/entry', () => {
 					assert.equal(res.text, '/');
 					assert.equal(res.get('X-Process'), 'unknown,node-ALBI');
 					assert.equal(res.get('Cache-Control'), 'must-revalidate, max-age=0');
+					done();
+				}
+			});
+	});
+
+	it('should set xhr successful', done => {
+		const app = new Koa();
+		const entry = localRequire('middlewares/entry');
+		const server = app.listen();
+		app.use(entry('/albi', 'ALBI'));
+
+		app.use(ctx => {
+			assert(ctx.xhr);
+			ctx.body = ctx.url;
+		});
+
+		request(server)
+			.get('/albi')
+			.set({
+				'X-Requested-With': 'XMLHttpRequest'
+			})
+			.end((err, res) => {
+				if (err) {
+					done(err);
+				} else {
+					assert.equal(res.status, 200);
+					assert.equal(res.text, '/');
 					done();
 				}
 			});

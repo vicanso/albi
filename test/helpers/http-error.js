@@ -2,7 +2,7 @@
 const assert = require('assert');
 require('../../init');
 
-describe('helpers/http-error', () => {
+describe('helper/http-error', () => {
 	it('should get an error successful', done => {
 		const httpError = localRequire('helpers/http-error');
 		const err500 = httpError('my 500');

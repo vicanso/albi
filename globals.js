@@ -3,8 +3,18 @@ const _ = require('lodash');
 const globals = {
 	// running, pause
 	status: 'running',
-	// 参考middlewares/http-stats
-	performance: {},
+
+	performance: {
+		// 参考middlewares/http-stats
+		http: null,
+		// tasks/performance
+		lag: 0,
+		// tasks/performance
+		memory: {
+			exec: '0KB',
+			physical: '0KB'
+		}
+	},
 	concurrency: 'low'
 };
 

@@ -34,7 +34,7 @@ describe('middleware/http-stats', () => {
 					done(err);
 				} else {
 					assert.equal(res.status, 200);
-					const performance = globals.get('performance');
+					const performance = globals.get('performance.http');
 					// after reset, total and connecting is set to 0
 					assert.equal(performance.total, 0);
 					assert.equal(performance.connecting, 0);
@@ -50,7 +50,7 @@ describe('middleware/http-stats', () => {
 					done(err);
 				} else {
 					assert.equal(res.status, 200);
-					const performance = globals.get('performance');
+					const performance = globals.get('performance.http');
 					assert.equal(performance.total, 2);
 					assert.equal(performance.connecting, 1);
 				}

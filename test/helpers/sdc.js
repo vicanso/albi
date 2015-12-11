@@ -4,7 +4,7 @@ const assert = require('assert');
 const dgram = require('dgram');
 require('../../init');
 
-describe('helpers/statsd-client', () => {
+describe('helper/statsd-client', () => {
 	it('should init statsd-client successful', done => {
 		const server = dgram.createSocket('udp4');
 		const sdc = localRequire('helpers/sdc');

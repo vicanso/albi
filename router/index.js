@@ -22,6 +22,7 @@ function addToRouter(category, fns) {
 		return;
 	}
 	_.forEach(fns, (v, k) => {
+		/* istanbul ignore else */
 		if (_.isFunction(v)) {
 			router.add(category + '.' + k, v);
 		} else if (_.isObject(v)) {

@@ -2,6 +2,7 @@ SRC = *.js \
 	controllers/*.js \
 	helpers/*.js \
 	middlewares/*.js \
+	tasks/*.js \
 	router/*.js
 
 TESTS = test/init.js \
@@ -9,6 +10,7 @@ TESTS = test/init.js \
 	test/helpers/*.js \
 	test/middlewares/*.js \
 	test/controllers/*.js \
+	test/tasks/*.js \
 	test/router.js
 
 jshint:

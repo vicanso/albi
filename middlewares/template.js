@@ -2,12 +2,11 @@
 const path = require('path');
 const jade = require('jade');
 const config = localRequire('config');
-exports.viewPath = path.join(__dirname, '../views');
 
 exports.index = parse('index', 'index');
 
 function render(file, data, options) {
-	file = path.join(exports.viewPath, file);
+	file = path.join(config.viewPath, file);
 	const extname = path.extname(file);
 	if (!extname) {
 		file += '.jade';
@@ -18,8 +17,10 @@ function render(file, data, options) {
 
 function parse(name, file) {
 	return (ctx, next) => {
-		const html = render(file, ctx.state, config.templateOptions);
-		ctx.body = html;
-		return next();
+		return next().then(() => {
+			ctx.state.TEMPLATE = name;
+			const html = render(file, ctx.state, config.templateOptions);
+			ctx.body = html;
+		});
 	};
 }

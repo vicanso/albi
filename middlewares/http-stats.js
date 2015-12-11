@@ -19,7 +19,7 @@ function httpStats(interval) {
 	let timer = setInterval(resetHttpPerformance, interval);
 	timer.unref();
 	return stats(options, (performance) => {
-		globals.set('performance', performance);
+		globals.set('performance.http', performance);
 	});
 
 	/**
@@ -27,7 +27,7 @@ function httpStats(interval) {
 	 * @return {[type]} [description]
 	 */
 	function resetHttpPerformance() {
-		const performance = globals.get('performance');
+		const performance = globals.get('performance.http');
 		_.forEach(performance, function(v, k) {
 			if (k === 'createdAt') {
 				performance[k] = (new Date()).toISOString();

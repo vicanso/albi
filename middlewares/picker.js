@@ -12,6 +12,7 @@ function picker(field) {
 	return (ctx, next) => {
 		return next().then(() => {
 			let pickValue = ctx.query[field];
+			/* istanbul ignore if */
 			if (!pickValue || !ctx.body) {
 				return;
 			}

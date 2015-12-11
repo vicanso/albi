@@ -6,6 +6,7 @@ const globals = localRequire('globals');
 const errors = localRequire('errors');
 const middlewares = localRequire('middlewares');
 const koaConvert = require('koa-convert');
+const _ = require('lodash');
 
 /* istanbul ignore if */
 if (require.main === module) {
@@ -16,9 +17,14 @@ if (require.main === module) {
 exports.initServer = initServer;
 
 function initServer(port) {
+	localRequire('tasks');
 	const mount = require('koa-mounting');
 	const app = new Koa();
 	const appUrlPrefix = config.appUrlPrefix;
+
+	// error handler
+	app.use(middlewares.error);
+
 
 	app.use(middlewares.entry(appUrlPrefix, config.name));
 
@@ -31,6 +37,7 @@ function initServer(port) {
 	// http stats middleware
 	app.use(middlewares['http-stats'](config.httpStatsResetInterval));
 
+	// http connection limit
 	app.use(middlewares.limit(config.limitOptions, config.limitResetInterval));
 
 	// static file middleware, add default header: Vary
@@ -65,10 +72,7 @@ function initServer(port) {
 
 	app.use(localRequire('router').routes());
 
-	app.on('error', err => {
-		console.dir(err.expose);
-		console.dir(err);
-	});
+	app.on('error', _.noop);
 
 
 	return app.listen(port, function(err) {
