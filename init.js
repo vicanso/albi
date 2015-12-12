@@ -8,6 +8,15 @@ const config = localRequire('config');
 const Joi = require('joi');
 initLogger();
 
+process.on('unhandledRejection', function(err) {
+	console.error(`unhandledRejection:${err.message}, stack:${err.stack}`);
+});
+
+config.env === 'production' && process.on('uncaughtException', function(err) {
+	// TODO should safe exit
+	console.error(`uncaughtException:${err.message}, stack:${err.stack}`);
+});
+
 
 /**
  * [validateThrow 如果校验失败，throw error，如果成功，返回转换后的数据]

@@ -9,6 +9,10 @@ module.exports = [
 	'POST /sys/safe-exit m.auth.admin,c.system.safeExit',
 	// sysetm end
 
+	// user start
+	'GET /user/me m.noCache,c.user.me',
+	// user end
 
-	'GET /user/me m.noCache,c.user.me'
+	// home page
+	'GET / v.home,c.home'
 ];

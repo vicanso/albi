@@ -2,6 +2,8 @@
 
 module.exports = home;
 
-function home(ctx) {
-
+function home(ctx, next) {
+	ctx.state.viewData = {
+		name: 'vicanso'
+	};
 }

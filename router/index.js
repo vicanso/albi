@@ -8,7 +8,8 @@ const middlewares = localRequire('middlewares');
 addToRouter('c', controllers);
 addToRouter('m.noCache', middlewares['no-cache']());
 addToRouter('m.auth.admin', middlewares.auth.admin);
-module.exports = getRouter(localRequire('router/routes'));
+addToRouter('v', middlewares.template);
+module.exports = getRouter(localRequire('router/config'));
 
 
 /**

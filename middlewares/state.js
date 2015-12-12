@@ -1,6 +1,7 @@
 'use strict';
 const config = localRequire('config');
 const urlJoin = require('url-join');
+const Importer = require('jtfileimporter');
 const _ = require('lodash');
 const moment = require('moment');
 const path = require('path');
@@ -22,6 +23,8 @@ function state(versions) {
 
 	return (ctx, next) => {
 		const state = ctx.state;
+		const importer = new Importer();
+		importer.prefix = staticUrlPrefix;
 		state.STATIC_URL_PREFIX = staticUrlPrefix;
 		state.APP_URL_PREFIX = appUrlPrefix;
 		state.APP_VERSION = config.version;
@@ -30,6 +33,7 @@ function state(versions) {
 		state.moment = moment;
 		state.IMG_URL = imgUrlFn;
 		state.URL = anchorUrlFn;
+		state.importer = importer;
 		return next();
 	};
 }

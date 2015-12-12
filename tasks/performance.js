@@ -22,6 +22,7 @@ function run(interval, sdc) {
 	const physicalTotal = bytes(heapStats.total_physical_size);
 	const usedHeapSize = bytes(heapStats.used_heap_size);
 	const lag = toobusy.lag();
+	/* istanbul ignore if */
 	if (config.env === 'development' || heapStats.total_physical_size > 100 * 1024 * 1024 || lag > 70) {
 		console.info(`system performance memory exec:${totalHeapSizeExec} use:${usedHeapSize} total:${totalHeapSize} physical:${physicalTotal} lag:${lag}`);
 	}
@@ -34,6 +35,7 @@ function run(interval, sdc) {
 		exec: totalHeapSizeExec,
 		physical: physicalTotal
 	});
+	/* istanbul ignore next */
 	const timer = setTimeout(() => {
 		run(interval, sdc);
 	}, interval);
