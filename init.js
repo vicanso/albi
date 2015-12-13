@@ -12,10 +12,12 @@ process.on('unhandledRejection', function(err) {
 	console.error(`unhandledRejection:${err.message}, stack:${err.stack}`);
 });
 
-config.env === 'production' && process.on('uncaughtException', function(err) {
-	// TODO should safe exit
-	console.error(`uncaughtException:${err.message}, stack:${err.stack}`);
-});
+if (config.env === 'production') {
+	process.on('uncaughtException', function(err) {
+		// TODO should safe exit
+		console.error(`uncaughtException:${err.message}, stack:${err.stack}`);
+	});
+}
 
 
 /**
