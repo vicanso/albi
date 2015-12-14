@@ -35,10 +35,14 @@ function initServer(port) {
 	app.use(require('koa-log')(config.logType));
 
 	// http stats middleware
-	app.use(middlewares['http-stats'](config.httpStatsResetInterval));
+	app.use(middlewares['http-stats']({
+		sdc: localRequire('helpers/sdc')
+	}));
 
 	// http connection limit
 	app.use(middlewares.limit(config.limitOptions, config.limitResetInterval));
+
+
 
 	// static file middleware, add default header: Vary
 	app.use(mount(

@@ -12,12 +12,7 @@ describe('middleware/template', () => {
 		const state = localRequire('middlewares/state');
 		const template = localRequire('middlewares/template');
 		app.use(state({}));
-		app.use(template.home);
-		app.use(ctx => {
-			ctx.state.viewData = {
-				name: 'vicanso'
-			};
-		});
+		app.use(template.test);
 
 		request(app.listen())
 			.get('/')

@@ -12,7 +12,9 @@ describe('middleware/http-stats', () => {
 		const globals = localRequire('globals');
 		const server = app.listen();
 
-		app.use(stats(50));
+		app.use(stats({
+			sdc: localRequire('helpers/sdc')
+		}));
 
 		app.use(ctx => {
 			if (ctx.url === '/wait') {
@@ -35,8 +37,7 @@ describe('middleware/http-stats', () => {
 				} else {
 					assert.equal(res.status, 200);
 					const performance = globals.get('performance.http');
-					// after reset, total and connecting is set to 0
-					assert.equal(performance.total, 0);
+					assert.equal(performance.total, 2);
 					assert.equal(performance.connecting, 0);
 					done();
 

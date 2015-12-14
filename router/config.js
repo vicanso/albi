@@ -14,5 +14,5 @@ module.exports = [
 	// user end
 
 	// home page
-	'GET / v.home,c.home'
+	'GET /,/page/:page v.home,c.home'
 ];

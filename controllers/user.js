@@ -1,5 +1,5 @@
 'use strict';
-
+const services = localRequire('services');
 exports.me = me;
 
 function me(ctx) {

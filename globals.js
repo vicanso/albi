@@ -6,16 +6,19 @@ const globals = {
 
 	performance: {
 		// 参考middlewares/http-stats
-		http: null,
+		http: {},
 		// tasks/performance
 		lag: 0,
 		// tasks/performance
 		memory: {
 			exec: '0KB',
 			physical: '0KB'
-		}
+		},
+		// router/index
+		route: {},
+		// middlewares/limit
+		concurrency: 'low'
 	},
-	concurrency: 'low'
 };
 
 exports.get = get;

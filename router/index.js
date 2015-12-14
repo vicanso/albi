@@ -3,7 +3,28 @@ const _ = require('lodash');
 const router = require('koa-router-parser');
 const controllers = localRequire('controllers');
 const middlewares = localRequire('middlewares');
+const globals = localRequire('globals');
+const sdc = localRequire('helpers/sdc');
 
+// add route handler stats
+router.addDefault('common', (ctx, next) => {
+	const routePerformance = globals.get(
+		'performance.route');
+	if (!routePerformance.createdAt) {
+		routePerformance.createdAt = (new Date()).toISOString();
+	}
+	const method = ctx.method.toUpperCase();
+	_.forEach(ctx.matched, (layer => {
+		const key = method + layer.path;
+		sdc.increment('route.' + key);
+		if (!routePerformance[key]) {
+			routePerformance[key] = 1;
+		} else {
+			routePerformance[key]++;
+		}
+	}));
+	return next();
+});
 
 addToRouter('c', controllers);
 addToRouter('m.noCache', middlewares['no-cache']());

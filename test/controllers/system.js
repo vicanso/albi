@@ -82,7 +82,9 @@ describe('controller/system', () => {
 						memory: Joi.object({
 							exec: Joi.string().required(),
 							physical: Joi.string().required()
-						})
+						}),
+						route: Joi.object().required(),
+						concurrency: Joi.string().required()
 					})
 				}));
 				done();

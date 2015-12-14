@@ -2,5 +2,6 @@
 
 module.exports = [
 	// name template
-	'home home'
+	'home home',
+	'test test'
 ];

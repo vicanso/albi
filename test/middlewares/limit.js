@@ -46,7 +46,7 @@ describe('middleware/limit', () => {
 					.get('/wait')
 					.end(function(err, res) {
 						assert.equal(res.status, 200);
-						assert.equal(globals.get('concurrency'), 'low');
+						assert.equal(globals.get('performance.concurrency'), 'low');
 						assert.equal(globals.get('status'), 'running');
 						console.info = info;
 						done();
@@ -55,7 +55,7 @@ describe('middleware/limit', () => {
 		request(server)
 			.get('/wait')
 			.end(function(err, res) {
-				assert.equal(globals.get('concurrency'), 'mid');
+				assert.equal(globals.get('performance.concurrency'), 'mid');
 				assert.equal(globals.get('status'), 'pause');
 				assert.equal(res.status, 429);
 			});
