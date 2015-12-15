@@ -13,7 +13,7 @@ html(lang='zh-CN')
 		title #{title}
 		include ./inlinejs
 		//CSS_FILES_CONTAINER
-		- importer.import('/css/pure.css', '/css/global.css')
+		- importer.import('/css/pure.css', '/css/global.css', '/components/vendor.js', '/components/global.js')
 
 	body
 		block bodyContainer

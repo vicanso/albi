@@ -20,7 +20,7 @@ function state(versions) {
 	const anchorUrlFn = url => {
 		return urlJoin(appUrlPrefix, url);
 	};
-
+	const defaultPattern = config.env === 'development' ? '*' : '';
 	return (ctx, next) => {
 		const state = ctx.state;
 		const importer = new Importer();
@@ -28,12 +28,15 @@ function state(versions) {
 		state.STATIC_URL_PREFIX = staticUrlPrefix;
 		state.APP_URL_PREFIX = appUrlPrefix;
 		state.APP_VERSION = config.version;
+		state.APP = config.name;
 		state.ENV = config.env;
 		state._ = _;
 		state.moment = moment;
 		state.IMG_URL = imgUrlFn;
 		state.URL = anchorUrlFn;
 		state.importer = importer;
+		state.DEBUG = _.get(ctx, 'debugParams.DEBUG', false);
+		state.PATTERN = _.get(ctx, 'debugParams.PATTERN', defaultPattern);
 		return next();
 	};
 }

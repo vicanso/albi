@@ -2,11 +2,13 @@ script.
   (function(global){
     global.CONFIG = {
       debug: #{DEBUG || false},
-      env: '#{ENV}',
-      staticUrlPrefix: '#{STATIC_URL_PREFIX}',
-      appUrlPrefix: '#{APP_URL_PREFIX}',
-      appVersion: '#{APP_VERSION}',
-      template: '#{TEMPLATE}'
+      env: "#{ENV}",
+      app: "#{APP}",
+      staticUrlPrefix: "#{STATIC_URL_PREFIX}",
+      appUrlPrefix: "#{APP_URL_PREFIX}",
+      appVersion: "#{APP_VERSION}",
+      pattern: "#{PATTERN}",
+      template: "#{TEMPLATE}"
     };
     var TIMING = {
       data: {},
