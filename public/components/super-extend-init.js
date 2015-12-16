@@ -1,24 +1,12 @@
 'use strict';
-var superExtend = require('superagent-extend');
-var _ = require('lodash');
-var util = superExtend.util;
-var donigCount = 0;
-var doningRequest = {};
-
-
-var postStatsException = (function() {
-	var exceptions = [];
-	var post = superExtend.parse('POST /stats/exception');
-	var debouncePost = _.debounce(function() {
-		post(exceptions).then((res) => {
-			exceptions.length = 0;
-		});
-	}, 3000);
-	return function(data) {
-		exceptions.push(data);
-		debouncePost();
-	};
-})();
+const superExtend = require('superagent-extend');
+const _ = require('lodash');
+const util = superExtend.util;
+const debug = require('./debug');
+const http = require('./http');
+const global = require('./global');
+const doningRequest = {};
+const appUrlPrefix = global.get('CONFIG.appUrlPrefix', '');
 
 
 util.addHeader('common', {
@@ -35,42 +23,74 @@ util.addHeader('delete', {
 });
 
 util.timeout = 5 * 1000;
-
+var uuid = 0;
 util.addReqIntc(function appUrlPrefixHandler(req) {
-	donigCount++;
-	var url = req.url;
-	var key = req.method + req.url;
+	let url = req.url;
+	const key = req.method + req.url;
+	const requestId = ++uuid;
+	debug('request[%d] %s', requestId, key);
 	if (!doningRequest[key]) {
 		doningRequest[key] = 0;
 	}
 
-
-	var count = ++doningRequest[key];
+	const count = ++doningRequest[key];
 	if (count > 1) {
 		// 相同的请求同时并发数超过1
-		var data = {
+		http.statsException({
 			key: key,
 			count: count,
 			type: 'parallelRequest'
-		};
-		postStatsException(data);
+		});
 	}
+	req.once('complete', () => {
+		debug('request[%d] complete %s', requestId, key);
+		doningRequest[key]--;
+	});
+	req.once('fail', (err) => {
+		debug('request[%d] fail %s', requestId, key);
+		http.statsException({
+			key: key,
+			type: 'requestFail',
+			message: err.message
+		});
+	});
 
-
-	if (CONFIG.appUrlPrefix && url.charAt(0) === '/') {
-		req.url = CONFIG.appUrlPrefix + url;
+	if (appUrlPrefix && url.charAt(0) === '/') {
+		req.url = appUrlPrefix + url;
 	}
 
 });
+
+
+
+const isReject = (function() {
+	const rejectUrls = _.map(['/sys/', '/stats/'], item => {
+		return appUrlPrefix + item;
+	});
+	debug('rejectUrls:%j', rejectUrls);
+	return (url) => {
+		return !!_.find(rejectUrls, item => {
+			return url.indexOf(item) === 0;
+		});
+	};
+})();
 
 util.addResIntc(function responseEnd(res) {
-	donigCount--;
+	const req = res.req;
+	const url = req.url;
+	if (isReject(url)) {
+		return;
+	}
+	const performance = res.performance;
+	const data = {
+		method: req.method,
+		url: url,
+		use: performance.fetchEnd - performance.fetchStart,
+		// hit cache
+		hit: false
+	};
+	if (parseInt(res.get('X-Hits') || 0)) {
+		data.hit = true;
+	}
+	http.statsAjax(data);
 });
-
-
-
-var user = superExtend.parse('GET /user/me?cache=false');
-
-user();
-user();
-user();

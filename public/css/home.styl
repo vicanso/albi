@@ -1,0 +1,90 @@
+@import './constant'
+
+LogoContainerCss()
+	margin-top 3em
+	.logo
+		display block
+		width 220px
+		margin 0 auto
+		$logoHeight = 64px
+		height $logoHeight
+		line-height $logoHeight
+		overflow hidden
+		.brand, .desc
+			display block
+			float left
+		.brand
+			width $logoHeight
+			text-align center
+			background-color #0089da
+			font-size 32px
+			color #fff
+			position relative
+			span
+				position absolute
+				bottom 5px
+				right 3px
+				line-height 1em
+				font-size 14px
+		.desc
+			font-size 64px
+			color #000
+			margin-left 10px
+			span
+				color #b3b3b3
+				font-size 32px
+			.dot
+				color #0089da
+				
+
+.homePage
+	.logoContainer
+		LogoContainerCss()
+	
+	.description h3
+		color #666
+		text-align center
+		font-weight 200
+		margin 1em auto
+		font-size 24px
+	
+	.forkmeContainer
+		display block
+		position fixed
+		right 0
+		top 0
+		img
+			width 149px
+			height 149px
+			display block
+		
+	.components
+		ul
+			margin 2em 0
+			padding 0
+			li
+				display inline-block
+				a
+					display block
+					color #fff
+					color rgba(255, 255, 255, 0.85)
+					line-height 60px
+					text-indent 1em
+				&:nth-child(1)
+					width 15%
+					background-color #1f8dd6
+				&:nth-child(2)
+					width 18%
+					background-color #8058a5
+				&:nth-child(3)
+					width 22%
+					background-color #5eb95e
+				&:nth-child(4)
+					width 15%
+					background-color #dd514c
+				&:nth-child(5)
+					width 12%
+					background-color #f37b1d
+				&:nth-child(6)
+					width 18%
+					background-color #fad232

@@ -1,8 +1,10 @@
 'use strict';
-var debug = require('debug');
-
-if (CONFIG.pattern) {
-	debug.names.push(new RegExp('^' + CONFIG.pattern.replace(/\*/g, '.*?') + '$'));
+const debug = require('debug');
+const global = require('./global');
+const pattern = global.get('CONFIG.pattern');
+const app = global.get('CONFIG.app');
+if (pattern) {
+	debug.names.push(new RegExp('^' + pattern.replace(/\*/g, '.*?') + '$'));
 }
 
-module.exports = debug('jt.' + CONFIG.app);
+module.exports = debug('jt.' + app);

@@ -1,18 +1,18 @@
-mixin Components(items)
+mixin Components(items, baseUrl, selectedUrl)
 	ul
 		each item in items
-			li
-				a(href=URL('/component/' + item), title='#{item}') #{item}
+			- var url = baseUrl + item.url;
+			li(class='#{selectedUrl === url? "selected" : ""}')
+				a(href=URL(url), title='#{item.name}') #{item.name}
+				if item.children
+					+Components(item.children, url, selectedUrl)
+
 
 nav.navContainer
-	a.text-center.logo(href='javascript:;', title='Albi')
+	a.text-center.logo(href=URL('/'), title='Albi')
 		| Albi
-	ul
-		li
-			a(href='javascript:;', title='Get Started') Get Started
-		li.selected
-			a(href='javascript:;', title='Components') Components
-			- var componentsItems = ['debug', 'emitter', 'http', 'ms', 'rest', 'store', 'superagent', 'url', 'util'];
-			+Components(componentsItems)
+	- var navigation = viewData.navigation;
+	if navigation
+		+Components(navigation.items, '', navigation.selected)
 
-	- importer.import('/css/nav.css')
+- importer.import('/css/nav.css')

@@ -1,6 +1,30 @@
 extends ./layout
-block bodyContainer
-	.homePage
-		include ./nav
 
+mixin LogoContainer
+	a.logo.clearfix(href=URL('/'))
+		span.brand A
+			span js
+		span.desc Albi
+			span.dot .
+			span js
+
+
+block bodyContainer
+	include ./nav
+	.homePage.pageContentContainer
+		a.forkmeContainer(href='https://github.com/vicanso/albi')
+			img(src=IMG_URL('/img/forkme.png'))
+		.logoContainer
+			+LogoContainer
+		
+		section.description
+			h3 Easy web framewrok for Node.js, based on koa 2.x
+		
+		- var navigation = viewData.navigation;
+		if navigation
+			section.components: ul
+				each item in navigation.items
+					li: a(href=URL(item.url)) #{item.name}
+
+	- importer.import('/css/home.css')
 	

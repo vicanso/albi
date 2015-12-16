@@ -13,11 +13,16 @@ html(lang='zh-CN')
 		title #{title}
 		include ./inlinejs
 		//CSS_FILES_CONTAINER
-		- importer.import('/css/pure.css', '/css/global.css', '/components/vendor.js', '/components/global.js')
+		- importer.import('/css/pure.css', '/css/global.css', '/components/vendor.js', '/components/app.js')
 
 	body
 		block bodyContainer
 
 	include ./globals
 
+	script.
+		TIMING.end('html')
+		TIMING.start('js')
 	//JS_FILES_CONTAINER
+	script.
+		TIMING.end('js')

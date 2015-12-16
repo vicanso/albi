@@ -1,12 +1,13 @@
 'use strict';
+const view = localRequire('services/view');
 
 module.exports = home;
 
 function home(ctx, next) {
 	ctx.state.viewData = {
-		name: 'vicanso',
-		globals: {
-			name: 'globals'
+		navigation: {
+			items: view.navigation,
+			selected: '/get-started'
 		}
 	};
 }

@@ -52,6 +52,10 @@
     "url-join": "0.0.1"
   },
   "devDependencies": {
+    "babel-core": "^6.3.17",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
     "istanbul": "^0.4.1",
     "jshint": "^2.8.0",
     "koa-stylus-parser": "^2.0.0",

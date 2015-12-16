@@ -12,6 +12,7 @@ module.exports = [
 	// stats start
 	'POST /stats/exception c.stats.exception',
 	'POST /stats/statistics c.stats.statistics',
+	'POST /stats/ajax c.stats.ajaxStats',
 	// stats end
 
 	// user start

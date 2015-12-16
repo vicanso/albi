@@ -6,7 +6,7 @@ module.exports = {
 	context: path.join(__dirname, 'public/components'),
 	entry: {
 		vendor: ['bluebird', 'lodash', 'superagent-extend', 'debug'],
-		global: ['./global.js']
+		app: ['./app.js']
 	},
 	output: {
 		path: path.join(__dirname, 'assets/components'),
@@ -14,5 +14,14 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
-	]
+	],
+	module: {
+		loaders: [{
+			test: /\.js[x]?$/,
+			loader: 'babel',
+			query: {
+				presets: ['es2015', 'react']
+			}
+		}]
+	}
 };
