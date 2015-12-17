@@ -88,9 +88,9 @@ function initServer(port) {
 
 	app.on('error', _.noop);
 
-	if (config.env === 'development') {
-		webpackWatch();
-	}
+	// if (config.env === 'development') {
+	// 	webpackWatch();
+	// }
 
 	return app.listen(port, function(err) {
 		if (err) {

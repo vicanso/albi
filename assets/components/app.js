@@ -1,14 +1,12 @@
-webpackJsonp([0],{
-
-/***/ 0:
+webpackJsonp([0],[
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1);
 
 
 /***/ },
-
-/***/ 1:
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18,7 +16,11 @@ webpackJsonp([0],{
 	var http = __webpack_require__(10);
 	var global = __webpack_require__(9);
 	__webpack_require__(20);
-	_.defer(init);
+	var dom = __webpack_require__(21);
+	_.defer(function () {
+		init();
+		dom.lazyLoadImage('.lazyLoadImage');
+	});
 
 	/**
 	 * [init description]
@@ -68,9 +70,13 @@ webpackJsonp([0],{
 		});
 	}
 
-/***/ },
+	function runLazyLoad() {}
 
-/***/ 5:
+/***/ },
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -86,8 +92,10 @@ webpackJsonp([0],{
 	module.exports = debug('jt.' + app);
 
 /***/ },
-
-/***/ 9:
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -111,8 +119,7 @@ webpackJsonp([0],{
 	}
 
 /***/ },
-
-/***/ 10:
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -154,8 +161,16 @@ webpackJsonp([0],{
 	}
 
 /***/ },
-
-/***/ 20:
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -252,6 +267,41 @@ webpackJsonp([0],{
 		http.statsAjax(data);
 	});
 
-/***/ }
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
 
-});
+	'use strict';
+
+	var Emitter = __webpack_require__(22);
+	var $ = __webpack_require__(23);
+	var _ = __webpack_require__(2);
+
+	Emitter(exports);
+
+	exports.lazyLoadImage = lazyLoadImage;
+
+	initScrollEvent();
+
+	/**
+	 * [initScrollEvent description]
+	 * @return {[type]} [description]
+	 */
+	function initScrollEvent() {
+		$(window).on('scroll', _.throttle(function (e) {
+			var top = $(document).scrollTop();
+			exports.emit('scroll', {
+				top: top
+			});
+		}, 300));
+	}
+
+	function lazyLoadImage(selector) {
+		_.forEach($(selector), function (dom) {
+			var imgSrc = $(dom).data('src');
+			$('<img src="' + imgSrc + '" />').appendTo(dom);
+		});
+	}
+
+/***/ }
+]);

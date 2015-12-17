@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
 	context: path.join(__dirname, 'public/components'),
 	entry: {
-		vendor: ['bluebird', 'lodash', 'superagent-extend', 'debug'],
+		vendor: ['bluebird', 'component-emitter', 'lodash', 'superagent-extend', 'debug', 'jquery'],
 		app: ['./app.js']
 	},
 	output: {

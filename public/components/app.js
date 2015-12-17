@@ -4,7 +4,11 @@ const debug = require('./debug');
 const http = require('./http');
 const global = require('./global');
 require('./super-extend-init');
-_.defer(init);
+const dom = require('./dom');
+_.defer(function() {
+	init();
+	dom.lazyLoadImage('.lazyLoadImage');
+});
 
 /**
  * [init description]
@@ -52,5 +56,7 @@ function init() {
 		}
 		http.statsException(data);
 	});
-
 }
+
+
+function runLazyLoad() {}
