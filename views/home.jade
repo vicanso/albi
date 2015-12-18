@@ -12,7 +12,7 @@ mixin LogoContainer
 block bodyContainer
 	include ./nav
 	.homePage.pageContentContainer
-		a.forkmeContainer.lazyLoadImage(href='https://github.com/vicanso/albi', data-src=IMG_URL('/img/forkme.png'))
+		a.forkmeContainer.lazyLoadImage(href='https://github.com/vicanso/albi', image-src=IMG_URL('/img/forkme.png'), lazy-load-image)
 		.logoContainer
 			+LogoContainer
 		

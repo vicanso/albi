@@ -1,32 +1,53 @@
 'use strict';
+const angular = require('angular');
 const _ = require('lodash');
-const debug = require('./debug');
-const http = require('./http');
-const global = require('./global');
-require('./super-extend-init');
-const dom = require('./dom');
-_.defer(function() {
-	init();
-	dom.lazyLoadImage('.lazyLoadImage');
-});
+const globals = require('./globals');
 
-/**
- * [init description]
- * @return {[type]} [description]
- */
-function init() {
+const http = require('./services/http');
+require('./services/dom');
+require('./directives');
+
+
+const app = angular.module(globals.get('CONFIG.app'), globals.getAngularModules());
+
+
+require('./controllers/nav');
+
+
+
+app.config(['$httpProvider', function($httpProvider, CONST) {
+	// 对ajax的请求添加特定header
+	$httpProvider.defaults.headers.common['X-Requested-With'] =
+		'XMLHttpRequest';
+
+	_.forEach(http.interceptors, interceptor => {
+		$httpProvider.interceptors.push(interceptor);
+	});
+}]).config(['$provide', function($provide) {
+	const params = ['$log', '$injector', angularErrorHandler];
+	$provide.decorator('$exceptionHandler', params);
+}]);
+
+app.run(['rest', (rest) => {
+	statistics(rest);
+	init();
+}]);
+
+
+
+function statistics(rest) {
 	// post performance
 	const data = {
-		screen: _.pick(global.get('screen'), 'width height availWidth availHeight'.split(' ')),
-		template: global.get('CONFIG.template')
+		screen: _.pick(globals.get('screen'), 'width height availWidth availHeight'.split(' ')),
+		template: globals.get('CONFIG.template')
 	};
-	const timing = global.get('TIMING');
+	const timing = globals.get('TIMING');
 	if (timing) {
 		timing.end('page');
 		data.timing = timing.toJSON();
 	}
 
-	const performance = global.get('performance');
+	const performance = globals.get('performance');
 	if (performance) {
 		data.performance = performance.timing;
 		if (performance.getEntries) {
@@ -35,10 +56,30 @@ function init() {
 			});
 		}
 	}
-	http.statistics(data);
+	rest.statistics(data);
+}
 
-	// capture global error
-	global.set('onerror', (msg, url, line, row, err) => {
+
+function angularErrorHandler($log, $injector) {
+	return function(exception, cause) {
+		if (globals.get('CONFIG.env') === 'development') {
+			alert(exception.message);
+			$log.error.apply($log, arguments);
+		} else {
+			const rest = $injector.get('rest');
+			rest.statsException({
+				message: exception.message,
+				stack: exception.stack,
+				cause: cause,
+				type: 'uncaughtException'
+			});
+		}
+	};
+}
+
+
+function init() {
+	globals.set('onerror', (msg, url, line, row, err) => {
 		var stack = '';
 		if (err) {
 			stack = err.stack;
@@ -57,6 +98,3 @@ function init() {
 		http.statsException(data);
 	});
 }
-
-
-function runLazyLoad() {}

@@ -1,6 +1,6 @@
 'use strict';
 const debug = require('debug');
-const global = require('./global');
+const global = require('./globals');
 const pattern = global.get('CONFIG.pattern');
 const app = global.get('CONFIG.app');
 if (pattern) {
