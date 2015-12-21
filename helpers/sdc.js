@@ -1,7 +1,5 @@
 'use strict';
 const _ = require('lodash');
-const config = localRequire('config');
-const debug = localRequire('helpers/debug');
 var client = null;
 
 exports.init = _.once(init);

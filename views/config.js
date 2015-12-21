@@ -3,5 +3,6 @@
 module.exports = [
 	// name template
 	'home home',
-	'test test'
+	'test test',
+	'doc doc'
 ];

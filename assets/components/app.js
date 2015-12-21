@@ -13,15 +13,15 @@ webpackJsonp([0],[
 
 	var angular = __webpack_require__(2);
 	var _ = __webpack_require__(4);
-	var globals = __webpack_require__(8);
+	var globals = __webpack_require__(7);
 
-	var http = __webpack_require__(20);
-	__webpack_require__(21);
-	__webpack_require__(18);
+	var http = __webpack_require__(8);
+	__webpack_require__(15);
+	__webpack_require__(16);
 
 	var app = angular.module(globals.get('CONFIG.app'), globals.getAngularModules());
 
-	__webpack_require__(22);
+	__webpack_require__(18);
 
 	app.config(['$httpProvider', function ($httpProvider, CONST) {
 		// 对ajax的请求添加特定header
@@ -109,8 +109,7 @@ webpackJsonp([0],[
 /* 4 */,
 /* 5 */,
 /* 6 */,
-/* 7 */,
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -144,14 +143,206 @@ webpackJsonp([0],[
 	}
 
 /***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var globals = __webpack_require__(7);
+	var angular = __webpack_require__(2);
+	var debug = __webpack_require__(9);
+	var pathToRegexp = __webpack_require__(13);
+	var moduleName = 'jt.http';
+
+	var interceptors = [globalRequestHandler];
+
+	var angularModule = angular.module(moduleName, []);
+
+	angularModule.factory('rest', ['$http', service]);
+	globals.addAngularModule(moduleName);
+
+	exports.interceptors = interceptors;
+	exports.timeout = 5 * 1000;
+
+	function service($http) {
+		return {
+			parse: function parse(desc) {
+				return _parse($http, desc);
+			},
+			statistics: _parse($http, 'POST /stats/statistics'),
+			statsAjax: getDebouncePost($http, '/stats/ajax'),
+			statsException: getDebouncePost($http, '/stats/exception')
+		};
+	}
+
+	var isReject = (function () {
+		var prefix = globals.get('CONFIG.appUrlPrefix', '');
+		var rejectUrls = _.map(['/sys/', '/stats/'], function (item) {
+			return prefix + item;
+		});
+		debug('rejectUrls:%j', rejectUrls);
+		return function (url) {
+			return !!_.find(rejectUrls, function (item) {
+				return url.indexOf(item) === 0;
+			});
+		};
+	})();
+
+	/**
+	 * [globalRequestHandler description]
+	 */
+	function globalRequestHandler($q, $injector) {
+		var prefix = globals.get('CONFIG.appUrlPrefix', '');
+		var uuid = 0;
+		var doningRequest = {};
+
+		function begin(config) {
+			var key = config.method + config.url;
+			var requestId = ++uuid;
+			debug('request[%d] %s', requestId, key);
+			if (!doningRequest[key]) {
+				doningRequest[key] = 0;
+			}
+
+			var count = ++doningRequest[key];
+
+			if (count > 1) {
+				// 相同的请求同时并发数超过1
+				var rest = $injector.get('rest');
+				debug('parallelRequest:%s', key);
+				rest.statsException({
+					key: key,
+					count: count,
+					type: 'parallelRequest'
+				});
+			}
+			config._startAt = Date.now();
+		}
+
+		function end(config, res) {
+			var method = config.method;
+			var url = config.url;
+			var key = method + url;
+			doningRequest[key]--;
+			if (isReject(url)) {
+				return;
+			};
+			var data = {
+				method: method,
+				url: url,
+				use: Date.now() - config._startAt,
+				status: _.get(res, 'status', -1),
+				hit: false
+			};
+			if (res && parseInt(res.headers('X-Hits') || 0)) {
+				data.hit = true;
+			}
+			var rest = $injector.get('rest');
+			rest.statsAjax(data);
+		}
+
+		return {
+			request: function request(config) {
+				config.url = prefix + config.url;
+				begin(config);
+				return config;
+			},
+			requestError: function requestError(rejection) {
+				end(rejection.config);
+				return $q.reject(rejection);
+			},
+			response: function response(res) {
+				end(res.config, res);
+				return res;
+			},
+			responseError: function responseError(rejection) {
+				end(rejection.config);
+				return $q.reject(rejection);
+			}
+		};
+	}
+	globalRequestHandler.$inject = ['$q', '$injector'];
+
+	function _parse($http, desc) {
+		var arr = desc.split(' ');
+		if (arr.length < 2) {
+			throw new Error('request description is invalid');
+		}
+		var method = arr[0].toUpperCase();
+		var url = arr[1];
+		var paramKeys = pathToRegexp(url).keys;
+		return function () {
+			var args = _.toArray(arguments);
+			var cloneUrl = url;
+			_.forEach(paramKeys, function (key) {
+				cloneUrl = cloneUrl.replace(':' + key.name, args.shift());
+			});
+			var data = args[0];
+			var headers = args[1];
+			var options = {
+				method: method,
+				url: cloneUrl
+			};
+			if (exports.timeout) {
+				options.timeout = exports.timeout;
+			}
+			if (method === 'GET' || method === 'DELETE' || method === 'HEAD') {
+				options.params = data;
+			} else {
+				options.data = data;
+			}
+			return $http(options);
+		};
+	}
+
+	function getDebouncePost($http, url, interval) {
+		interval = interval || 3000;
+		var dataList = [];
+		var post = _parse($http, 'POST ' + url);
+		var debouncePost = _.debounce(function () {
+			post(dataList.slice());
+			dataList.length = 0;
+		}, interval);
+		return function (data) {
+			if (data) {
+				if (_.isArray(data)) {
+					dataList.push.apply(dataList, data);
+				} else {
+					dataList.push(data);
+				}
+				debouncePost();
+			}
+		};
+	}
+
+/***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var debug = __webpack_require__(10);
+	var global = __webpack_require__(7);
+	var pattern = global.get('CONFIG.pattern');
+	var app = global.get('CONFIG.app');
+	if (pattern) {
+		debug.names.push(new RegExp('^' + pattern.replace(/\*/g, '.*?') + '$'));
+	}
+
+	module.exports = debug('jt.' + app);
+
+/***/ },
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-	var isarray = __webpack_require__(10);
+	var isarray = __webpack_require__(14);
 
 	/**
 	 * Expose `pathToRegexp`.
@@ -542,7 +733,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 10 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -552,247 +743,15 @@ webpackJsonp([0],[
 	};
 
 /***/ },
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var debug = __webpack_require__(14);
-	var global = __webpack_require__(8);
-	var pattern = global.get('CONFIG.pattern');
-	var app = global.get('CONFIG.app');
-	if (pattern) {
-		debug.names.push(new RegExp('^' + pattern.replace(/\*/g, '.*?') + '$'));
-	}
-
-	module.exports = debug('jt.' + app);
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	__webpack_require__(19);
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var angular = __webpack_require__(2);
-	var globals = __webpack_require__(8);
-	var moduleName = 'jt.lazy-load';
-	globals.addAngularModule(moduleName);
-
-	var angularModuel = angular.module(moduleName, []);
-
-	angularModuel.directive('lazyLoadImage', lazyLoadImage);
-
-	function lazyLoadImage() {
-		function link(scope, element, attr) {
-			var imgSrc = attr.imageSrc;
-			if (imgSrc) {
-				element.append('<img src="' + imgSrc + '" />');
-			}
-		}
-
-		return {
-			restrict: 'A',
-			link: link
-		};
-	}
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var globals = __webpack_require__(8);
-	var angular = __webpack_require__(2);
-	var debug = __webpack_require__(17);
-	var pathToRegexp = __webpack_require__(9);
-	var moduleName = 'jt.http';
-
-	var interceptors = [globalRequestHandler];
-
-	var angularModule = angular.module(moduleName, []);
-
-	angularModule.factory('rest', ['$http', service]);
-	globals.addAngularModule(moduleName);
-
-	exports.interceptors = interceptors;
-	exports.timeout = 5 * 1000;
-
-	function service($http) {
-		return {
-			parse: function parse(desc) {
-				return _parse($http, desc);
-			},
-			statistics: _parse($http, 'POST /stats/statistics'),
-			statsAjax: getDebouncePost($http, '/stats/ajax'),
-			statsException: getDebouncePost($http, '/stats/exception')
-		};
-	}
-
-	var isReject = (function () {
-		var prefix = globals.get('CONFIG.appUrlPrefix', '');
-		var rejectUrls = _.map(['/sys/', '/stats/'], function (item) {
-			return prefix + item;
-		});
-		debug('rejectUrls:%j', rejectUrls);
-		return function (url) {
-			return !!_.find(rejectUrls, function (item) {
-				return url.indexOf(item) === 0;
-			});
-		};
-	})();
-
-	/**
-	 * [globalRequestHandler description]
-	 */
-	function globalRequestHandler($q, $injector) {
-		var prefix = globals.get('CONFIG.appUrlPrefix', '');
-		var uuid = 0;
-		var doningRequest = {};
-
-		function begin(config) {
-			var key = config.method + config.url;
-			var requestId = ++uuid;
-			debug('request[%d] %s', requestId, key);
-			if (!doningRequest[key]) {
-				doningRequest[key] = 0;
-			}
-
-			var count = ++doningRequest[key];
-
-			if (count > 1) {
-				// 相同的请求同时并发数超过1
-				var rest = $injector.get('rest');
-				debug('parallelRequest:%s', key);
-				rest.statsException({
-					key: key,
-					count: count,
-					type: 'parallelRequest'
-				});
-			}
-			config._startAt = Date.now();
-		}
-
-		function end(config, res) {
-			var method = config.method;
-			var url = config.url;
-			var key = method + url;
-			doningRequest[key]--;
-			if (isReject(url)) {
-				return;
-			};
-			var data = {
-				method: method,
-				url: url,
-				use: Date.now() - config._startAt,
-				status: _.get(res, 'status', -1),
-				hit: false
-			};
-			if (res && parseInt(res.headers('X-Hits') || 0)) {
-				data.hit = true;
-			}
-			var rest = $injector.get('rest');
-			rest.statsAjax(data);
-		}
-
-		return {
-			request: function request(config) {
-				config.url = prefix + config.url;
-				begin(config);
-				return config;
-			},
-			requestError: function requestError(rejection) {
-				end(rejection.config);
-				return $q.reject(rejection);
-			},
-			response: function response(res) {
-				end(res.config, res);
-				return res;
-			},
-			responseError: function responseError(rejection) {
-				end(rejection.config);
-				return $q.reject(rejection);
-			}
-		};
-	}
-	globalRequestHandler.$inject = ['$q', '$injector'];
-
-	function _parse($http, desc) {
-		var arr = desc.split(' ');
-		if (arr.length < 2) {
-			throw new Error('request description is invalid');
-		}
-		var method = arr[0].toUpperCase();
-		var url = arr[1];
-		var paramKeys = pathToRegexp(url).keys;
-		return function () {
-			var args = _.toArray(arguments);
-			var cloneUrl = url;
-			_.forEach(paramKeys, function (key) {
-				cloneUrl = cloneUrl.replace(':' + key.name, args.shift());
-			});
-			var data = args[0];
-			var headers = args[1];
-			var options = {
-				method: method,
-				url: cloneUrl
-			};
-			if (exports.timeout) {
-				options.timeout = exports.timeout;
-			}
-			if (method === 'GET' || method === 'DELETE' || method === 'HEAD') {
-				options.params = data;
-			} else {
-				options.data = data;
-			}
-			return $http(options);
-		};
-	}
-
-	function getDebouncePost($http, url, interval) {
-		interval = interval || 3000;
-		var dataList = [];
-		var post = _parse($http, 'POST ' + url);
-		var debouncePost = _.debounce(function () {
-			post(dataList.slice());
-			dataList.length = 0;
-		}, interval);
-		return function (data) {
-			if (data) {
-				if (_.isArray(data)) {
-					dataList.push.apply(dataList, data);
-				} else {
-					dataList.push(data);
-				}
-				debouncePost();
-			}
-		};
-	}
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var globals = __webpack_require__(8);
+	var globals = __webpack_require__(7);
 	var angular = __webpack_require__(2);
 	var _ = __webpack_require__(4);
-	var debug = __webpack_require__(17);
+	var debug = __webpack_require__(9);
 	var moduleName = 'jt.dom';
 	globals.addAngularModule(moduleName);
 
@@ -820,13 +779,50 @@ webpackJsonp([0],[
 	service.$inject = ['$rootScope', '$window'];
 
 /***/ },
-/* 22 */
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	__webpack_require__(17);
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var angular = __webpack_require__(2);
-	var globals = __webpack_require__(8);
+	var globals = __webpack_require__(7);
+	var moduleName = 'jt.lazy-load';
+	globals.addAngularModule(moduleName);
+
+	var angularModuel = angular.module(moduleName, []);
+
+	angularModuel.directive('lazyLoadImage', lazyLoadImage);
+
+	function lazyLoadImage() {
+		function link(scope, element, attr) {
+			var imgSrc = attr.imageSrc;
+			if (imgSrc) {
+				element.append('<img src="' + imgSrc + '" />');
+			}
+		}
+
+		return {
+			restrict: 'A',
+			link: link
+		};
+	}
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var angular = __webpack_require__(2);
+	var globals = __webpack_require__(7);
 
 	ctrl.$inject = ['$scope'];
 
@@ -836,8 +832,7 @@ webpackJsonp([0],[
 		var self = this;
 
 		self.selected = function (url, e) {
-			console.dir(url);
-			e.preventDefault();
+			// e.preventDefault();
 		};
 
 		return self;

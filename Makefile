@@ -15,8 +15,8 @@ TESTS = test/init.js \
 	test/services/*.js \
 	test/router.js
 
-jshint:
-	node ./node_modules/.bin/jshint \
+eslint:
+	node ./node_modules/.bin/eslint \
 		$(SRC)
 
 cov:
@@ -27,7 +27,7 @@ cov:
 		--
 
 test:
-	make jshint && make cov
+	make eslint && make cov
 
 
-.PHONY: jshint cov test
+.PHONY: eslint cov test

@@ -4,7 +4,6 @@ const path = require('path');
 const config = localRequire('config');
 const fs = BlueBird.promisifyAll(require('fs'));
 const globals = localRequire('globals');
-const bytes = require('bytes');
 const _ = require('lodash');
 const moment = require('moment');
 

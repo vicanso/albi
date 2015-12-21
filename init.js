@@ -59,7 +59,9 @@ function initLogger() {
 		return;
 	}
 	const infos = require('url').parse(config.log);
-	logger.add('type', {
+	logger.set('app', config.name);
+	logger.wrap(console);
+	logger.add('udp', {
 		host: infos.hostname,
 		port: parseInt(infos.port)
 	});

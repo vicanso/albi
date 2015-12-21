@@ -27,7 +27,7 @@ exports.componentPath = path.join(__dirname, 'assets/components');
 exports.staticMaxAge = env === 'development' ? 0 : 365 * 24 * 3600;
 
 // log server url
-exports.log = process.env.LOG || (env === 'development' ? '' : 'udp://localhost:6000');
+exports.log = process.env.LOG || ((env === 'development' || env === 'test') ? '' : 'udp://localhost:6000');
 
 // http log type
 exports.logType = env === 'development' ? 'dev' : ':remote-addr - :cookie[_track] ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"';

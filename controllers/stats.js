@@ -30,10 +30,15 @@ function statistics(ctx) {
 }
 
 
+/**
+ * [ajaxStats description]
+ * @param  {[type]} ctx [description]
+ * @return {[type]}     [description]
+ */
 function ajaxStats(ctx) {
 	const ua = ctx.get('user-agent');
 	_.forEach(ctx.request.body, (item) => {
-		console.dir(item);
+		console.info(`browser-ajax ua:${ua}, data:${JSON.stringify(item)}`);
 	});
 	ctx.body = null;
 }

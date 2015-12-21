@@ -1,0 +1,8 @@
+extends ./layout
+
+
+
+block bodyContainer
+	include ./nav
+	.docPage.pageContentContainer
+		.docContent !{viewData.docHtml}

@@ -11,8 +11,7 @@ function ctrl($scope) {
 	const self = this;
 
 	self.selected = (url, e) => {
-		console.dir(url);
-		e.preventDefault();
+		// e.preventDefault();
 	};
 
 	return self;

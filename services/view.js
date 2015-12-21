@@ -13,26 +13,6 @@ function getNavigation() {
 	const nav = [{
 		name: 'Get Started'
 	}, {
-		name: 'Controllers',
-		children: [{
-			name: 'home'
-		}, {
-			name: 'stats'
-		}, {
-			name: 'system'
-		}, {
-			name: 'user'
-		}]
-	}, {
-		name: 'Helpers',
-		children: [{
-			name: 'debug'
-		}, {
-			name: 'http error'
-		}, {
-			name: 'sdc'
-		}]
-	}, {
 		name: 'Middlewares',
 		children: [{
 			name: 'auth'
@@ -56,6 +36,26 @@ function getNavigation() {
 			name: 'state'
 		}, {
 			name: 'template'
+		}]
+	}, {
+		name: 'Controllers',
+		children: [{
+			name: 'home'
+		}, {
+			name: 'stats'
+		}, {
+			name: 'system'
+		}, {
+			name: 'user'
+		}]
+	}, {
+		name: 'Helpers',
+		children: [{
+			name: 'debug'
+		}, {
+			name: 'http error'
+		}, {
+			name: 'sdc'
 		}]
 	}, {
 		name: 'Router',

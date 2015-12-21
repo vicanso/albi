@@ -2,7 +2,6 @@
 const v8 = require('v8');
 const bytes = require('bytes');
 const toobusy = require('toobusy-js');
-const _ = require('lodash');
 const config = localRequire('config');
 const globals = localRequire('globals');
 const MB = 1024 * 1024;

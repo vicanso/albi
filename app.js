@@ -88,10 +88,6 @@ function initServer(port) {
 
 	app.on('error', _.noop);
 
-	// if (config.env === 'development') {
-	// 	webpackWatch();
-	// }
-
 	return app.listen(port, function(err) {
 		if (err) {
 			console.error(`server listen on ${port} fail, err:${err.message}`);
@@ -115,35 +111,4 @@ function ping(ctx) {
 	} else {
 		ctx.body = 'pong';
 	}
-}
-
-
-function webpackWatch() {
-	const webpack = require('webpack');
-
-
-
-	const compiler = webpack(localRequire('webpack.config'));
-
-	// compiler.run(function(err, stats) {
-	// 	if (err) {
-	// 		console.error(err);
-	// 	} else {
-	// 		console.dir(stats);
-	// 	}
-	// });
-
-	compiler.watch({ // watch options:
-		aggregateTimeout: 300, // wait so long for more changes
-		poll: true // use polling instead of native watchers
-			// pass a number to set the polling interval
-	}, function(err, stats) {
-		if (err) {
-			console.error(err);
-		} else {
-			console.info('compiler run successful');
-		}
-
-	});
-
 }

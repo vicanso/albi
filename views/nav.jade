@@ -13,6 +13,5 @@ nav.navContainer(ng-controller='NavController as navCtrl')
 		| Albi
 	- var navigation = viewData.navigation;
 	if navigation
-		+Components(navigation.items, '', navigation.selected)
+		+Components(navigation.items, '/doc', navigation.selected)
 
-- importer.import('/css/nav.css')

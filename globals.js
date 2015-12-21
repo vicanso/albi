@@ -18,7 +18,7 @@ const globals = {
 		route: {},
 		// middlewares/limit
 		concurrency: 'low'
-	},
+	}
 };
 
 exports.get = get;

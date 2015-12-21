@@ -1,7 +1,6 @@
 'use strict';
 const path = require('path');
 const jade = require('jade');
-const _ = require('lodash');
 const config = localRequire('config');
 const viewConfigs = localRequire('views/config');
 

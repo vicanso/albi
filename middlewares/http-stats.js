@@ -1,8 +1,6 @@
 'use strict';
 const stats = require('koa-http-stats');
-const sdc = localRequire('helpers/sdc');
 const globals = localRequire('globals');
-const _ = require('lodash');
 
 module.exports = httpStats;
 
