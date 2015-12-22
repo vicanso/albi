@@ -15,8 +15,6 @@ function getNavigation() {
 	}, {
 		name: 'Middlewares',
 		children: [{
-			name: 'auth'
-		}, {
 			name: 'common'
 		}, {
 			name: 'debug'

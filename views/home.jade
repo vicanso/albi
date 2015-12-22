@@ -23,7 +23,7 @@ block bodyContainer
 		if navigation
 			section.components: ul
 				each item in navigation.items
-					li: a(href=URL(item.url)) #{item.name}
+					li: a(href=URL('/doc' + item.url)) #{item.name}
 
 		section.introduction
 			//- p 一直以来，试过写不少node.js的模块，都是写得乱七八糟的，没有测试，没有注释，更没有文档。这次，必须做点改变，因此也就有了Albi的出现。
