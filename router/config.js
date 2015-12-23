@@ -22,5 +22,5 @@ module.exports = [
 	// home page
 	'GET /,/page/:page v.home,c.home',
 	// doc page
-	'GET /doc/:category v.doc,c.doc'
+	'GET /doc/:category,/doc/:category/:name v.doc,c.doc'
 ];

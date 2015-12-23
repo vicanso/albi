@@ -11,6 +11,8 @@ exports.port = process.env.PORT || 3000;
 
 exports.name = process.env.NAME || 'albi';
 
+exports.processName = process.env.HOST_NAME || process.pid;
+
 // app url prefix for all request 
 exports.appUrlPrefix = env === 'development' ? '' : '/albi';
 

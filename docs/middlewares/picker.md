@@ -1,13 +1,6 @@
-'use strict';
-const _ = require('lodash');
+## picker
 
-module.exports = picker;
-
-/**
- * [picker description]
- * @param  {[type]} field [description]
- * @return {[type]}       [description]
- */
+```
 function picker(field) {
 	return (ctx, next) => {
 		const query = ctx.query;
@@ -39,3 +32,6 @@ function picker(field) {
 		});
 	};
 }
+```
+
+从接口返回的数据中挑选需要的字段，方便同样的接口，在不同应用场合中可能用到的字段不一样，后端接口只提供一个大的汇总，在各功能中根据选择挑选对应的字段。?_fields=a,b,c表示挑出a,b,c字段（如果返回的结果是array，则从arry中各个元素中挑选）。?_fields=-a,b,c表示删除a,b,c字段，保留其它字段。

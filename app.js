@@ -26,7 +26,7 @@ function initServer(port) {
 	app.use(middlewares.error);
 
 
-	app.use(middlewares.entry(appUrlPrefix, config.name));
+	app.use(middlewares.entry(appUrlPrefix, config.processName));
 
 	// ping for health check
 	app.use(mount('/ping', ping));

@@ -15,6 +15,7 @@ describe('middleware/picker', () => {
 		app.use(picker('_fields'));
 
 		app.use(ctx => {
+			assert(!ctx.query['_fields']);
 			if (ctx.path === '/array') {
 				ctx.body = [{
 					name: 'a',

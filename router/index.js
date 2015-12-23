@@ -27,7 +27,7 @@ router.addDefault('common', (ctx, next) => {
 });
 
 addToRouter('c', controllers);
-addToRouter('m.noCache', middlewares['no-cache']());
+addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin);
 addToRouter('v', middlewares.template);
 module.exports = getRouter(localRequire('router/config'));

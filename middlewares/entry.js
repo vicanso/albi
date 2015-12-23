@@ -2,7 +2,7 @@
 module.exports = entry;
 
 
-function entry(appUrlPrefix, appName) {
+function entry(appUrlPrefix, processName) {
 	return (ctx, next) => {
 		// 所有的请求都去除appUrlPrefix
 		const currentPath = ctx.path;
@@ -17,7 +17,7 @@ function entry(appUrlPrefix, appName) {
 			ctx.xhr = false;
 		}
 		const processList = ctx.get('X-Process') || 'unknown';
-		ctx.set('X-Process', processList + ',node-' + appName);
+		ctx.set('X-Process', processList + ',node-' + processName);
 		ctx.set('Cache-Control', 'must-revalidate, max-age=0');
 		return next();
 	};

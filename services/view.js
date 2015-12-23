@@ -15,6 +15,8 @@ function getNavigation() {
 	}, {
 		name: 'Middlewares',
 		children: [{
+			name: 'auth'
+		}, {
 			name: 'common'
 		}, {
 			name: 'debug'
@@ -27,8 +29,6 @@ function getNavigation() {
 		}, {
 			name: 'limit'
 		}, {
-			name: 'no cache'
-		}, {
 			name: 'picker'
 		}, {
 			name: 'state'
@@ -36,16 +36,7 @@ function getNavigation() {
 			name: 'template'
 		}]
 	}, {
-		name: 'Controllers',
-		children: [{
-			name: 'home'
-		}, {
-			name: 'stats'
-		}, {
-			name: 'system'
-		}, {
-			name: 'user'
-		}]
+		name: 'Controllers'
 	}, {
 		name: 'Helpers',
 		children: [{

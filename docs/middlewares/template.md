@@ -1,23 +1,6 @@
-'use strict';
-const path = require('path');
-const jade = require('jade');
-const config = localRequire('config');
-const viewConfigs = localRequire('views/config');
+## template
 
-viewConfigs.forEach(str => {
-	const arr = str.split(' ');
-	exports[arr[0]] = parse(arr[1]);
-});
-
-// exports.index = parse('index', 'index');
-
-/**
- * [render description]
- * @param  {[type]} file    [description]
- * @param  {[type]} data    [description]
- * @param  {[type]} options [description]
- * @return {[type]}         [description]
- */
+```
 function render(file, data, options) {
 	file = path.join(config.viewPath, file);
 	const extname = path.extname(file);
@@ -27,13 +10,6 @@ function render(file, data, options) {
 	const tpl = jade.compileFile(file, options);
 	return tpl(data);
 }
-
-
-/**
- * [parse description]
- * @param  {[type]} file [description]
- * @return {[type]}      [description]
- */
 function parse(file) {
 	return (ctx, next) => {
 		return next().then(() => {
@@ -49,3 +25,6 @@ function parse(file) {
 		});
 	};
 }
+```
+
+主要是将模板文件render之后，将css和js的占位符替换成css和js文件列表，输出html。
