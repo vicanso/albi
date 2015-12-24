@@ -1,72 +1,83 @@
 {
-  "name": "albi",
-  "description": "backend framework base on koa",
-  "version": "2.0.0",
-  "author": {
-    "name": "vicanso 小墨鱼",
-    "email": "vicansocanbico@gmail.com"
-  },
-  "keywords": [
-    "koa",
-    "albi"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vicanso/albi.git"
-  },
-  "main": "app",
-  "readmeFilename": "README.md",
-  "scripts": {
-    "test": "make test"
-  },
-  "dependencies": {
-    "bluebird": "^3.0.6",
-    "bytes": "^2.2.0",
-    "debug": "^2.2.0",
-    "highlight.js": "^9.0.0",
-    "http-errors": "^1.3.1",
-    "jade": "^1.11.0",
-    "joi": "^7.0.1",
-    "jtfileimporter": "^0.4.2",
-    "koa": "^2.0.0-alpha.3",
-    "koa-bodyparser": "^3.0.0",
-    "koa-connection-limit": "^2.0.1",
-    "koa-convert": "^1.2.0",
-    "koa-etag": "^2.1.0",
-    "koa-fresh": "0.0.3",
-    "koa-http-stats": "^2.0.2",
-    "koa-log": "^2.0.0",
-    "koa-methodoverride": "^2.0.0",
-    "koa-mounting": "^2.0.0",
-    "koa-query-checker": "^2.0.0",
-    "koa-router": "^7.0.0",
-    "koa-router-parser": "^2.0.1",
-    "koa-static-serve": "^2.0.2",
-    "lodash": "^3.10.1",
-    "markdown": "^0.5.0",
-    "moment": "^2.10.6",
-    "require-tree": "^1.1.1",
-    "statsd-client": "^0.2.1",
-    "superagent-extend": "^0.1.4",
-    "timtam-logger": "^0.3.0",
-    "toobusy-js": "^0.4.2",
-    "url-join": "0.0.1"
-  },
-  "devDependencies": {
-    "angular": "^1.4.8",
-    "babel-core": "^6.3.17",
-    "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "eslint": "^1.10.3",
-    "istanbul": "^0.4.1",
-    "koa-stylus-parser": "^2.0.0",
-    "mocha": "^2.3.4",
-    "path-to-regexp": "^1.2.1",
-    "supertest": "^1.1.0",
-    "webpack": "^1.12.9"
-  },
-  "appVersion": "2015-12-09T01:09:31.170Z",
-  "readme": "backend framework base on koa"
+	"name": "albi",
+	"description": "backend framework base on koa",
+	"version": "2.0.0",
+	"author": {
+		"name": "vicanso 小墨鱼",
+		"email": "vicansocanbico@gmail.com"
+	},
+	"keywords": [
+		"koa",
+		"albi"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vicanso/albi.git"
+	},
+	"main": "app",
+	"readmeFilename": "README.md",
+	"scripts": {
+		"test": "make test"
+	},
+	"dependencies": {
+		"bluebird": "^3.0.6",
+		"bytes": "^2.2.0",
+		"debug": "^2.2.0",
+		"highlight.js": "^9.0.0",
+		"http-errors": "^1.3.1",
+		"jade": "^1.11.0",
+		"joi": "^7.0.1",
+		"jtfileimporter": "^0.4.2",
+		"koa": "^2.0.0-alpha.3",
+		"koa-bodyparser": "^3.0.0",
+		"koa-connection-limit": "^2.0.1",
+		"koa-convert": "^1.2.0",
+		"koa-etag": "^2.1.0",
+		"koa-fresh": "0.0.3",
+		"koa-http-stats": "^2.0.2",
+		"koa-log": "^2.0.0",
+		"koa-methodoverride": "^2.0.0",
+		"koa-mounting": "^2.0.0",
+		"koa-query-checker": "^2.0.0",
+		"koa-router": "^7.0.0",
+		"koa-router-parser": "^2.0.1",
+		"koa-static-serve": "^2.0.2",
+		"lodash": "^3.10.1",
+		"markdown": "^0.5.0",
+		"moment": "^2.10.6",
+		"require-tree": "^1.1.1",
+		"statsd-client": "^0.2.1",
+		"superagent-extend": "^0.1.6",
+		"timtam-logger": "^0.3.0",
+		"toobusy-js": "^0.4.2",
+		"url-join": "0.0.1"
+	},
+	"devDependencies": {
+		"eslint": "^1.10.3",
+		"istanbul": "^0.4.1",
+		"jspm": "^0.16.19",
+		"koa-stylus-parser": "^2.0.0",
+		"mocha": "^2.3.4",
+		"path-to-regexp": "^1.2.1",
+		"supertest": "^1.1.0"
+	},
+	"appVersion": "2015-12-09T01:09:31.170Z",
+	"readme": "backend framework base on koa",
+	"jspm": {
+		"directories": {
+			"baseURL": "public"
+		},
+		"dependencies": {
+			"debug": "npm:debug@^2.2.0",
+			"jquery": "github:components/jquery@^2.1.4",
+			"lodash": "npm:lodash@^3.10.1",
+			"superagent-extend": "npm:superagent-extend@^0.1.6"
+		},
+		"devDependencies": {
+			"babel": "npm:babel-core@^5.8.24",
+			"babel-runtime": "npm:babel-runtime@^5.8.24",
+			"core-js": "npm:core-js@^1.1.4"
+		}
+	}
 }

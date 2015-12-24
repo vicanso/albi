@@ -1,5 +1,5 @@
 doctype html
-html(lang='zh-CN', ng-app='#{APP}')
+html(lang='zh-CN')
 	head
 		meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
 		meta(http-equiv='X-UA-Compatible', content='IE=edge')
@@ -13,7 +13,8 @@ html(lang='zh-CN', ng-app='#{APP}')
 		title #{title}
 		include ./inlinejs
 		//CSS_FILES_CONTAINER
-		- importer.import('/css/pure.css', '/css/highlight.css', '/css/albi.css', '/components/vendor.js', '/components/app.js')
+		- importer.import('/css/pure.css', '/css/highlight.css', '/css/albi.css')
+		- importer.import('/jspm_packages/system.js', '/config.js')
 
 	body
 		block bodyContainer
@@ -26,3 +27,4 @@ html(lang='zh-CN', ng-app='#{APP}')
 	//JS_FILES_CONTAINER
 	script.
 		TIMING.end('js')
+		System.import(CONFIG.staticUrlPrefix + '/js/bootstrap.js');

@@ -3,12 +3,12 @@ mixin Components(items, baseUrl, selectedUrl)
 		each item in items
 			- var url = URL(baseUrl + item.url);
 			li(class='#{selectedUrl === url? "selected" : ""}')
-				a(href='#{url}', title='#{item.name}', ng-click='navCtrl.selected("#{url}", $event)') #{item.name}
+				a(href='#{url}', title='#{item.name}') #{item.name}
 				if item.children
 					+Components(item.children, url, selectedUrl)
 
 
-nav.navContainer(ng-controller='NavController as navCtrl')
+nav.navContainer
 	a.text-center.logo(href=URL('/'), title='Albi')
 		| Albi
 	- var navigation = viewData.navigation;

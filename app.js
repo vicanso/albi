@@ -48,10 +48,6 @@ function initServer(port) {
 			config.staticUrlPrefix,
 			require('koa-stylus-parser')(config.staticPath)
 		));
-		app.use(mount(
-			config.staticUrlPrefix + '/components',
-			require('koa-static-serve')(config.componentPath)
-		));
 	}
 
 	// static file middleware, add default header: Vary
