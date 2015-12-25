@@ -2,14 +2,10 @@
 const path = require('path');
 const jade = require('jade');
 const config = localRequire('config');
-const viewConfigs = localRequire('views/config');
 
-viewConfigs.forEach(str => {
-	const arr = str.split(' ');
-	exports[arr[0]] = parse(arr[1]);
-});
+exports.parse = parse;
+exports.render = render;
 
-// exports.index = parse('index', 'index');
 
 /**
  * [render description]

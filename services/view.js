@@ -38,14 +38,7 @@ function getNavigation() {
 	}, {
 		name: 'Controllers'
 	}, {
-		name: 'Helpers',
-		children: [{
-			name: 'debug'
-		}, {
-			name: 'http error'
-		}, {
-			name: 'sdc'
-		}]
+		name: 'Helpers'
 	}, {
 		name: 'Router',
 		children: [{

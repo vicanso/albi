@@ -5,11 +5,26 @@ const controllers = localRequire('controllers');
 const middlewares = localRequire('middlewares');
 const globals = localRequire('globals');
 const sdc = localRequire('helpers/sdc');
+const views = localRequire('views');
 
-// add route handler stats
-router.addDefault('common', (ctx, next) => {
-	const routePerformance = globals.get(
-		'performance.route');
+// add route handler stats，common is for all http method
+router.addDefault('common', routeStats);
+
+addToRouter('c', controllers);
+addToRouter('m.noCache', middlewares.common.noCache());
+addToRouter('m.auth.admin', middlewares.auth.admin);
+addToRouter('v', views);
+module.exports = getRouter(localRequire('router/config'));
+
+
+/**
+ * [routeStats description]
+ * @param  {[type]}   ctx  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+function routeStats(ctx, next) {
+	const routePerformance = globals.get('performance.route');
 	if (!routePerformance.createdAt) {
 		routePerformance.createdAt = (new Date()).toISOString();
 	}
@@ -24,14 +39,7 @@ router.addDefault('common', (ctx, next) => {
 		}
 	}));
 	return next();
-});
-
-addToRouter('c', controllers);
-addToRouter('m.noCache', middlewares.common.noCache());
-addToRouter('m.auth.admin', middlewares.auth.admin);
-addToRouter('v', middlewares.template);
-module.exports = getRouter(localRequire('router/config'));
-
+}
 
 /**
  * [addToRouter description]
