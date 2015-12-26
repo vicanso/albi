@@ -8,10 +8,13 @@ mixin Components(items, baseUrl, selectedUrl)
 					+Components(item.children, url, selectedUrl)
 
 
+a#navLink(href='javascript:;') M
+
 nav.navContainer
 	a.text-center.logo(href=URL('/'), title='Albi')
 		| Albi
 	- var navigation = viewData.navigation;
 	if navigation
 		+Components(navigation.items, '/doc', navigation.selected)
+
 

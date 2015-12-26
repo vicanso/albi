@@ -66,10 +66,16 @@ LogoContainerCss()
 				display inline-block
 				a
 					display block
-					color #fff
 					color rgba(255, 255, 255, 0.85)
 					line-height 60px
+					white-space nowrap
 					text-indent 1em
+				@media (max-width:760px)
+					a
+						font-size 14px
+						line-height 48px
+						text-indent 0
+						text-align center
 				&:nth-child(1)
 					width 15%
 					background-color #1f8dd6
@@ -91,7 +97,9 @@ LogoContainerCss()
 	
 	.introduction
 		color #333
-		margin 0 150px
 		font-size 16px
-	.appCodeContainer
+	.appCodeContainer, .introduction
 		margin 0 150px
+	@media (max-width:760px)
+		.introduction, .appCodeContainer
+			margin 0 15px

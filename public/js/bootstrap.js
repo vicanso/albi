@@ -12,12 +12,18 @@ _.defer(() => {
 	$('.lazyLoadImage').each(function() {
 		lazyLoad.load($(this));
 	});
+
+	$('#navLink').click(function() {
+		const obj = $(this);
+		obj.next('.navContainer').addBack().toggleClass('active');
+	});
 });
 
 function statistics() {
 	// post performance
 	const data = {
-		screen: _.pick(globals.get('screen'), 'width height availWidth availHeight'.split(' ')),
+		screen: _.pick(globals.get('screen'), 'width height availWidth availHeight'.split(
+			' ')),
 		template: globals.get('CONFIG.template')
 	};
 	const timing = globals.get('TIMING');
