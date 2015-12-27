@@ -49,11 +49,9 @@ function getNavigation() {
 		children: [{
 			name: 'debug'
 		}, {
-			name: 'global'
+			name: 'globals'
 		}, {
 			name: 'http'
-		}, {
-			name: 'super-extend-init'
 		}]
 	}];
 	const convert = (item) => {
