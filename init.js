@@ -31,6 +31,7 @@ Joi.validateThrow = function() {
 	if (err) {
 		err.status = 400;
 		err.expose = true;
+		err.expected = true;
 		throw err;
 	} else {
 		return result.value;

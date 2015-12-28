@@ -17,6 +17,8 @@ module.exports = [
 
 	// user start
 	'GET /user/me m.noCache,c.user.me',
+	'POST /user/login c.user.login',
+	'GET /users/category/:category c.user.filter',
 	// user end
 
 	// home page
