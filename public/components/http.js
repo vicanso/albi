@@ -1,19 +1,29 @@
 'use strict';
-import * as superagentExtend from 'superagent-extend';
+import * as request from 'superagent';
 import * as globals from './globals';
 import debug from './debug';
 import _ from 'lodash';
-const request = superagentExtend.request;
-const util = superagentExtend.util;
+import uuid from 'node-uuid';
 const appUrlPrefix = globals.get('CONFIG.appUrlPrefix');
-
 const statsAjax = getDebouncePost('/stats/ajax');
+const middlewares = [];
 export const statsException = getDebouncePost('/stats/exception');
 
 
 initAjaxStats();
 initAjaxHeaders();
 
+// 超时设置
+var timeout = 0;
+export function timeout(ms) {
+	timeout = ms;
+}
+
+export function addMiddleware(fn) {
+	if (_.indexOf(middlewares, fn) === -1) {
+		middlewares.push(fn);
+	}
+}
 
 export function get(url, headers) {
 	const req = request.get(url);
@@ -36,7 +46,31 @@ export function post(url, data, headers) {
 
 
 export function parse(desc) {
-	return superagentExtend.parse(desc);
+	const arr = desc.split(' ');
+	if (arr.length < 2) {
+		throw new Error('request description is invalid');
+	}
+	let method = arr[0].toLowerCase();
+	/* istanbul ignore if */
+	if (method === 'delete') {
+		method = 'del';
+	}
+	const url = arr[1];
+	return function() {
+		const args = _.toArray(arguments);
+		const req = request[method](url);
+		if (args[0]) {
+			if (method === 'get' || method === 'del') {
+				req.query(args[0])
+			} else {
+				req.send(args[0]);
+			}
+		}
+		if (args[1]) {
+			req.set(args[1]);
+		}
+		return req.done();
+	};
 }
 
 // 对于/sys/, /stats/的请求不统计性能
@@ -55,14 +89,13 @@ const isReject = (function() {
  * @return {[type]} [description]
  */
 function initAjaxStats() {
-	let uuid = 0;
+	let requestCount = 0;
 	const doningRequest = {};
-	// 添加HTTP请求的全局处理
-	util.addReqIntc(req => {
+	middlewares.push((req) => {
 		const url = req.url;
 		const method = req.method;
 		const key = method + url;
-		const requestId = ++uuid;
+		const requestId = ++requestCount;
 		debug('request[%d] %s', requestId, key);
 		if (!doningRequest[key]) {
 			doningRequest[key] = 0;
@@ -76,8 +109,6 @@ function initAjaxStats() {
 				type: 'parallelRequest'
 			});
 		}
-		// 所有的请求添加appUrlPrefix
-		req.url = appUrlPrefix + req.url;
 		req.once('complete', () => {
 			--doningRequest[key];
 		});
@@ -92,11 +123,10 @@ function initAjaxStats() {
 			if (isReject(url)) {
 				return;
 			}
-			const performance = res.performance;
 			const data = {
 				method: method,
 				url: url,
-				use: performance.fetchEnd - performance.fetchStart,
+				use: res.use,
 				status: res.status,
 				hit: false
 			};
@@ -105,12 +135,17 @@ function initAjaxStats() {
 			}
 			statsAjax(data);
 		});
+		return req;
 	});
 }
 
 function initAjaxHeaders() {
-	util.addHeader('comon', {
-		'X-Requested-With': 'XMLHttpRequest'
+	middlewares.push((req) => {
+		req.set({
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-UUID': uuid.v4()
+		});
+		return req;
 	});
 }
 
@@ -132,4 +167,27 @@ function getDebouncePost(url, interval) {
 			debouncePost();
 		}
 	}
+}
+
+
+request.Request.prototype.done = function done() {
+	if (timeout) {
+		this.timeout(timeout);
+	}
+	_.forEach(middlewares, fn => {
+		this.use(fn);
+	});
+	return new Promise((resolve, reject) => {
+		const start = Date.now();
+		this.end((err, res) => {
+			this.emit('complete');
+			if (err) {
+				this.emit('fail', err);
+				return reject(err);
+			}
+			res.use = Date.now() - start;
+			this.emit('success', res);
+			resolve(res);
+		});
+	});
 }

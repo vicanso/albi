@@ -5,6 +5,7 @@ const Importer = require('jtfileimporter');
 const _ = require('lodash');
 const moment = require('moment');
 const path = require('path');
+const versions = localRequire('versions')
 
 module.exports = state;
 
@@ -25,6 +26,11 @@ function state(versions) {
 		const state = ctx.state;
 		const importer = new Importer();
 		importer.prefix = staticUrlPrefix;
+		if (config.env !== 'development') {
+			importer.version = versions;
+			importer.versionMode = 1;
+		}
+
 		state.STATIC_URL_PREFIX = staticUrlPrefix;
 		state.APP_URL_PREFIX = appUrlPrefix;
 		state.APP_VERSION = config.version;
