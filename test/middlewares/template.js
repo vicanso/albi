@@ -9,10 +9,10 @@ require('../../init');
 describe('middleware/template', () => {
 	it('should compile a template successful', done => {
 		const app = new Koa();
+		const views = localRequire('views');
 		const state = localRequire('middlewares/state');
-		const template = localRequire('middlewares/template');
 		app.use(state({}));
-		app.use(template.test);
+		app.use(views.test);
 
 		request(app.listen())
 			.get('/')

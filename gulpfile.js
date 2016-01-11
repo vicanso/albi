@@ -9,10 +9,11 @@ const copy = require('gulp-copy');
 const through = require('through2');
 const crc32 = require('buffer-crc32');
 const path = require('path');
-const uglify = require('gulp-uglify');
+const shell = require('gulp-shell');
 const fs = require('fs');
-const assetsPath = 'assets'
-	// 保存静态文件的crc32版本号
+const _ = require('lodash');
+const assetsPath = 'assets';
+// 保存静态文件的crc32版本号
 const crc32Versions = {};
 
 function version(opts) {
@@ -20,12 +21,19 @@ function version(opts) {
 		let version = crc32.unsigned(file.contents);
 		let extname = path.extname(file.path);
 		let name = file.path.substring(file.base.length - 1);
+		if (opts && opts.prefix) {
+			name = opts.prefix + name;
+		}
 		crc32Versions[name] = version;
 		file.path = file.path.replace(extname, '.' + version + extname);
 		cb(null, file);
 	}
 	return through.obj(addVersion);
 }
+
+gulp.task('del:jspm', function() {
+	return del(['jspm/config.*.js', 'jspm/bundles', 'jspm/packages/system.*.js']);
+});
 
 gulp.task('del:assets', function() {
 	return del([assetsPath]);
@@ -52,7 +60,6 @@ gulp.task('stylus', ['del:assets', 'del:build'], function() {
 
 gulp.task('copy-others', ['del:assets', 'del:build'], function() {
 	return gulp.src(['public/**/*',
-		'!public/jspm_packages/**/*',
 		'!public/**/*.styl',
 		'!public/**/*.js'
 	]).pipe(copy('build', {
@@ -60,14 +67,12 @@ gulp.task('copy-others', ['del:assets', 'del:build'], function() {
 	}));
 });
 
-gulp.task('copy-jspm', ['del:assets', 'del:build'], function() {
-	return gulp.src([
-			'public/jspm_packages/system.js.map'
-		])
-		.pipe(copy(assetsPath, {
-			prefix: 1
-		}));
-});
+
+gulp.task('jspm-bundle', ['del:jspm'], shell.task([
+	'node node_modules/.bin/jspm bundle-sfx bootstrap.js jspm/bundles/bootstrap.js --inject --minify'
+]));
+
+
 
 gulp.task('static-css', ['stylus', 'copy-others'], function() {
 	return gulp.src(['build/**/*.css'])
@@ -78,15 +83,17 @@ gulp.task('static-css', ['stylus', 'copy-others'], function() {
 });
 
 gulp.task('static-js', ['copy-others'], function() {
-	return gulp.src(['public/**/*.js', '!public/components/*.js', '!public/jspm_packages/**/*.js', 'public/jspm_packages/system.js'])
+	return gulp.src(['public/**/*.js', '!public/components/*.js'])
 		.pipe(version())
 		.pipe(gulp.dest(assetsPath));
 });
 
-gulp.task('static-jspm', ['copy-others'], function() {
-	return gulp.src(['public/*/system.js'])
-		.pipe(version())
-		.pipe(gulp.dest(assetsPath));
+gulp.task('static-jspm', ['jspm-bundle'], function() {
+	return gulp.src(['jspm/*/system.js', 'jspm/config.js', 'jspm/*/bootstrap.js'])
+		.pipe(version({
+			prefix: '/jspm'
+		}))
+		.pipe(gulp.dest('jspm'));
 });
 
 
@@ -110,8 +117,13 @@ gulp.task('static-img', ['copy-others'], function() {
 		.pipe(gulp.dest(assetsPath));
 });
 
-gulp.task('crc32', ['static-css', 'static-js', 'static-img'], function(cb) {
-	fs.writeFile(path.join(__dirname, 'versions.json'), JSON.stringify(crc32Versions, null, 2), cb);
+gulp.task('crc32', ['static-css', 'static-js', 'static-img', 'static-jspm'], function(cb) {
+	const data = {};
+	const keys = _.keys(crc32Versions).sort();
+	_.forEach(keys, k => {
+		data[k] = crc32Versions[k];
+	});
+	fs.writeFile(path.join(__dirname, 'versions.json'), JSON.stringify(data, null, 2), cb);
 });
 
 gulp.task('app-version', function(cb) {
@@ -145,7 +157,6 @@ gulp.task('default', [
 	'del:build',
 	'stylus',
 	'copy-others',
-	'copy-jspm',
 	'static-css',
 	'static-js',
 	'static-jspm',

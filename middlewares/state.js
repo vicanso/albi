@@ -5,7 +5,6 @@ const Importer = require('jtfileimporter');
 const _ = require('lodash');
 const moment = require('moment');
 const path = require('path');
-const versions = localRequire('versions')
 
 module.exports = state;
 

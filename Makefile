@@ -30,4 +30,12 @@ test:
 	make eslint && make cov
 
 
-.PHONY: eslint cov test
+build:
+	node ./node_modules/.bin/gulp
+
+
+init:
+	npm install && node ./node_modules/.bin/jspm install
+
+
+.PHONY: eslint cov test build init

@@ -1,9 +1,9 @@
 'use strict';
-import * as http from '../components/http';
+import * as http from './components/http';
 import _ from 'lodash';
 import $ from 'jquery';
-import * as globals from '../components/globals';
-import * as lazyLoad from '../components/lazy-load';
+import * as globals from './components/globals';
+import * as lazyLoad from './components/lazy-load';
 
 _.defer(() => {
 

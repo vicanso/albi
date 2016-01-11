@@ -45,6 +45,11 @@ function getNavigation() {
 			name: 'config'
 		}]
 	}, {
+		name: 'Views',
+		children: [{
+			name: 'config'
+		}]
+	}, {
 		name: 'Components',
 		children: [{
 			name: 'debug'

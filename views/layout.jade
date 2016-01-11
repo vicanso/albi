@@ -14,8 +14,10 @@ html(lang='zh-CN')
 		include ./inlinejs
 		//CSS_FILES_CONTAINER
 		- importer.import('/css/pure.css', '/css/highlight.css', '/css/albi.css')
-		- importer.import('/jspm_packages/system.js', '/config.js')
-
+		if ENV === 'development' || DEBUG
+			- importer.import('/jspm/packages/system.js', '/jspm/config.js')
+		else 
+			- importer.import('/jspm/bundles/bootstrap.js')
 	body
 		block bodyContainer
 
@@ -27,4 +29,7 @@ html(lang='zh-CN')
 	//JS_FILES_CONTAINER
 	script.
 		TIMING.end('js')
-		System.import(CONFIG.staticUrlPrefix + '/js/bootstrap.js');
+		if (CONFIG.env === 'development' || CONFIG.debug) {
+			System.import(CONFIG.staticUrlPrefix + '/jspm/bootstrap.js')
+		} 
+		

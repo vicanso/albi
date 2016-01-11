@@ -23,6 +23,8 @@ exports.staticUrlPrefix = '/static';
 exports.staticPath = env === 'development' ? path.join(__dirname, 'public') :
 	path.join(__dirname, 'assets');
 
+exports.jspmPath = path.join(__dirname, 'jspm');
+
 exports.componentPath = path.join(__dirname, 'assets/components');
 
 // static file cache-control max-age

@@ -50,6 +50,19 @@ function initServer(port) {
 		));
 	}
 
+	// jspm
+	app.use(mount(
+		config.staticUrlPrefix + '/jspm',
+		require('koa-static-serve')(
+			config.jspmPath, {
+				maxAge: config.staticMaxAge,
+				headers: {
+					'Vary': 'Accept-Encoding'
+				}
+			}
+		)
+	));
+
 	// static file middleware, add default header: Vary
 	app.use(mount(
 		config.staticUrlPrefix,

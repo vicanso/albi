@@ -24,4 +24,4 @@ module.exports = [
 ];
 ```
 
-路由的config配置，通过字符串的形式来描述路由的处理方式
+路由的config配置，通过字符串的形式来描述路由的处理方式，v.*的都是view template的处理，根据 views/config.js来生成
