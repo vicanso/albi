@@ -20,6 +20,7 @@ function initServer(port) {
 	localRequire('tasks');
 	const mount = require('koa-mounting');
 	const app = new Koa();
+	// app.keys = ['im a newer secret', 'i like turtle'];
 	const appUrlPrefix = config.appUrlPrefix;
 
 	// error handler
@@ -32,7 +33,13 @@ function initServer(port) {
 	app.use(mount('/ping', ping));
 
 	// http log
-	app.use(require('koa-log')(config.logType));
+	const koaLog = require('koa-log');
+
+	koaLog.morgan.token('uuid', function getUUID(ctx) {
+		return ctx.get('X-UUID') || 'unknown';
+	});
+
+	app.use(koaLog(config.logType));
 
 	// http stats middleware
 	app.use(middlewares['http-stats']({

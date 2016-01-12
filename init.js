@@ -60,7 +60,10 @@ function initLogger() {
 		return;
 	}
 	const infos = require('url').parse(config.log);
-	logger.set('app', config.name);
+	logger.set('app', config.app);
+	logger.set('extra', {
+		process: config.name
+	});
 	logger.wrap(console);
 	logger.add('udp', {
 		host: infos.hostname,

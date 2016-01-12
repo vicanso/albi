@@ -1,4 +1,5 @@
 'use strict';
+const config = localRequire('config');
 module.exports = entry;
 
 
@@ -16,9 +17,10 @@ function entry(appUrlPrefix, processName) {
 		} else {
 			ctx.xhr = false;
 		}
-		const processList = ctx.get('X-Process') || 'unknown';
-		ctx.set('X-Process', processList + ',node-' + processName);
-		ctx.set('Cache-Control', 'must-revalidate, max-age=0');
+		const processList = (ctx.get('X-Process') || '').split(',');
+		processList.push(config.name);
+		ctx.set('X-Process', processList.join(','));
+		ctx.set('Cache-Control', 'no-cache, must-revalidate, max-age=0');
 		return next();
 	};
 }

@@ -17,6 +17,10 @@ _.defer(() => {
 		const obj = $(this);
 		obj.next('.navContainer').addBack().toggleClass('active');
 	});
+
+	http.get('/user/me', {
+		'Cache-Control': 'no-cache'
+	})
 });
 
 function statistics() {

@@ -143,7 +143,7 @@ function initAjaxHeaders() {
 	middlewares.push((req) => {
 		req.set({
 			'X-Requested-With': 'XMLHttpRequest',
-			'X-UUID': uuid.v4()
+			'X-UUID': uuid.v4().replace(/-/g, '')
 		});
 		return req;
 	});

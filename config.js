@@ -9,7 +9,9 @@ exports.env = env;
 
 exports.port = process.env.PORT || 3000;
 
-exports.name = process.env.NAME || 'albi';
+exports.app = pkg.name;
+
+exports.name = `${pkg.name}-${process.env.NAME || process.env.HOST_NAME || Date.now()}`
 
 exports.processName = process.env.HOST_NAME || process.pid;
 
@@ -31,10 +33,12 @@ exports.componentPath = path.join(__dirname, 'assets/components');
 exports.staticMaxAge = env === 'development' ? 0 : 365 * 24 * 3600;
 
 // log server url
-exports.log = process.env.LOG || ((env === 'development' || env === 'test') ? '' : 'udp://localhost:6000');
+exports.log = process.env.LOG || ((env === 'development' || env === 'test') ? '' : 'udp://localhost:7001');
+
+exports.trackCookie = '_jt';
 
 // http log type
-exports.logType = env === 'development' ? 'dev' : ':remote-addr - :cookie[_track] ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"';
+exports.logType = env === 'development' ? 'dev' : `:remote-addr - :cookie[${exports.trackCookie}] - :uuid ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"`;
 
 // http stats reset interval
 exports.httpStatsResetInterval = 30 * 60 * 1000;
