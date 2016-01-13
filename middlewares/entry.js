@@ -1,5 +1,5 @@
 'use strict';
-const config = localRequire('config');
+const _ = require('lodash');
 module.exports = entry;
 
 
@@ -18,9 +18,9 @@ function entry(appUrlPrefix, processName) {
 			ctx.xhr = false;
 		}
 		const processList = (ctx.get('X-Process') || '').split(',');
-		processList.push(config.name);
-		ctx.set('X-Process', processList.join(','));
-		ctx.set('Cache-Control', 'no-cache, must-revalidate, max-age=0');
+		processList.push(processName);
+		ctx.set('X-Process', _.compact(processList).join(','));
+		ctx.set('Cache-Control', 'no-cache');
 		return next();
 	};
 }

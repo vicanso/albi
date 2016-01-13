@@ -3,10 +3,13 @@ const _ = require('lodash');
 const httpError = localRequire('helpers/http-error');
 const checker = require('koa-query-checker');
 const noCacheQuery = checker('cache=false');
+const uuid = require('node-uuid');
+
 
 exports.noQuery = noQuery;
 exports.deprecate = deprecate;
 exports.noCache = noCache;
+exports.noStore = noStore;
 
 /**
  * [noQuery description]
@@ -42,9 +45,7 @@ function deprecate(hint, dueDay) {
 
 /**
  * [noCache description]
- * @param  {[type]}   ctx  [description]
- * @param  {Function} next [description]
- * @return {[type]}        [description]
+ * @return {[type]} [description]
  */
 function noCache() {
 	return (ctx, next) => {
@@ -54,5 +55,18 @@ function noCache() {
 		} else {
 			return noCacheQuery(ctx, next);
 		}
+	};
+}
+
+
+/**
+ * [noStore description]
+ * @return {[type]} [description]
+ */
+function noStore() {
+	return (ctx, next) => {
+		ctx.set('Cache-Control', 'no-store');
+		ctx.set('ETag', uuid.v1());
+		return next();
 	};
 }

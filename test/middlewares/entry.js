@@ -20,14 +20,15 @@ describe('middleware/entry', () => {
 
 		request(server)
 			.get('/albi/')
+			.set('X-Process', 'haproxy')
 			.end((err, res) => {
 				if (err) {
 					done(err);
 				} else {
 					assert.equal(res.status, 200);
 					assert.equal(res.text, '/');
-					assert.equal(res.get('X-Process'), 'unknown,node-ALBI');
-					assert.equal(res.get('Cache-Control'), 'must-revalidate, max-age=0');
+					assert.equal(res.get('X-Process'), 'haproxy,ALBI');
+					assert.equal(res.get('Cache-Control'), 'no-cache');
 					done();
 				}
 			});

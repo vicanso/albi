@@ -33,7 +33,7 @@ function state(versions) {
 		state.STATIC_URL_PREFIX = staticUrlPrefix;
 		state.APP_URL_PREFIX = appUrlPrefix;
 		state.APP_VERSION = config.version;
-		state.APP = config.name;
+		state.APP = config.app;
 		state.ENV = config.env;
 		state._ = _;
 		state.moment = moment;

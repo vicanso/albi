@@ -13,6 +13,8 @@ router.addDefault('common', routeStats);
 addToRouter('c', controllers);
 addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin);
+addToRouter('m.deprecate', middlewares.common.deprecate());
+addToRouter('m.noStore', middlewares.common.noStore());
 addToRouter('v', views);
 module.exports = getRouter(localRequire('router/config'));
 

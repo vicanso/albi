@@ -11,9 +11,7 @@ exports.port = process.env.PORT || 3000;
 
 exports.app = pkg.name;
 
-exports.name = `${pkg.name}-${process.env.NAME || process.env.HOST_NAME || Date.now()}`
-
-exports.processName = process.env.HOST_NAME || process.pid;
+exports.name = `${pkg.name}-${process.env.NAME || process.env.HOST_NAME || Date.now()}`;
 
 // app url prefix for all request 
 exports.appUrlPrefix = env === 'development' ? '' : '/albi';
@@ -33,7 +31,7 @@ exports.componentPath = path.join(__dirname, 'assets/components');
 exports.staticMaxAge = env === 'development' ? 0 : 365 * 24 * 3600;
 
 // log server url
-exports.log = process.env.LOG || ((env === 'development' || env === 'test') ? '' : 'udp://localhost:7001');
+exports.log = process.env.LOG || ((env === 'development' || env === 'test') ? '' : 'timtam://localhost:7001');
 
 exports.trackCookie = '_jt';
 

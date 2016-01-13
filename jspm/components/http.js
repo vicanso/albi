@@ -12,6 +12,7 @@ export const statsException = getDebouncePost('/stats/exception');
 
 initAjaxStats();
 initAjaxHeaders();
+deprecateWarning()
 
 // 超时设置
 var timeout = 0;
@@ -73,16 +74,7 @@ export function parse(desc) {
 	};
 }
 
-// 对于/sys/, /stats/的请求不统计性能
-const isReject = (function() {
-	const rejectUrls = ['/sys/', '/stats/'];
-	debug('rejectUrls:%j', rejectUrls);
-	return (url) => {
-		return !!_.find(rejectUrls, item => {
-			return url.indexOf(item) === 0;
-		});
-	};
-})();
+
 
 /**
  * [initAjaxStats 初始化ajax相关统计功能]
@@ -91,6 +83,16 @@ const isReject = (function() {
 function initAjaxStats() {
 	let requestCount = 0;
 	const doningRequest = {};
+
+	// 对于/sys/, /stats/的请求不统计性能
+	const rejectUrls = ['/sys/', '/stats/'];
+	debug('rejectUrls:%j', rejectUrls);
+	const isReject = (url) => {
+		return !!_.find(rejectUrls, item => {
+			return url.indexOf(item) === 0;
+		});
+	}
+
 	middlewares.push((req) => {
 		const url = req.url;
 		const method = req.method;
@@ -140,12 +142,32 @@ function initAjaxStats() {
 }
 
 function initAjaxHeaders() {
-	middlewares.push((req) => {
+	middlewares.push(req => {
 		req.set({
 			'X-Requested-With': 'XMLHttpRequest',
 			'X-UUID': uuid.v4().replace(/-/g, '')
 		});
 		return req;
+	});
+}
+
+/**
+ * [deprecateWarning description]
+ * @return {[type]} [description]
+ */
+function deprecateWarning() {
+	middlewares.push(req => {
+		req.once('success', res => {
+			const deprecation = res.get('X-Deprecation');
+			if (deprecation) {
+				const msg = req.method + ' ' + req.url + ' ' + deprecation;
+				if (globals.get('CONFIG.env') === 'development') {
+					alert(msg);
+				} else {
+					console.warn(msg);
+				}
+			}
+		});
 	});
 }
 

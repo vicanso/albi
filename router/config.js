@@ -24,5 +24,11 @@ module.exports = [
 	// home page
 	'GET /,/page/:page v.home,c.home',
 	// doc page
-	'GET /doc/:category,/doc/:category/:name v.doc,c.doc'
+	'GET /doc/:category,/doc/:category/:name v.doc,c.doc',
+
+
+
+	// common test
+	'GET /common/deprecate m.deprecate,c.common.deprecate',
+	'GET /common/no-store m.noStore,c.common.noStore'
 ];
