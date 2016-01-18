@@ -33,7 +33,7 @@ function noQuery(ctx, next) {
 function deprecate(hint, dueDay) {
 	hint = hint || 'This request should not be used any more.';
 	return (ctx, next) => {
-		ctx.set('X-Deprecation', hint);
+		ctx.set('Warning', hint);
 		if (dueDay) {
 			ctx.set('X-Due-Day', dueDay);
 		}

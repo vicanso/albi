@@ -17,9 +17,9 @@ function entry(appUrlPrefix, processName) {
 		} else {
 			ctx.xhr = false;
 		}
-		const processList = (ctx.get('X-Process') || '').split(',');
+		const processList = (ctx.get('Via') || '').split(',');
 		processList.push(processName);
-		ctx.set('X-Process', _.compact(processList).join(','));
+		ctx.set('Via', _.compact(processList).join(','));
 		ctx.set('Cache-Control', 'no-cache');
 		return next();
 	};
