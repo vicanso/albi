@@ -111,17 +111,17 @@ function initAjaxStats() {
 				type: 'parallelRequest'
 			});
 		}
-		req.once('complete', () => {
+		
+		req.once('error', err => {
 			--doningRequest[key];
-		});
-		req.once('fail', err => {
 			statsException({
 				key: key,
 				message: err.message,
 				type: 'requestFail'
 			});
 		});
-		req.once('success', res => {
+		req.once('response', res => {
+			--doningRequest[key];
 			if (isReject(url)) {
 				return;
 			}
@@ -202,13 +202,10 @@ request.Request.prototype.done = function done() {
 	return new Promise((resolve, reject) => {
 		const start = Date.now();
 		this.end((err, res) => {
-			this.emit('complete');
 			if (err) {
-				this.emit('fail', err);
 				return reject(err);
 			}
 			res.use = Date.now() - start;
-			this.emit('success', res);
 			resolve(res);
 		});
 	});
