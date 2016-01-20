@@ -46,6 +46,7 @@
     "lodash": "^4.0.0",
     "markdown": "^0.5.0",
     "moment": "^2.11.1",
+    "node-uuid": "^1.4.7",
     "require-tree": "^1.1.1",
     "statsd-client": "^0.2.1",
     "superagent-extend": "^0.1.6",
