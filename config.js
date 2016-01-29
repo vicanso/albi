@@ -38,6 +38,8 @@ exports.trackCookie = '_jt';
 // http log type
 exports.logType = env === 'development' ? 'dev' : `:remote-addr - :cookie[${exports.trackCookie}] - :uuid ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"`;
 
+exports.etcd = process.env.ETCD || 'http://localhost:2379';
+
 // http stats reset interval
 exports.httpStatsResetInterval = 30 * 60 * 1000;
 

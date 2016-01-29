@@ -1,8 +1,8 @@
 'use strict';
-const superExtend = require('superagent-extend');
+const request = require('superagent');
 const _ = require('lodash');
 
-const ipLocation = superExtend.parse('GET http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json');
+// const ipLocation = superExtend.parse('GET http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json');
 
 exports.location = location;
 
@@ -12,9 +12,14 @@ exports.location = location;
  * @return {[type]}    [description]
  */
 function location(ip) {
-	return ipLocation({
-		ip: ip
-	}).then(res => {
-		return _.pick(res.body, 'country province city'.split(' '));
+	return new Promise((resolve, reject) => {
+		request.get(`http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=${ip}`)
+			.end((err, res) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(_.pick(res.body, 'country province city'.split(' ')));
+				}
+			});
 	});
 }

@@ -55,7 +55,7 @@ describe('middleware/limit', () => {
 		request(server)
 			.get('/wait')
 			.end(function(err, res) {
-				assert.equal(globals.get('performance.concurrency'), 'mid');
+				assert.equal(globals.get('performance.concurrency'), 'high');
 				assert.equal(globals.get('status'), 'pause');
 				assert.equal(res.status, 429);
 			});

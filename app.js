@@ -8,6 +8,8 @@ const middlewares = localRequire('middlewares');
 const koaConvert = require('koa-convert');
 const _ = require('lodash');
 
+localRequire('services');
+
 /* istanbul ignore if */
 if (require.main === module) {
 	initServer(config.port);

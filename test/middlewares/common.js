@@ -64,7 +64,7 @@ describe('middleware/common', () => {
 			request(app.listen())
 				.get('/')
 				.end((err, res) => {
-					assert.equal(res.get('X-Deprecation'), hint);
+					assert.equal(res.get('Warning'), hint);
 					assert.equal(res.get('X-Due-Day'), dueDay);
 					done();
 				});
