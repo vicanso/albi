@@ -128,5 +128,21 @@ describe('middleware/common', () => {
 		});
 	});
 
+	describe('no-store', () => {
+		it('should set a no-store response header success', done => {
+			const app = new Koa();
+			app.use(commonMiddleware.noStore());
+			app.use(ctx => {
+				ctx.body = 'OK';
+			});
+			request(app.listen())
+				.get('/')
+				.end((err, res) => {
+					assert.equal(res.get('Cache-Control'), 'no-store');
+					assert(res.get('ETag'));
+					done();
+				});
+		});
+	});
 
 });

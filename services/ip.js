@@ -15,6 +15,7 @@ function location(ip) {
 	return new Promise((resolve, reject) => {
 		request.get(`http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=${ip}`)
 			.end((err, res) => {
+				/* istanbul ignore if */
 				if (err) {
 					reject(err);
 				} else {

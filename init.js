@@ -8,10 +8,11 @@ const config = localRequire('config');
 const Joi = require('joi');
 initLogger();
 
+/* istanbul ignore next */
 process.on('unhandledRejection', function(err) {
 	console.error(`unhandledRejection:${err.message}, stack:${err.stack}`);
 });
-
+/* istanbul ignore next */
 if (config.env === 'production') {
 	process.on('uncaughtException', function(err) {
 		// TODO should safe exit
@@ -54,8 +55,8 @@ function localRequire(name) {
  * [initLogger description]
  * @return {[type]} [description]
  */
+/* istanbul ignore next */
 function initLogger() {
-	/* istanbul ignore if */
 	if (!config.log) {
 		return;
 	}

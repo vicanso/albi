@@ -11,6 +11,8 @@ exports.port = process.env.PORT || 3000;
 
 exports.app = pkg.name;
 
+// exports.domain = 'albi.io';
+
 exports.name = `${pkg.name}-${process.env.NAME || process.env.HOST_NAME || Date.now()}`;
 
 // app url prefix for all request 

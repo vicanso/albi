@@ -3,4 +3,4 @@ npm-debug.log
 coverage
 assets
 jspm/packages
-jspm/bundle
+jspm/bundles

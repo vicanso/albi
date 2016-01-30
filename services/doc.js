@@ -8,7 +8,7 @@ const markdown = require('markdown').markdown;
 
 exports.getDescription = getDescription;
 
-
+/* istanbul ignore next */
 function getDescription(name) {
 	const file = path.join(__dirname, '../docs', name + '.md');
 	return fs.readFileAsync(file, 'utf8')
