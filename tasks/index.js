@@ -9,7 +9,8 @@ const resetTimer = setInterval(reset, 30 * 60 * 1000);
 resetTimer.unref();
 
 const refresh = () => {
-	backend.refresh().then(data => {
+	backend.refresh().then(() => {
+		console.info('refresh service success');
 		setTimeout(refresh, backendRefreshInterval).unref();
 	}).catch(err => {
 		console.error(err);
@@ -18,6 +19,7 @@ const refresh = () => {
 };
 
 backend.register().then(data => {
+	console.info(`register service success, data:${JSON.stringify(data)}`);
 	setTimeout(refresh, backendRefreshInterval).unref();
 }).catch(err => {
 	console.error(err);

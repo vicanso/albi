@@ -13,7 +13,7 @@ exports.app = pkg.name;
 
 // exports.domain = 'albi.io';
 
-exports.name = `${pkg.name}-${process.env.NAME || process.env.HOST_NAME || Date.now()}`;
+exports.name = `${pkg.name}-${process.env.NAME || process.env.HOSTNAME || Date.now()}`;
 
 // app url prefix for all request 
 exports.appUrlPrefix = env === 'development' ? '' : '/albi';

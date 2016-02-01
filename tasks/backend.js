@@ -11,7 +11,8 @@ const client = new MicroService({
 });
 const data = {
 	port: config.port,
-	ip: getIP()
+	ip: getIP(),
+	name: config.app
 };
 if (config.appUrlPrefix) {
 	data.prefix = config.appUrlPrefix;
