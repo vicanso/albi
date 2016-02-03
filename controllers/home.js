@@ -16,6 +16,7 @@ function home(ctx) {
 			},
 			expressDemo: hljs.highlightAuto(code).value
 		};
+		ctx.set('Cache-Control', 'public, max-age=600');
 	});
 
 }

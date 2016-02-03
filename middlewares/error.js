@@ -7,7 +7,7 @@ module.exports = error;
 function error(ctx, next) {
 	return next().then(_.noop, (err) => {
 		ctx.status = err.status || 500;
-		ctx.set('Cache-Control', 'must-revalidate, max-age=0');
+		ctx.set('Cache-Control', 'no-cache');
 		const data = {
 			code: err.code || 0,
 			error: err.message,

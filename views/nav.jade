@@ -1,9 +1,9 @@
 mixin Components(items, baseUrl, selectedUrl)
 	ul
 		each item in items
-			- var url = URL(baseUrl + item.url);
+			- var url = baseUrl + item.url;
 			li(class='#{selectedUrl === url? "selected" : ""}')
-				a(href='#{url}', title='#{item.name}') #{item.name}
+				a(href='#{URL(url)}', title='#{item.name}') #{item.name}
 				if item.children
 					+Components(item.children, baseUrl + item.url, selectedUrl)
 

@@ -12,7 +12,8 @@ export const statsException = getDebouncePost('/stats/exception');
 
 initAjaxStats();
 initAjaxHeaders();
-deprecateWarning()
+initPrefixMiddleware();
+deprecateWarning();
 
 // 超时设置
 var timeout = 0;
@@ -149,6 +150,16 @@ function initAjaxHeaders() {
 		});
 		return req;
 	});
+}
+
+function initPrefixMiddleware() {
+	const prefix = globals.get('CONFIG.appUrlPrefix');
+	if (prefix) {
+		middlewares.push(req => {
+			req.url = prefix + req.url;
+			return req;
+		});
+	}
 }
 
 /**

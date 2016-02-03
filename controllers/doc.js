@@ -23,5 +23,6 @@ function docView(ctx) {
 			},
 			description: description
 		};
+		ctx.set('Cache-Control', 'public, max-age=600');
 	});
 }
