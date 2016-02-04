@@ -33,14 +33,14 @@ exports.componentPath = path.join(__dirname, 'assets/components');
 exports.staticMaxAge = env === 'development' ? 0 : 365 * 24 * 3600;
 
 // log server url
-exports.log = process.env.LOG || ((env === 'development' || env === 'test') ? '' : 'timtam://localhost:7001');
+exports.log = process.env.LOG;
 
 exports.trackCookie = '_jt';
 
 // http log type
 exports.logType = env === 'development' ? 'dev' : `:remote-addr - :cookie[${exports.trackCookie}] - :uuid ":method :url HTTP/:http-version" :status :length ":referrer" ":user-agent"`;
 
-exports.etcd = process.env.ETCD || 'http://localhost:2379';
+exports.etcd = process.env.ETCD;
 
 // http stats reset interval
 exports.httpStatsResetInterval = 30 * 60 * 1000;

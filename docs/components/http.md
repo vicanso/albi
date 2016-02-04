@@ -50,14 +50,6 @@ login(data).then(res => {
 });
 ```
 
-```
-//get user by category
-const userFilter = http.parse('GET /users/category/:category');
-userFilter('vip').then(res => {
-	// GET /users/category/vip
-	console.info(res);
-});
-```
 
 
 

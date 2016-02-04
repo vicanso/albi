@@ -66,8 +66,6 @@ function getImgUrl(staticUrlPrefix, versions) {
 			if (version) {
 				let ext = path.extname(file);
 				file = file.replace(ext, '.' + version + ext);
-			} else {
-				file = file + '?v=' + config.version;
 			}
 			return urlJoin(staticUrlPrefix, file);
 		}
