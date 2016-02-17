@@ -20,6 +20,7 @@ exports.safeExit = safeExit;
  */
 function version(ctx) {
 	return getVersion().then(data => {
+		ctx.set('Cache-Control', 'public, max-age=600');
 		ctx.body = data;
 	});
 }

@@ -17,12 +17,14 @@ exports.noStore = noStore;
  * @param  {Function} next [description]
  * @return {[type]}        [description]
  */
-function noQuery(ctx, next) {
-	if (_.isEmpty(ctx.query)) {
-		return next();
-	} else {
-		throw httpError('query must be empty', 400);
-	}
+function noQuery() {
+	return (ctx, next) => {
+		if (_.isEmpty(ctx.query)) {
+			return next();
+		} else {
+			throw httpError('query must be empty', 400);
+		}
+	};
 }
 
 /**

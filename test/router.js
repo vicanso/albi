@@ -5,6 +5,7 @@ const assert = require('assert');
 const request = require('supertest');
 const router = localRequire('router');
 const Koa = require('koa');
+const _ = require('lodash');
 describe('router', () => {
 	it('should add controllers successful', done => {
 		const app = new Koa();
@@ -15,7 +16,7 @@ describe('router', () => {
 			.set('Cache-Control', 'no-cache')
 			.end((err, res) => {
 				assert.equal(res.status, 200);
-				assert.equal(res.body.name, 'vicanso');
+				assert(!_.isEmpty(res.body));
 				done();
 			});
 	});

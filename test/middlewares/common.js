@@ -20,7 +20,7 @@ describe('middleware/common', () => {
 					done();
 				}
 			};
-			app.use(commonMiddleware.noQuery);
+			app.use(commonMiddleware.noQuery());
 
 			app.use(ctx => {
 				ctx.body = 'OK';

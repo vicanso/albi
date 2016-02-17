@@ -21,7 +21,7 @@ describe('middleware/state', () => {
 			assert.equal(state.STATIC_URL_PREFIX, '/albi/static');
 			assert(state.APP_VERSION);
 			assert.equal(state.IMG_URL('/a.png'), '/albi/static/a.123.png');
-			assert.equal(state.IMG_URL('b.png'), '/albi/static/b.png?v=' + state.APP_VERSION);
+			assert.equal(state.IMG_URL('b.png'), '/albi/static/b.png');
 			assert.equal(state.URL('/home'), '/albi/home');
 			ctx.body = 'OK';
 		});

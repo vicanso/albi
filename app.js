@@ -44,9 +44,7 @@ function initServer(port) {
 	app.use(koaLog(config.logType));
 
 	// http stats middleware
-	app.use(middlewares['http-stats']({
-		sdc: localRequire('helpers/sdc')
-	}));
+	app.use(middlewares['http-stats']());
 
 	// http connection limit
 	app.use(middlewares.limit(config.limitOptions, config.limitResetInterval));
@@ -94,6 +92,8 @@ function initServer(port) {
 
 	app.use(middlewares.debug());
 
+	app.use(middlewares.version());
+
 
 
 	app.use(koaConvert(require('koa-fresh')()));
@@ -104,7 +104,6 @@ function initServer(port) {
 	app.use(middlewares.state(localRequire('versions')));
 
 	app.use(middlewares.picker('_fields'));
-
 	app.use(localRequire('router').routes());
 
 	app.on('error', _.noop);

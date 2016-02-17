@@ -4,7 +4,7 @@ const router = require('koa-router-parser');
 const controllers = localRequire('controllers');
 const middlewares = localRequire('middlewares');
 const globals = localRequire('globals');
-const sdc = localRequire('helpers/sdc');
+const stats = localRequire('helpers/stats');
 const views = localRequire('views');
 
 // add route handler stats，common is for all http method
@@ -12,6 +12,7 @@ router.addDefault('common', routeStats);
 
 addToRouter('c', controllers);
 addToRouter('m.noCache', middlewares.common.noCache());
+addToRouter('m.noQuery', middlewares.common.noQuery());
 addToRouter('m.auth.admin', middlewares.auth.admin);
 addToRouter('m.deprecate', middlewares.common.deprecate());
 addToRouter('m.noStore', middlewares.common.noStore());
@@ -33,7 +34,11 @@ function routeStats(ctx, next) {
 	const method = ctx.method.toUpperCase();
 	_.forEach(ctx.matched, (layer => {
 		const key = method + layer.path;
-		sdc.increment('route.' + key);
+		stats.write('http-route', {
+			method: method,
+			path: layer.path
+		});
+		// sdc.increment('route.' + key);
 		if (!routePerformance[key]) {
 			routePerformance[key] = 1;
 		} else {
