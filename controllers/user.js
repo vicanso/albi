@@ -99,6 +99,7 @@ function filter(ctx) {
 	const params = Joi.validateThrow(ctx.params, {
 		category: Joi.string().valid('vip', 'vvip').required()
 	});
+	console.info(params);
 	ctx.body = [{
 		account: 'vicanso',
 		createdAt: '2015-12-25'

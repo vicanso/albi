@@ -92,8 +92,8 @@ function initServer(port) {
 
 	app.use(middlewares.debug());
 
-	app.use(middlewares.version());
 
+	app.use(require('koa-rest-version')());
 
 
 	app.use(koaConvert(require('koa-fresh')()));
