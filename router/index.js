@@ -36,7 +36,7 @@ function routeStats(ctx, next) {
 		const key = method + layer.path;
 		stats.write('http-route', {
 			method: method,
-			path: layer.path
+			route: layer.path
 		});
 		// sdc.increment('route.' + key);
 		if (!routePerformance[key]) {

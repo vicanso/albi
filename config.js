@@ -42,6 +42,8 @@ exports.logType = env === 'development' ? 'dev' : `:remote-addr - :cookie[${expo
 
 exports.etcd = process.env.ETCD;
 
+exports.influx = process.env.INFLUX;
+
 // http stats reset interval
 exports.httpStatsResetInterval = 30 * 60 * 1000;
 

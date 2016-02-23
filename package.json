@@ -57,7 +57,7 @@
     "moment": "^2.11.2",
     "node-uuid": "^1.4.7",
     "require-tree": "^1.1.1",
-    "statsd-client": "^0.2.1",
+    "simple-influx": "0.0.2",
     "superagent": "^1.7.2",
     "timtam-logger": "^0.3.0",
     "toobusy-js": "^0.4.3",
@@ -82,7 +82,7 @@
     "supertest": "^1.2.0",
     "through2": "^2.0.0"
   },
-  "appVersion": "2016-02-22T14:01:13.644Z",
+  "appVersion": "2016-02-23T01:37:44.335Z",
   "readme": "backend framework base on koa",
   "jspm": {
     "directories": {

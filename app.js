@@ -22,6 +22,9 @@ function initServer(port) {
 	localRequire('tasks');
 	const mount = require('koa-mounting');
 	const app = new Koa();
+	// trust proxy
+	app.proxy = true;
+
 	// app.keys = ['im a newer secret', 'i like turtle'];
 	const appUrlPrefix = config.appUrlPrefix;
 

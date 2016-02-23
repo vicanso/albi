@@ -1,6 +1,6 @@
 'use strict';
-const stats = require('koa-http-stats');
 const globals = localRequire('globals');
+const stats = localRequire('helpers/stats');
 const _ = require('lodash');
 
 module.exports = httpStats;
@@ -11,14 +11,11 @@ module.exports = httpStats;
  */
 function httpStats(options) {
 	const tagKeys = 'statusDesc timeLevel sizeLevel'.split(' ');
-	return stats(options, (performance, statsData) => {
+	return require('koa-http-stats')(options, (performance, statsData) => {
 		if (!performance.createdAt) {
 			performance.createdAt = (new Date()).toISOString();
 		}
 		globals.set('performance.http', performance);
-
-		console.dir(_.pick(statsData, tagKeys));
-		console.dir(_.omit(statsData, tagKeys));
-
+		stats.write('http', _.pick(statsData, tagKeys), _.omit(statsData, tagKeys));
 	});
 }
