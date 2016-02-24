@@ -12,9 +12,7 @@ describe('middleware/http-stats', () => {
 		const globals = localRequire('globals');
 		const server = app.listen();
 
-		app.use(stats({
-			sdc: localRequire('helpers/sdc')
-		}));
+		app.use(stats());
 
 		app.use(ctx => {
 			if (ctx.url === '/wait') {
