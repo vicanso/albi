@@ -1,74 +1,32 @@
 'use strict';
 const _ = require('lodash');
-const httpError = localRequire('helpers/http-error');
-const checker = require('koa-query-checker');
-const noCacheQuery = checker('cache=false');
-const uuid = require('node-uuid');
+const errors = localRequire('helpers/errors');
+const influx = localRequire('helpers/influx');
+const url = require('url');
 
+exports.noQuery = () => (ctx, next) => {
+  if (_.isEmpty(ctx.query)) {
+    return next();
+  }
+  throw errors.get('query string must be empty', 400);
+};
 
-exports.noQuery = noQuery;
-exports.deprecate = deprecate;
-exports.noCache = noCache;
-exports.noStore = noStore;
+exports.deprecate = (hint) => (ctx, next) => {
+  ctx.set('Warning', hint);
+  console.warn(`deprecate - ${ctx.url} is still used.`);
+  const urlInfo = url.parse(ctx.url);
+  influx.write('deprecate', {
+    path: urlInfo.pathname,
+  });
+  return next();
+};
 
-/**
- * [noQuery description]
- * @param  {[type]}   ctx  [description]
- * @param  {Function} next [description]
- * @return {[type]}        [description]
- */
-function noQuery() {
-	return (ctx, next) => {
-		if (_.isEmpty(ctx.query)) {
-			return next();
-		} else {
-			throw httpError('query must be empty', 400);
-		}
-	};
-}
-
-/**
- * [deprecate description]
- * @param  {[type]} hint [description]
- * @return {[type]}      [description]
- */
-function deprecate(hint, dueDay) {
-	hint = hint || 'This request should not be used any more.';
-	return (ctx, next) => {
-		ctx.set('Warning', hint);
-		if (dueDay) {
-			ctx.set('X-Due-Day', dueDay);
-		}
-		console.warn(`deprecate - ${ctx.url} is still used.${hint}`);
-		return next();
-	};
-}
-
-
-/**
- * [noCache description]
- * @return {[type]} [description]
- */
-function noCache() {
-	return (ctx, next) => {
-		const method = ctx.method.toUpperCase();
-		if ((method !== 'GET' && method !== 'HEAD') || ctx.get('Cache-Control') === 'no-cache') {
-			return next();
-		} else {
-			return noCacheQuery(ctx, next);
-		}
-	};
-}
-
-
-/**
- * [noStore description]
- * @return {[type]} [description]
- */
-function noStore() {
-	return (ctx, next) => {
-		ctx.set('Cache-Control', 'no-store');
-		ctx.set('ETag', uuid.v1());
-		return next();
-	};
-}
+exports.noCache = () => (ctx, next) => {
+  const method = ctx.method.toUpperCase();
+  ctx.set('Cache-Control', 'no-cache, max-age=0');
+  if ((method !== 'GET' && method !== 'HEAD')
+    || ctx.get('Cache-Control') === 'no-cache') {
+    return next();
+  }
+  throw errors.get('Request header:Cache-Control must be set `no-cache`', 400);
+};

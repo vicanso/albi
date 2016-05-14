@@ -1,57 +1,21 @@
-## common
+# common
 
-### no query
-```
-function noQuery(ctx, next) {
-	if (_.isEmpty(ctx.query)) {
-		return next();
-	} else {
-		throw httpError('query must be empty', 400);
-	}
-}
-```
+通用的一些middleware
 
-对query参数的校验，要求不能为任何的query。对于这个middleware的使用，主要是因为我是varnish控，基本开发的网站都用到varnish做缓存。而开发的时候很多的url是没有query的，但是前端开发并不会考虑后端是不是有使用了缓存，怎么缓存之类，而且也有喜欢使用*?v= + Date.now()*这样来避免缓存的使用，导致varnish产生了太多的缓存，因此需要使用到noQuery的校验。
+## noQuery
 
-注：HTTP的缓存应该都由后端接口来控制，前端不应该通过添加*时间戳*的形式来避免缓存，如果该接口不能缓存，应该由后端设置Cache-Control，如果前端请求想强制不使用缓存，应该设置Request Header, Cache-Control: no-cache。
+校验url中的query参数是否为空，主要用于可缓存的请求（varnish缓存等），避免同样的请求，生成了不同的缓存，导致缓存数据增大
 
 
-### deprecate
+## deprecate
 
-```
-function deprecate(hint, dueDay) {
-	hint = hint || 'This request should not be used any more.';
-	return (ctx, next) => {
-		ctx.set('X-Deprecation', hint);
-		if (dueDay) {
-			ctx.set('X-Due-Day', dueDay);
-		}
-		console.warn(`deprecate - ${ctx.url} is still used.${hint}`);
-		return next();
-	};
-}
-```
+- `hint` 标注该请求什么时候会废弃等信息
 
-标记HTTP请求的处理已是deprecate，不再建议使用，如果有需要，也可标记due day。
+用于指定请求将于何时废弃，并且如果该接口有被调用，记录日志并添加统计
 
 
 ### noCache
 
-```
-const checker = require('koa-query-checker');
-const noCacheQuery = checker('cache=false');
-function noCache() {
-	return (ctx, next) => {
-		const method = ctx.method.toUpperCase();
-		if ((method !== 'GET' && method !== 'HEAD') || ctx.get('Cache-Control') === 'no-cache') {
-			return next();
-		} else {
-			return noCacheQuery(ctx, next);
-		}
-	};
-}
-```
+用于指定请求(GET/HEAD)不可缓存，设置response header中的Cache-Control: no-cache, max-age=0，并判断reques header中的Cache-Control是不断为no-cache。
 
-基于[koa-query-checker](https://github.com/vicanso/koa-query-checker)实现的强制要求请求url必须有cache=false或者request header设置Cache-Control:no-cache。如果没有设置request header，也没有cache=false的query，则重定向。
-
-注：noCache主要是为了让varnish能够更快捷的判断请求是否可以缓存，如果不使用varnish或者不在乎varnish通过response header中判断是否能够缓存，这middleware并没有什么用。
+开发环境为了方便测试增加，判断url中query参数是否有cache=false，否则redirect，并在query string中添加cache=false。

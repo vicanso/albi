@@ -1,21 +1,17 @@
 'use strict';
-const globals = localRequire('globals');
-const stats = localRequire('helpers/stats');
 const _ = require('lodash');
+const httpStats = require('koa-http-stats');
+const globals = localRequire('helpers/globals');
+const influx = localRequire('helpers/influx');
 
-module.exports = httpStats;
-
-/**
- * [httpStats 统计http请求数，当前处理数，请求处理时间]
- * @return {[type]}          [description]
- */
-function httpStats(options) {
-	const tagKeys = 'statusDesc timeLevel sizeLevel'.split(' ');
-	return require('koa-http-stats')(options, (performance, statsData) => {
-		if (!performance.createdAt) {
-			performance.createdAt = (new Date()).toISOString();
-		}
-		globals.set('performance.http', performance);
-		stats.write('http', _.pick(statsData, tagKeys), _.omit(statsData, tagKeys));
-	});
-}
+module.exports = (options) => httpStats(options, (p, statsData, ctx) => {
+  const tagKeys = 'status spdy size busy'.split(' ');
+  const performance = p;
+  if (!performance.createdAt) {
+    performance.createdAt = (new Date()).toISOString();
+  }
+  globals.set('performance.http', performance);
+  const fields = _.omit(statsData, tagKeys);
+  fields.ip = ctx.ip;
+  influx.write('http', fields, _.pick(statsData, tagKeys));
+});
