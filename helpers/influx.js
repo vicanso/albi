@@ -3,6 +3,7 @@ const Influx = require('influxdb-nodejs');
 const config = localRequire('config');
 const utils = localRequire('helpers/utils');
 const _ = require('lodash');
+const debug = localRequire('helpers/debug');
 
 const getClient = url => {
   const client = new Influx(url);
@@ -30,10 +31,9 @@ exports.write = (measurement, fields, ...args) => {
   if (tags) {
     reader.tag(tags);
   }
+  debug('influx measurement:%s, fields:%j, tags:%j', measurement, fields, tags);
   const syncNow = utils.getParam(args, _.isBoolean);
-  if (syncNow) {
-    reader.then();
-  } else {
+  if (!syncNow) {
     reader.queue();
   }
   return reader;

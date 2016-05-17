@@ -11,6 +11,7 @@ exports.port = process.env.PORT || 5018;
 
 exports.app = pkg.name;
 
+// http://user:pass@127.0.0.1:8086/mydatabase
 exports.influx = process.env.INFLUX;
 
 // app url prefix for all request
@@ -46,3 +47,5 @@ exports.connectLimitOptions = {
   high: 500,
   interval: 5000,
 };
+// admin token (jenny)
+exports.adminToken = '6a3f4389a53c889b623e67f385f28ab8e84e5029';

@@ -72,6 +72,8 @@ module.exports = (port) => {
 
   app.use(localRequire('middlewares/picker')('_fields'));
 
+  app.use(localRequire('router').routes());
+
   app.on('error', _.noop);
 
   const server = app.listen(port, (err) => {

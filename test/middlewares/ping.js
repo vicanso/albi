@@ -18,8 +18,8 @@ describe('middleware/ping', () => {
         if (err) {
           return done(err);
         }
-        assert.equal(res.status, 200);
-        assert.equal(res.text, 'pong');
+        assert.equal(res.status, 204);
+        assert.equal(res.text, '');
         globals.set('status', 'pause');
         request(server)
           .get('/ping')
