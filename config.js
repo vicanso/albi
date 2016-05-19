@@ -11,18 +11,13 @@ exports.port = process.env.PORT || 5018;
 
 exports.app = pkg.name;
 
+// exports.domain = 'albi.io';
+
 // http://user:pass@127.0.0.1:8086/mydatabase
 exports.influx = process.env.INFLUX;
 
 // app url prefix for all request
 exports.appUrlPrefix = env === 'development' ? '' : '/albi';
-
-// static file url prefix
-exports.staticUrlPrefix = '/static';
-
-// static file path
-exports.staticPath = env === 'development' ? path.join(__dirname, 'public') :
-  path.join(__dirname, 'assets');
 
 exports.staticOptions = {
   urlPrefix: '/static',
@@ -49,3 +44,7 @@ exports.connectLimitOptions = {
 };
 // admin token (jenny)
 exports.adminToken = '6a3f4389a53c889b623e67f385f28ab8e84e5029';
+// etcd server address http://192.168.99.100:2379/v2
+exports.etcd = process.env.ETCD;
+// application binding ip address
+exports.IP = process.env.IP;

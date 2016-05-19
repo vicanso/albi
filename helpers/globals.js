@@ -3,6 +3,8 @@ const _ = require('lodash');
 const globals = {
   // running, pause
   status: 'running',
+  // handling request count
+  connectingTotal: 0,
   performance: {
     // 参考middlewares/http-stats
     http: null,

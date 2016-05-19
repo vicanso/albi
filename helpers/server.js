@@ -40,7 +40,7 @@ module.exports = (port) => {
   const denyQuerystring = config.env !== 'development';
   // jspm static file
   app.use(mount(
-    `${config.staticUrlPrefix}/jspm`,
+    `${staticOptions.urlPrefix}/jspm`,
     staticServe(config.jspmPath, {
       denyQuerystring,
       maxAge: staticOptions.maxAge,

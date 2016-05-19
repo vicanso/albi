@@ -38,9 +38,10 @@ function getImgUrl(staticUrlPrefix, versions) {
  */
 module.exports = (versions) => {
   const appUrlPrefix = config.appUrlPrefix;
-  const staticUrlPrefix = urlJoin(appUrlPrefix, config.staticUrlPrefix);
+  const staticOptions = config.staticOptions;
+  const staticUrlPrefix = appUrlPrefix ? urlJoin(appUrlPrefix, staticOptions.urlPrefix) : staticOptions.urlPrefix;
   const imgUrlFn = getImgUrl(staticUrlPrefix, versions);
-  const anchorUrlFn = url => urlJoin(appUrlPrefix, url);
+  const anchorUrlFn = url => appUrlPrefix ? urlJoin(appUrlPrefix, url) : url;
   return (ctx, next) => {
     const state = ctx.state;
     const importer = new Importer();

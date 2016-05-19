@@ -1,6 +1,6 @@
 'use strict';
 const _ = require('lodash');
-
+const globals = localRequire('helpers/globals');
 module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   const currentPath = ctx.path;
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
@@ -14,5 +14,12 @@ module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   processList.push(processName);
   ctx.set('Via', _.compact(processList).join(','));
   ctx.set('Cache-Control', 'no-cache, max-age=0');
-  return next();
+  globals.set('connectingTotal', globals.get('connectingTotal') + 1);
+  const complete = () => {
+    globals.set('connectingTotal', globals.get('connectingTotal') - 1);
+  };
+  return next().then(complete, err => {
+    complete();
+    throw err;
+  });
 };

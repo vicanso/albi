@@ -2,7 +2,6 @@
 const viewConfigs = [
   // name tempalte
   'home home',
-  'test test',
 ];
 const template = localRequire('middlewares/template');
 const _ = require('lodash');

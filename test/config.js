@@ -29,6 +29,7 @@ describe('config', () => {
         high: Joi.number().integer().required(),
         interval: Joi.number().integer().required(),
       }).required(),
+      adminToken: Joi.string().required(),
     });
     done(data.error);
   });

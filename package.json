@@ -22,11 +22,13 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/helpers/*.js test/middlewares/*.js --"
+    "test": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/helpers/*.js test/middlewares/*.js --",
+    "install-all": "npm i && node node_modules/.bin/jspm install"
   },
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.3.5",
+    "bytes": "^2.3.0",
     "debug": "^2.2.0",
     "http-errors": "^1.4.0",
     "influxdb-nodejs": "^1.0.0",
@@ -46,8 +48,12 @@
     "koa-router-parser": "^2.0.3",
     "koa-static-serve": "^2.0.5",
     "lodash": "^4.12.0",
+    "micro-service": "0.0.4",
+    "performance-nodejs": "0.0.5",
     "pug": "^2.0.0-alpha7",
     "require-tree": "^1.1.1",
+    "superagent": "^2.0.0-alpha.2",
+    "toobusy-js": "^0.5.0",
     "url-join": "^1.1.0"
   },
   "devDependencies": {
@@ -55,8 +61,25 @@
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.7.0",
     "istanbul": "^0.4.3",
+    "jspm": "^0.16.34",
     "koa-stylus-parser": "^2.0.0",
     "mocha": "^2.4.5",
     "supertest": "^1.2.0"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "jspm",
+      "packages": "jspm/packages"
+    },
+    "dependencies": {
+      "lodash": "npm:lodash@^4.12.0",
+      "node-uuid": "npm:node-uuid@^1.4.7",
+      "superagent": "npm:superagent@^1.8.2"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
   }
 }

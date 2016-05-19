@@ -9,7 +9,7 @@ module.exports = (ctx, next) => next().then(_.noop, err => {
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   const data = {
     code: err.code || 0,
-    error: err.message,
+    message: err.message,
     expected: false,
   };
   _.forEach(err, (v, k) => {

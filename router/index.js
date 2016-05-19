@@ -5,6 +5,7 @@ const debug = localRequire('helpers/debug');
 const middlewares = localRequire('middlewares');
 const config = localRequire('config');
 const influx = localRequire('helpers/influx');
+const views = localRequire('views');
 
 function routeStats(ctx, next) {
   const start = Date.now();
@@ -16,7 +17,7 @@ function routeStats(ctx, next) {
       return;
     }
     influx.write('http-route', {
-      use: use,
+      use,
     }, {
       method: method.toLowerCase(),
       path: layer.path,
@@ -53,6 +54,7 @@ addToRouter('c', localRequire('controllers'));
 addToRouter('m.noQuery', middlewares.common.noQuery());
 addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
+addToRouter('v', views);
 
 
 module.exports = getRouter(localRequire('router/config'));
