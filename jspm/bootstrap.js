@@ -1,6 +1,6 @@
 'use strict';
 import * as globals from './components/globals';
-// import * as http from './components/http';
+import * as http from './components/http';
 
 const init = () => globals.set('onerror', (msg, url, line, row, err) => {
   var stack = '';
@@ -39,11 +39,14 @@ const statistics = () => {
       data.entries = _.filter(performance.getEntries(), tmp => tmp.initiatorType !== 'xmlhttprequest');
     }
   }
-
-  console.dir(data);
 };
 
 _.defer(() => {
   init();
   statistics();
+  http.get('/sys/version').then(data => {
+    console.dir(data);
+  }).catch(err => {
+    console.error(err);
+  });
 });
