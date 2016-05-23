@@ -15,7 +15,7 @@ const init = () => globals.set('onerror', (msg, url, line, row, err) => {
     stack: stack,
     type: 'uncaughtException',
   };
-  if (global.get('CONFIG.env') === 'development') {
+  if (globals.get('CONFIG.env') === 'development') {
     alert(JSON.stringify(data));
   }
 });
@@ -39,14 +39,22 @@ const statistics = () => {
       data.entries = _.filter(performance.getEntries(), tmp => tmp.initiatorType !== 'xmlhttprequest');
     }
   }
+  http.post('/stats/statistics', data).then(res => {
+    console.info('post statistics success');
+  }).catch(err => {
+    console.error('post statistics fail, %s', err);
+  });
 };
 
 _.defer(() => {
   init();
   statistics();
-  http.get('/sys/version').then(data => {
-    console.dir(data);
-  }).catch(err => {
-    console.error(err);
-  });
+  http.get('/users/me')
+    .set('Cache-Control', 'no-cache')
+    .set('Accept', 'application/vnd.albi.v2+json)')
+    .then(res => {
+      console.dir(res.body);
+    }).catch(err => {
+      console.error(err);
+    });
 });

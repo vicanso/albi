@@ -3,6 +3,8 @@ const _ = require('lodash');
 const errors = localRequire('helpers/errors');
 const influx = localRequire('helpers/influx');
 const url = require('url');
+const checker = require('koa-query-checker');
+const noCacheQuery = checker('cache=false');
 
 exports.noQuery = () => (ctx, next) => {
   if (_.isEmpty(ctx.query)) {
@@ -28,5 +30,5 @@ exports.noCache = () => (ctx, next) => {
     || ctx.get('Cache-Control') === 'no-cache') {
     return next();
   }
-  throw errors.get('Request header:Cache-Control must be set `no-cache`', 400);
+  return noCacheQuery(ctx, next);
 };

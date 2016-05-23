@@ -9,4 +9,12 @@ module.exports = [
 
   // page view
   'GET / v.home,c.home',
+
+  // user
+  'GET /users/me m.noCache,c.user.me',
+
+  // stats
+  'POST /stats/ajax c.stats.ajax',
+  'POST /stats/exception c.stats.exception',
+  'POST /stats/statistics c.stats.statistics',
 ];
