@@ -5,7 +5,6 @@ const path = require('path');
 const config = localRequire('config');
 const globals = localRequire('helpers/globals');
 const moment = require('moment');
-const _ = require('lodash');
 const utils = localRequire('helpers/utils');
 
 function getVersion() {
@@ -41,7 +40,7 @@ exports.stats = (ctx) => getVersion().then(version => {
   ctx.body = {
     connectingTotal: globals.get('connectingTotal'),
     status: globals.get('status'),
-    version: version,
+    version,
     uptime: uptime.fromNow(),
     startedAt: uptime.toISOString(),
   };
@@ -52,4 +51,4 @@ exports.restart = (ctx) => {
   utils.checkToExit(3);
   console.info('application will restart soon');
   ctx.body = null;
-}
+};

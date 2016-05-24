@@ -29,7 +29,7 @@ describe('middleware/error', () => {
         assert(data.expected);
         Joi.validateThrow(data, {
           code: Joi.number().required(),
-          error: Joi.string().required(),
+          message: Joi.string().required(),
           stack: Joi.string().required(),
           expected: Joi.boolean().required()
         }, {
@@ -60,7 +60,7 @@ describe('middleware/error', () => {
         assert(!data.expected);
         Joi.validateThrow(data, {
           code: Joi.number().required(),
-          error: Joi.string().required(),
+          message: Joi.string().required(),
           expected: Joi.boolean().required()
         }, {
           allowUnknown: true

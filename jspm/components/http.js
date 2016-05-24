@@ -1,37 +1,19 @@
 'use strict';
 import * as request from 'superagent';
 import * as _ from 'lodash';
+/* eslint import/no-unresolved:0 */
 import * as uuid from 'uuid';
 import * as globals from './globals';
 import debug from './debug';
 
-
-
 // timeout ms
-export let timeout = 0;
+export const timeout = 0;
 // plugin for superagent
 const plugins = [];
 export const use = (fn) => {
-  if(!~_.indexOf(plugins, fn)) {
+  if (!~_.indexOf(plugins, fn)) {
     plugins.push(fn);
   }
-};
-
-function requestThen(resolve, reject) {
-  const self = this;
-  defaultHandle(self);
-  if (!self._fullfilledPromise) {
-    self._fullfilledPromise = new Promise((innerResolve, innerReject) => {
-      this.end(function(err, res){
-        if (err) {
-          innerReject(err);
-        } else {
-          innerResolve(res);
-        }
-      });
-    });
-  }
-  return self._fullfilledPromise.then(resolve, reject);
 };
 
 // default handle for http request
@@ -42,11 +24,32 @@ const defaultHandle = (req) => {
   _.forEach(plugins, plugin => req.use(plugin));
   return req;
 };
+
+function requestThen(resolve, reject) {
+  defaultHandle(this);
+  /* eslint no-underscore-dangle:0 */
+  if (!this._fullfilledPromise) {
+    /* eslint no-underscore-dangle:0 */
+    this._fullfilledPromise = new Promise((innerResolve, innerReject) => {
+      this.end((err, res) => {
+        if (err) {
+          innerReject(err);
+        } else {
+          innerResolve(res);
+        }
+      });
+    });
+  }
+  /* eslint no-underscore-dangle:0 */
+  return this._fullfilledPromise.then(resolve, reject);
+};
+
 const done = (req, query) => {
   if (query) {
     req.query(query);
   }
-  req.then = requestThen;
+  /* eslint no-param-reassign: 0*/
+  req.then = requestThen.bind(req);
   return req;
 };
 // request get
@@ -89,7 +92,7 @@ const getDebouncePost = (url, ms) => {
   const dataList = [];
   const debouncePost = _.debounce(() => {
     post(url, dataList.slice())
-      .then(res => {
+      .then(() => {
         console.info(`debounce post:${url} success`);
       })
       .catch(err => {
@@ -107,7 +110,7 @@ const getDebouncePost = (url, ms) => {
       dataList.push(data);
     }
     debouncePost();
-  }
+  };
 };
 
 const statsAjax = getDebouncePost('/stats/ajax');
@@ -140,7 +143,7 @@ const stats = () => {
         type: 'parallelRequest',
       });
     }
-    req.once('error', err => {
+    req.once('error', () => {
       --doingRequest[key];
     });
     req.once('response', res => {
@@ -153,7 +156,7 @@ const stats = () => {
         url,
         use: Date.now() - start,
         status: res.status,
-        hit: parseInt(res.get('X-Hits') || 0),
+        hit: parseInt(res.get('X-Hits') || 0, 10),
       };
       statsAjax(data);
     });
@@ -161,6 +164,7 @@ const stats = () => {
 };
 
 const init = () => {
+  use(stats());
   // url for appurl
   const appUrlPrefix = globals.get('CONFIG.appUrlPrefix');
   if (appUrlPrefix) {
@@ -175,23 +179,23 @@ const init = () => {
   use(req => {
     req.set({
       'X-Requested-With': 'XMLHttpRequest',
-      'X-UUID': uuid.v4(),
+      'X-Request-Id': uuid.v4(),
+      'X-Requested-At': Date.now(),
     });
     return req;
   });
   // development warning alert
-  if (globals.get('CONFIG.env') === 'development') { 
+  if (globals.get('CONFIG.env') === 'development') {
     use(req => {
       req.once('response', res => {
         const warning = res.get('Warning');
         if (warning) {
+          /* eslint no-alert:0 */
           alert(warning);
         }
       });
     });
   }
-  
-  use(stats());
 };
 
 init();

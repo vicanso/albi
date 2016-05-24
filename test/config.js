@@ -12,8 +12,6 @@ describe('config', () => {
       app: Joi.string().required(),
       influx: Joi.string(),
       appUrlPrefix: Joi.string().required(),
-      staticUrlPrefix: Joi.string().required(),
-      staticPath: Joi.string().required(),
       viewPath: Joi.string().required(),
       trackCookie: Joi.string().required(),
       httpLogFormat: Joi.string().required(),
@@ -30,6 +28,8 @@ describe('config', () => {
         interval: Joi.number().integer().required(),
       }).required(),
       adminToken: Joi.string().required(),
+      etcd: Joi.string(),
+      IP: Joi.string().ip(),
     });
     done(data.error);
   });

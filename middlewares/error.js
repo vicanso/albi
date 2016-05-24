@@ -26,13 +26,15 @@ module.exports = (ctx, next) => next().then(_.noop, err => {
     logList.push('[H-U]');
   }
   influx.write('excetion', {
-    code: err.code,
+    code: data.code,
     path: urlInfo.pathname,
   }, {
-    type: err.expected ? 'E' : 'U',
+    type: data.expected ? 'E' : 'U',
   });
-
   _.forEach(data, (v, k) => {
+    if (_.isObject(v)) {
+      return;
+    }
     logList.push(`${k}=${v}`);
   });
 

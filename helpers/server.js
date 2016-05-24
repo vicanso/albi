@@ -19,6 +19,7 @@ module.exports = (port) => {
   if (config.env === 'development') {
     app.use(koaLog('dev'));
   } else {
+    koaLog.morgan.token('request-id', (ctx) => ctx.get('X-Request-Id') || 'unknown');
     app.use(koaLog(config.httpLogFormat));
   }
   // http stats

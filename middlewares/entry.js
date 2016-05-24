@@ -15,8 +15,10 @@ module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   ctx.set('Via', _.compact(processList).join(','));
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   globals.set('connectingTotal', globals.get('connectingTotal') + 1);
+  const start = Date.now();
   const complete = () => {
     globals.set('connectingTotal', globals.get('connectingTotal') - 1);
+    ctx.set('X-Use', Date.now() - start);
   };
   return next().then(complete, err => {
     complete();

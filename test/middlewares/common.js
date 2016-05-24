@@ -100,7 +100,8 @@ describe('middleware/common', () => {
           if (err) {
             return done(err);
           }
-          assert.equal(res.status, 400);
+          assert.equal(res.status, 302);
+          console.dir(res.location);
           finished();
         });
 

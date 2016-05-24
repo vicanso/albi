@@ -13,7 +13,7 @@ const path = require('path');
  * @return {[type]}                 [description]
  */
 function getImgUrl(staticUrlPrefix, versions) {
-  return (f) => {
+  return function joinUrlPath(f) {
     let file = f;
     if (file.charAt(0) !== '/') {
       file = `/${file}`;
@@ -39,9 +39,15 @@ function getImgUrl(staticUrlPrefix, versions) {
 module.exports = (versions) => {
   const appUrlPrefix = config.appUrlPrefix;
   const staticOptions = config.staticOptions;
+  /* eslint max-len:0 */
   const staticUrlPrefix = appUrlPrefix ? urlJoin(appUrlPrefix, staticOptions.urlPrefix) : staticOptions.urlPrefix;
   const imgUrlFn = getImgUrl(staticUrlPrefix, versions);
-  const anchorUrlFn = url => appUrlPrefix ? urlJoin(appUrlPrefix, url) : url;
+  const anchorUrlFn = url => {
+    if (appUrlPrefix) {
+      return urlJoin(appUrlPrefix, url);
+    }
+    return url;
+  };
   return (ctx, next) => {
     const state = ctx.state;
     const importer = new Importer();

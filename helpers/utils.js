@@ -19,8 +19,9 @@ const checkToExit = exports.checkToExit = (times) => {
   setTimeout(() => {
     if (!globals.get('connectingTotal')) {
       console.info('exit without any connection');
-      return process.exit(0);
+      process.exit(0);
+    } else {
+      checkToExit(times - 1);
     }
-    checkToExit(--times);
   }, 10 * 1000).unref();
 };

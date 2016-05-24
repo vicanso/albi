@@ -11,7 +11,7 @@ describe('middleware/template', () => {
     const views = localRequire('views');
     const state = localRequire('middlewares/state');
     app.use(state({}));
-    app.use(views.test);
+    app.use(views.home);
 
     request(app.listen())
       .get('/')
