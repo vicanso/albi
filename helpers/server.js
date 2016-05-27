@@ -6,15 +6,21 @@ const _ = require('lodash');
 const mount = require('koa-mounting');
 const koaConvert = require('koa-convert');
 const staticServe = require('koa-static-serve');
+
+const session = require('koa-generic-session');
+const RedisStore = require('koa-redis');
+
 module.exports = (port) => {
   const app = new Koa();
   // trust proxy
   app.proxy = true;
+  app.keys = ['cuttle-fish', 'tree.xie'];
   // error handler
   app.use(localRequire('middlewares/error'));
   app.use(localRequire('middlewares/entry')(config.appUrlPrefix, config.app));
   // health check
   app.use(localRequire('middlewares/ping')('/ping'));
+
   // http log
   if (config.env === 'development') {
     app.use(koaLog('dev'));
@@ -72,6 +78,11 @@ module.exports = (port) => {
   app.use(localRequire('middlewares/state')(localRequire('versions')));
 
   app.use(localRequire('middlewares/picker')('_fields'));
+
+  app.use(koaConvert(session({
+    store: new RedisStore(),
+    key: config.sessionKey,
+  })));
 
   app.use(localRequire('router').routes());
 

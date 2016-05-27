@@ -42,9 +42,17 @@ exports.connectLimitOptions = {
   high: 500,
   interval: 5000,
 };
+// cookie name
+exports.sessionKey = 'albi';
 // admin token (jenny)
 exports.adminToken = '6a3f4389a53c889b623e67f385f28ab8e84e5029';
 // etcd server address http://192.168.99.100:2379/v2
 exports.etcd = process.env.ETCD;
 // application binding ip address
 exports.IP = process.env.IP;
+// mongodb uri
+// mongodb://user:pass@localhost:port,anotherhost:port,yetanother:port/mydatabase
+exports.mongoUri = process.env.MONGO;
+// redis uri
+// [redis:]//[[user][:password@]][host][:port][/db-number][?db=db-number[&password=bar[&option=value]]]
+exports.redisUri = process.env.REDIS;

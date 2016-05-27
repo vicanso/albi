@@ -54,6 +54,7 @@ addToRouter('c', localRequire('controllers'));
 addToRouter('m.noQuery', middlewares.common.noQuery());
 addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
+addToRouter('m.session', middlewares.session.normal);
 addToRouter('v', views);
 
 
