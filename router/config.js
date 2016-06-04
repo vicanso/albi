@@ -11,7 +11,7 @@ module.exports = [
   'GET / v.home,c.home',
 
   // user
-  'GET /users/me m.noCache,m.session,c.user.me',
+  'GET /users/me m.noCache,m.session.read,c.user.me',
 
   // stats
   'POST /stats/ajax c.stats.ajax',

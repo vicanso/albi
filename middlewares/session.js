@@ -1,26 +1,19 @@
 'use strict';
-const session = require('koa-generic-session');
-const RedisStore = require('koa-redis');
+const session = require('koa-simple-session');
+const RedisStore = require('koa-simple-redis');
 const config = localRequire('config');
 const koaConvert = require('koa-convert');
+const sessionMiddleware = session({
+  store: new RedisStore({
+    url: config.redisUri,
+    key: config.sessionKey,
+  }),
+});;
+exports.normal = sessionMiddleware;
 
-let sessionMiddleware = null;
-exports.normal = (ctx, next) => {
-  // console.dir(ctx.session);
-  return next();
-  // if (!sessionMiddleware) {
-  //   sessionMiddleware = koaConvert(session({
-  //     store: new RedisStore({
-  //       url: config.redisUri,
-  //       key: config.sessionKey,
-  //     }),
-  //   }));
-  // }
-  // const done = () => {
-  //   const p = new Promise((resolve, reject) => {
-  //     return resolve();
-  //   });
-  //   return p.then(next);
-  // }
-  // return sessionMiddleware(ctx, done);
+exports.readonly = (ctx, next) => {
+  return sessionMiddleware(ctx, () => {
+    Object.freeze(ctx.session);
+    return next();
+  });
 };
