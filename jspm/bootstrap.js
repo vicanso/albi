@@ -1,6 +1,7 @@
 'use strict';
 import * as globals from './components/globals';
 import * as http from './components/http';
+import * as user from './components/user';
 
 const init = () => globals.set('onerror', (msg, url, line, row, err) => {
   var stack = '';
@@ -49,12 +50,15 @@ const statistics = () => {
 _.defer(() => {
   init();
   statistics();
-  http.get('/users/me')
-    .set('Cache-Control', 'no-cache')
-    .set('Accept', 'application/vnd.albi.v2+json)')
-    .then(res => {
-      console.dir(res.body);
-    }).catch(err => {
-      console.error(err);
-    });
+  user.me().then(data => {
+    console.dir(data);
+  });
+  // http.get('/users/me')
+  //   .set('Cache-Control', 'no-cache')
+  //   .set('Accept', 'application/vnd.albi.v2+json)')
+  //   .then(res => {
+  //     console.dir(res.body);
+  //   }).catch(err => {
+  //     console.error(err);
+  //   });
 });

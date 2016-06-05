@@ -32,3 +32,11 @@ exports.noCache = () => (ctx, next) => {
   }
   return noCacheQuery(ctx, next);
 };
+
+exports.defaultVersion = (version) => (ctx, next) => {
+  ctx.versionConfig = _.extend({
+    version: 1,
+    type: 'json',
+  }, version, ctx.versionConfig);
+  return next();
+};

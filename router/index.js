@@ -56,6 +56,7 @@ addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
 addToRouter('m.session', middlewares.session.normal);
 addToRouter('m.session.read', middlewares.session.readonly);
+addToRouter('m.version.default', middlewares.common.defaultVersion());
 addToRouter('v', views);
 
 

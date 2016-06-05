@@ -58,7 +58,7 @@
     "performance-nodejs": "0.0.5",
     "pug": "^2.0.0-alpha7",
     "require-tree": "^1.1.1",
-    "superagent": "^2.0.0-alpha.2",
+    "superagent": "^2.0.0",
     "toobusy-js": "^0.5.0",
     "url-join": "^1.1.0"
   },
