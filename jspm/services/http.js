@@ -182,6 +182,9 @@ const init = () => {
       'X-Request-Id': uuid.v4(),
       'X-Requested-At': Date.now(),
     });
+    if (!req.get('Accept')) {
+      req.set('Accept', `application/vnd.${globals.get('CONFIG.app')}.v1+json`)
+    }
     return req;
   });
   // development warning alert

@@ -24,7 +24,9 @@
   "scripts": {
     "test": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js jspm/components/*.js && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/helpers/*.js test/middlewares/*.js --",
     "install-all": "npm i && node node_modules/.bin/jspm install",
-    "gulp": "node ./node_modules/.bin/gulp"
+    "gulp": "node ./node_modules/.bin/gulp",
+    "start": "node app",
+    "start-dev": "nodemon app"
   },
   "license": "MIT",
   "dependencies": {
@@ -86,9 +88,11 @@
       "packages": "jspm/packages"
     },
     "dependencies": {
+      "classnames": "npm:classnames@^2.2.5",
       "debug": "npm:debug@^2.2.0",
       "lodash": "npm:lodash@^4.12.0",
       "react": "npm:react@^15.1.0",
+      "react-dom": "npm:react-dom@^15.1.0",
       "react-redux": "npm:react-redux@^4.4.5",
       "redux": "npm:redux@^3.5.2",
       "superagent": "npm:superagent@^1.8.2",

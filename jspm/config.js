@@ -16,10 +16,12 @@ System.config({
   map: {
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
+    "classnames": "npm:classnames@2.2.5",
     "core-js": "npm:core-js@1.2.6",
     "debug": "npm:debug@2.2.0",
     "lodash": "npm:lodash@4.13.1",
     "react": "npm:react@15.1.0",
+    "react-dom": "npm:react-dom@15.1.0",
     "react-redux": "npm:react-redux@4.4.5",
     "redux": "npm:redux@3.5.2",
     "superagent": "npm:superagent@1.8.3",
@@ -428,6 +430,9 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "crypto": "github:jspm/nodelibs-crypto@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:react-dom@15.1.0": {
+      "react": "npm:react@15.1.0"
     },
     "npm:react-redux@4.4.5": {
       "hoist-non-react-statics": "npm:hoist-non-react-statics@1.0.6",

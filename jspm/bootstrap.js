@@ -1,9 +1,14 @@
 'use strict';
-import * as globals from './components/globals';
-import * as http from './components/http';
-import * as user from './components/user';
+import * as globals from './services/globals';
+import * as http from './services/http';
+import * as user from './services/user';
+import React from 'react';
+import store from './store';
+import ReactDOM from 'react-dom';
+import App from './components/app';
+import * as ReactRedux from 'react-redux';
 
-const init = () => globals.set('onerror', (msg, url, line, row, err) => {
+const globarErrorCatch = () => globals.set('onerror', (msg, url, line, row, err) => {
   var stack = '';
   if (err) {
     stack = err.stack;
@@ -20,6 +25,7 @@ const init = () => globals.set('onerror', (msg, url, line, row, err) => {
     alert(JSON.stringify(data));
   }
 });
+
 
 const statistics = () => {
   const data = {
@@ -47,18 +53,18 @@ const statistics = () => {
   });
 };
 
+const initRender = () => {
+  const Provider = ReactRedux.Provider;
+  ReactDOM.render(
+    <Provider store={store()}>
+      <App />
+    </Provider>,
+    document.getElementById('rootContainer')
+  );
+};
+
 _.defer(() => {
-  init();
+  globarErrorCatch();
   statistics();
-  user.me().then(data => {
-    console.dir(data);
-  });
-  // http.get('/users/me')
-  //   .set('Cache-Control', 'no-cache')
-  //   .set('Accept', 'application/vnd.albi.v2+json)')
-  //   .then(res => {
-  //     console.dir(res.body);
-  //   }).catch(err => {
-  //     console.error(err);
-  //   });
+  initRender();
 });

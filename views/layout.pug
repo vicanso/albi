@@ -12,7 +12,7 @@ html(lang='zh-CN')
     title #{title}
     include ./inlinejs
     //CSS_FILES_CONTAINER
-    - importer.import('/css/pure.css', '/css/global.css')
+    - importer.import('//o3tra507p.qnssl.com/font-awesome-4.6.3.css', '//o3tra507p.qnssl.com/pure-0.6.0.css', '/css/global.css')
     if ENV === 'development' || DEBUG
       - importer.import('/jspm/packages/system.js', '/jspm/config.js')
     else 
