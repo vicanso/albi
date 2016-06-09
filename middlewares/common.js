@@ -33,10 +33,18 @@ exports.noCache = () => (ctx, next) => {
   return noCacheQuery(ctx, next);
 };
 
-exports.defaultVersion = (version) => (ctx, next) => {
-  ctx.versionConfig = _.extend({
-    version: 1,
-    type: 'json',
-  }, version, ctx.versionConfig);
-  return next();
-};
+exports.version = (v, t) => {
+  const versions = _.isArray(v) ? v : [v]
+  const typeList = t ? (_.isArray(t) ? t : [t]) : ['json'];
+  return (ctx, next) => {
+    const version = _.get(ctx, 'versionConfig.version', 1);
+    if (_.indexOf(versions, version) === -1) {
+      throw errors.get(`version is invalid, it should be version:[${versions.join(',')}]`, 406);
+    }
+    const type = _.get(ctx, 'versionConfig.type', 'json');
+    if (_.indexOf(typeList, type) === -1) {
+      throw errors.get(`type is invalid, it should be type:[${typeList.join(',')}]`, 406);
+    }
+    return next();
+  };
+}

@@ -6,8 +6,11 @@ export const me = () => {
     .set('Cache-Control', 'no-cache')
     .set('Accept', 'application/vnd.albi.v1+json')
     .then(res => {
-      console.dir(res.body);
-    }).catch(err => {
-
+      return res.body;
+    }, err => {
+      if (err.status === 403) {
+        return {};
+      }
+      throw err;
     });
 };

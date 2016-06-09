@@ -1,11 +1,20 @@
 'use strict';
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const _ = require('lodash');
 const config = localRequire('config');
 const requireTree = require('require-tree');
 
 const initModels = (client, modelPath) => {
-
+  const models = requireTree('.');
+  _.forEach(models, (model, key) => {
+    const name = model.name || (key.charAt(0).toUpperCase() + key.substring(1));
+    const schema = new Schema(model.schema, model.options);
+    if (model.indexes) {
+      _.forEach(model.indexes, options => schema.index(options));
+    }
+    client.model(name, schema);
+  });
 };
 
 const initClient = (uri, options) => {
@@ -40,5 +49,12 @@ const initClient = (uri, options) => {
   return client;
 };
 
-
 const client = initClient(config.mongoUri);
+
+exports.get = (name) => {
+  if (!client) {
+    throw new Error('the db is not init!');
+  }
+  return client.model(name);
+};
+
