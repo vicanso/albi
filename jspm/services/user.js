@@ -49,6 +49,8 @@ export function login(account, password) {
 export function logout() {
   return http.del('/users/logout')
     .then(() => {
-      return {};
+      return {
+        account: '',
+      };
     });
 }

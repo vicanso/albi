@@ -10,6 +10,7 @@ import {
   USER_REGISTER_SUCC,
   USER_LOGOUT,
   USER_LOGOUT_FAIL,
+  USER_LOGOUT_SUCC,
 } from '../constants/action-types';
 
 const defaultStates = {
@@ -38,6 +39,7 @@ export default function user(state = defaultStates, action) {
     case USER_REGISTER_SUCC:
     case USER_FETCH_SUCC:
     case USER_LOGIN_SUCC:
+    case USER_LOGOUT_SUCC:
       return Object.assign({}, state, {
         status: '',
       }, action.user);

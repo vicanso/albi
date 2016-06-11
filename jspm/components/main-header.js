@@ -9,6 +9,7 @@ class MainHeader extends Component {
     this.state = {
       isMounted: false,
     };
+
   }
   componentWillMount() {
     const { dispatch } = this.props;
@@ -20,6 +21,16 @@ class MainHeader extends Component {
     const { isMounted } = this.state;
     if (!isMounted) {
       return;
+    }
+    const getError = () => {
+      if (user.status) {
+        return (
+          <span className='warning'>
+            <i className='fa fa-exclamation-triangle' aria-hidden="true"></i>
+            {user.message}
+          </span>
+        );
+      }
     }
     if (user.status === 'fetching') {
       return (
@@ -33,21 +44,22 @@ class MainHeader extends Component {
       return (
         <li>
           <span>{user.account}</span>
-          <a href='javascript:;' onClick={logout}>Logout</a>
+          <a href='javascript:;' onClick={logout}>
+            <i className='fa fa-sign-out' aria-hidden='true'></i>
+            logout</a>
+          {getError()}
         </li>
       );
     }
     return (
       <li>
-        <a href='javascript:;' className='mright5' onClick={showRegister}>Register</a>
-        <a href='javascript:;' onClick={showLogin}>Login</a>
-        {
-          user.status === 'error' &&
-          <span className='warning'>
-            <i className='fa fa-exclamation-triangle' aria-hidden="true"></i>
-            {user.message}
-          </span>
-        }
+        <a href='javascript:;' className='mright5' onClick={showRegister}>
+          <i className='fa fa-user' aria-hidden='true'></i>
+          register</a>
+        <a href='javascript:;' onClick={showLogin}>
+          <i className='fa fa-sign-in' aria-hidden='true'></i>
+          login</a>
+        {getError()}
       </li>
     );
   }
@@ -55,9 +67,10 @@ class MainHeader extends Component {
   render() {
     const { user } = this.props;
     return (
-      <header className="mainHeader">
+      <header className='mainHeader'>
         <ul className="pullRight">
           {this.renderUserInfo()}
+          <li className="version">Version 3.x</li>
         </ul>
       </header>
     );

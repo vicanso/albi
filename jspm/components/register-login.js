@@ -10,7 +10,7 @@ class Register extends Dialog {
       password: (refs.password.value || '').trim(),
     };
   }
-  handleSubmit(e) {
+  handleSubmit() {
     const { account, password} = this.getData();
     let error = '';
     const type = this.props.type || 'login';

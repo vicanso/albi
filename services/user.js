@@ -33,13 +33,17 @@ exports.add = (data) => {
 
 exports.get = (account, password, token) => {
   const User = Models.get('User');
-  return User.findOneAndUpdate({
+  return User.findOne({
     account,
   }).then(doc => {
+    const incorrectError = errors.get('ID/Password is incorrect', 400);
+    if (!doc) {
+      throw incorrectError;
+    }
     const user = doc.toJSON();
     const hash = crypto.createHash('sha256');
     if (hash.update(user.password + token).digest('hex') !== password) {
-      throw errors.get('ID/Password is incorrect', 400);
+      throw incorrectError;
     }
     doc.lastLoginedAt = (new Date()).toISOString();
     doc.loginCount++;

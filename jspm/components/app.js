@@ -5,6 +5,7 @@ import * as ReactRedux from 'react-redux';
 import * as Actions from '../actions/index';
 import RegisterLogin from './register-login';
 import MainHeader from './main-header';
+import MainNav from './main-nav';
 import * as User from '../actions/user';
 
 
@@ -12,28 +13,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-  }
-  register(data) {
-    // this.setState({
-    //   register: {
-    //     show: false,
-    //     status: 'doing',
-    //   },
-    // });
-    // User.add(data).then(user => {
-
-    // }).catch(err => {
-
-    // });
-  }
-  showRegister() {
-    this.setState({
-      showRegister: true,
-    });
-  }
-  componentWillMount() {
-    // const { dispatch } = this.props;
-    // dispatch(User.fetch());
   }
   renderMainHeader() {
     const { user, dispatch } = this.props;
@@ -97,6 +76,7 @@ class App extends Component {
         { this.renderMainHeader() }
         { this.renderRegister() }
         { this.renderLogin() }
+        <MainNav />
       </div>
     );
   }

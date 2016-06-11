@@ -16,3 +16,4 @@ export const USER_LOGIN_SUCC = 'USER_LOGIN_SUCC';
 
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const USER_LOGOUT_FAIL = 'USER_LOGOUT_FAIL';
+export const USER_LOGOUT_SUCC = 'USER_LOGOUT_SUCC';

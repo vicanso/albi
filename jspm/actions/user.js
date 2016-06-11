@@ -11,6 +11,7 @@ import {
   USER_REGISTER_SUCC,
   USER_LOGOUT,
   USER_LOGOUT_FAIL,
+  USER_LOGOUT_SUCC,
 } from '../constants/action-types';
 import * as UserService from '../services/user';
 
@@ -65,8 +66,9 @@ export function logout() {
     dispatch({
       type: USER_LOGOUT,
     });
-    return UserService.logout().then(user => {
-
-    }).catch(fail(dispatch, USER_LOGIN_FAIL));
+    return UserService.logout().then(user => dispatch({
+      type: USER_LOGOUT_SUCC,
+      user,
+    })).catch(fail(dispatch, USER_LOGIN_FAIL));
   };
 }
