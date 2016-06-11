@@ -33,9 +33,10 @@ exports.noCache = () => (ctx, next) => {
   return noCacheQuery(ctx, next);
 };
 
-exports.version = (v, t) => {
-  const versions = _.isArray(v) ? v : [v]
-  const typeList = t ? (_.isArray(t) ? t : [t]) : ['json'];
+exports.version = (v, _t) => {
+  const versions = _.isArray(v) ? v : [v];
+  const t = _t || ['json'];
+  const typeList = _.isArray(t) ? t : [t];
   return (ctx, next) => {
     const version = _.get(ctx, 'versionConfig.version', 1);
     if (_.indexOf(versions, version) === -1) {
@@ -47,4 +48,4 @@ exports.version = (v, t) => {
     }
     return next();
   };
-}
+};
