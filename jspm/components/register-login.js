@@ -11,19 +11,26 @@ class Register extends Dialog {
     };
   }
   handleSubmit(e) {
-    const data = this.getData();
+    const { account, password} = this.getData();
     let error = '';
-    if (data.password.length < 6) {
-      error = 'Password catn\'t be less than 6 character!';
-    }
-    if (data.account.length < 4) {
-      error = 'Password catn\'t be less than 4 character!';
+    const type = this.props.type || 'login';
+    if (type === 'login') {
+      if (!password || !account) {
+        error = 'Account and Password can\'t be empty';
+      }
+    } else {
+      if (password.length < 6) {
+        error = 'Password catn\'t be less than 6 character!';
+      }
+      if (account.length < 4) {
+        error = 'Password catn\'t be less than 4 character!';
+      }
     }
     if (error) {
       this.setState({'error': error});
       return;
     }
-    this.props.onSubmit(data);
+    this.props.onSubmit(account, password);
   }
   getError() {
     const state = this.state;
@@ -43,13 +50,28 @@ class Register extends Dialog {
       this.setState({error: ''});
     }
   }
+  componentWillMount() {
+    const type = this.props.type || 'login';
+    const title = type === 'login' ? 'Login' : 'Register';
+    this.state = {
+      classes: {
+        registerLoginDialog: true,
+      },
+      title,
+      style: {
+        marginTop: '-120px',
+      },
+    };
+  }
   getContent() {
+    const type = this.props.type || 'Login';
     return (
       <form className="pure-form pure-form-aligned"><fieldset>
         <div className="pure-control-group">
           <label for="name">Username</label>
           <input id="name"
             type="text"
+            autoFocus="true"
             placeholder="Username"
             onChange={this.handleChange.bind(this)}
             ref="account" />
@@ -73,21 +95,13 @@ class Register extends Dialog {
   }
   constructor() {
     super();
-    this.state = {
-      classes: {
-        registerDialog: true,
-      },
-      title: 'Register',
-      style: {
-        marginTop: '-120px',
-      },
-    };
   }
 }
 
 Register.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  type: PropTypes.string,
 };
 
 export default Register;

@@ -18,6 +18,7 @@ exports.me = (ctx) => {
 };
 
 exports.logout = (ctx) => {
+  throw new Error('logout fail');
   delete ctx.session.user;
   /* eslint no-param-reassign:0 */
   ctx.body = null;

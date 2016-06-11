@@ -1,0 +1,74 @@
+'use strict';
+import React, { PropTypes, Component } from 'react';
+import * as User from '../actions/user';
+
+
+class MainHeader extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isMounted: false,
+    };
+  }
+  componentWillMount() {
+    const { dispatch } = this.props;
+    dispatch(User.fetch());
+    this.state.isMounted = true;
+  }
+  renderUserInfo() {
+    const { user, showRegister, showLogin, logout } = this.props;
+    const { isMounted } = this.state;
+    if (!isMounted) {
+      return;
+    }
+    if (user.status === 'fetching') {
+      return (
+        <li>
+          <i className='fa fa-spinner mright5' aria-hidden='true'></i>
+            Loading...
+        </li>
+      );
+    }
+    if (user.account) {
+      return (
+        <li>
+          <span>{user.account}</span>
+          <a href='javascript:;' onClick={logout}>Logout</a>
+        </li>
+      );
+    }
+    return (
+      <li>
+        <a href='javascript:;' className='mright5' onClick={showRegister}>Register</a>
+        <a href='javascript:;' onClick={showLogin}>Login</a>
+        {
+          user.status === 'error' &&
+          <span className='warning'>
+            <i className='fa fa-exclamation-triangle' aria-hidden="true"></i>
+            {user.message}
+          </span>
+        }
+      </li>
+    );
+  }
+
+  render() {
+    const { user } = this.props;
+    return (
+      <header className="mainHeader">
+        <ul className="pullRight">
+          {this.renderUserInfo()}
+        </ul>
+      </header>
+    );
+  }
+};
+
+MainHeader.propTypes = {
+  showRegister: PropTypes.func.isRequired,
+  showLogin: PropTypes.func.isRequired,
+};
+
+
+
+export default MainHeader;

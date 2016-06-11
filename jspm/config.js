@@ -24,6 +24,8 @@ System.config({
     "react-dom": "npm:react-dom@15.1.0",
     "react-redux": "npm:react-redux@4.4.5",
     "redux": "npm:redux@3.5.2",
+    "redux-logger": "npm:redux-logger@2.6.1",
+    "redux-thunk": "npm:redux-thunk@2.1.0",
     "superagent": "npm:superagent@1.8.3",
     "uuid": "npm:uuid@2.0.2",
     "github:jspm/nodelibs-assert@0.1.0": {

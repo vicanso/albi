@@ -3,67 +3,121 @@ import React, { Component, PropTypes } from 'react';
 import * as Redux from 'redux';
 import * as ReactRedux from 'react-redux';
 import * as Actions from '../actions/index';
-import Register from './register';
-import * as User from '../services/user';
+import RegisterLogin from './register-login';
+import MainHeader from './main-header';
+import * as User from '../actions/user';
+
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   register(data) {
-    this.setState({
-      register: {
-        show: false,
-        status: 'doing',
-      },
-    });
-    User.add(data).then(user => {
+    // this.setState({
+    //   register: {
+    //     show: false,
+    //     status: 'doing',
+    //   },
+    // });
+    // User.add(data).then(user => {
 
-    }).catch(err => {
+    // }).catch(err => {
 
-    });
+    // });
   }
   showRegister() {
     this.setState({
-      register: {
-        show: true,
-      },
+      showRegister: true,
     });
   }
   componentWillMount() {
-    this.setState({
-      register: {
-        show: false,
-        status: '',
-      }
-    });
+    // const { dispatch } = this.props;
+    // dispatch(User.fetch());
+  }
+  renderMainHeader() {
+    const { user, dispatch } = this.props;
+    return (
+      <MainHeader
+        dispatch={dispatch}
+        user={user}
+        showRegister={() => {
+          this.setState({
+            showRegister: true,
+          })
+        }}
+        showLogin={() => {
+          this.setState({
+            showLogin: true,
+          })
+        }}
+        logout={() => {
+          dispatch(User.logout());
+        }}
+      />
+    );
+  }
+  renderRegister() {
+    const { dispatch } = this.props;
+    const { showRegister } = this.state;
+    if (showRegister) {
+      return (
+        <RegisterLogin
+          type={"register"}
+          onClose={() => this.setState({showRegister: false})}
+          onSubmit={(account, password) => {
+            this.setState({
+              showRegister: false,
+            });
+            dispatch(User.register(account, password));
+          }}
+        />
+      )
+    }
+  }
+  renderLogin() {
+    const { dispatch } = this.props;
+    const { showLogin } = this.state;
+    if (showLogin) {
+      return (
+        <RegisterLogin
+          type={"login"}
+          onClose={() => this.setState({showLogin: false})}
+          onSubmit={(account, password) => {
+            this.setState({showLogin: false});
+            dispatch(User.login(account, password));
+          }}
+        />
+      )
+    }
   }
   render() {
-    const state = this.state || {};
     return (
       <div>
-        <a href="javascript:;" onClick={this.showRegister.bind(this)}>Register</a>
-        { state.register.show &&
-          <Register
-            onClose={() => this.setState({register: false})}
-            onSubmit={this.register.bind(this)} />
-        }
+        { this.renderMainHeader() }
+        { this.renderRegister() }
+        { this.renderLogin() }
       </div>
     );
   }
 }
 
 App.propTypes = {
-  register: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    register: state.register,
+    user: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: Redux.bindActionCreators(Actions, dispatch),
+    dispatch,
   };
 }
 

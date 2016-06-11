@@ -18,7 +18,7 @@ exports.add = (data) => {
   const User = Models.get('User');
   return exists(data.account).then(exists => {
     if (exists) {
-      throw errors.get('该账号已被注册', 400);
+      throw errors.get('This ID has been used', 400);
     }
     const userData = _.clone(data);
     const date = (new Date()).toISOString();
@@ -39,7 +39,7 @@ exports.get = (account, password, token) => {
     const user = doc.toJSON();
     const hash = crypto.createHash('sha256');
     if (hash.update(user.password + token).digest('hex') !== password) {
-      throw errors.get('用户名或密码不正确', 400);
+      throw errors.get('ID/Password is incorrect', 400);
     }
     doc.lastLoginedAt = (new Date()).toISOString();
     doc.loginCount++;
