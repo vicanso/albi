@@ -1,20 +1,14 @@
 'use strict';
 import * as http from './http';
 import * as crypto from './crypto';
-const getToken = () => {
-  return http.get('/users/login')
-    .set('Cache-Control', 'no-cache')
-    .then(res => {
-      return res.body.token;
-    });
-};
+const getToken = () => http.get('/users/login')
+  .set('Cache-Control', 'no-cache')
+  .then(res => res.body.token);
 
 export function me() {
   return http.get('/users/me')
     .set('Cache-Control', 'no-cache')
-    .then(res => {
-      return res.body;
-    }, err => {
+    .then(res => res.body, err => {
       if (err.status === 403) {
         return {};
       }
@@ -27,11 +21,9 @@ export function add(account, password) {
   return http.post('/users/register')
     .send({
       account,
-      password: code
+      password: code,
     })
-    .then(res => {
-      return res.body;
-    });
+    .then(res => res.body);
 }
 
 export function login(account, password) {
@@ -40,17 +32,11 @@ export function login(account, password) {
     return http.post('/users/login', {
       account,
       password: code,
-    }).then(res => {
-      return res.body;
-    });
+    }).then(res => res.body);
   });
 }
 
 export function logout() {
   return http.del('/users/logout')
-    .then(() => {
-      return {
-        account: '',
-      };
-    });
+  .then(res => res.body || { account: '' });
 }

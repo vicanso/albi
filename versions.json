@@ -1,9 +1,12 @@
 {
-  "/css/global.css": 3680543341,
+  "/css/global.css": 3874625313,
+  "/css/home.css": 679296459,
+  "/css/main-header.css": 2029356121,
+  "/css/main-nav.css": 595923994,
   "/css/pure.css": 259838965,
   "/img/favicon.ico": 3375527646,
   "/img/forkme.png": 3191153849,
-  "/jspm/bundles/bootstrap.js": 3311557543,
-  "/jspm/config.js": 2761428706,
-  "/jspm/packages/system.js": 1266831667
+  "/jspm/bundles/bootstrap.js": 3383960193,
+  "/jspm/config.js": 2830355300,
+  "/jspm/packages/system.js": 1711486672
 }

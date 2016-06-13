@@ -42,7 +42,7 @@ function requestThen(resolve, reject) {
   }
   /* eslint no-underscore-dangle:0 */
   return this._fullfilledPromise.then(resolve, reject);
-};
+}
 
 const done = (req, query) => {
   if (query) {
@@ -183,7 +183,7 @@ const init = () => {
       'X-Requested-At': Date.now(),
     });
     if (!req.get('Accept')) {
-      req.set('Accept', `application/vnd.${globals.get('CONFIG.app')}.v1+json`)
+      req.set('Accept', `application/vnd.${globals.get('CONFIG.app')}.v1+json`);
     }
     return req;
   });

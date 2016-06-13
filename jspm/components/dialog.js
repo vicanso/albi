@@ -1,10 +1,11 @@
 'use strict';
+/* eslint import/no-unresolved:0 */
 import React, { PropTypes, Component } from 'react';
-import classnames from 'classnames'
+import classnames from 'classnames';
 
 class Dialog extends Component {
   getContent() {
-    return ;
+    return;
   }
   render() {
     const state = this.state;
@@ -13,10 +14,10 @@ class Dialog extends Component {
         <div className="maskContainer"></div>
         <div className="dialog" style={state.style}>
           <h3 className="title">
-            <a className="close tac" href="javascript:;" onClick={this.props.onClose}>
+            <a className="close tac" href="#" onClick={this.props.onClose}>
               <i className="fa fa-times" aria-hidden="true"></i>
             </a>
-            {state.title || ""}
+            {state.title || ''}
           </h3>
           <div className="content">
             {this.getContent()}
@@ -26,5 +27,9 @@ class Dialog extends Component {
     );
   }
 }
+
+Dialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Dialog;

@@ -1,4 +1,5 @@
 'use strict';
+/* eslint-disable */
 const SHA256 = (function() {
   function u(c, a, b) {
     var g = 0,

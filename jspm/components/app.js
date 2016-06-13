@@ -1,8 +1,7 @@
 'use strict';
+/* eslint import/no-unresolved:0 */
 import React, { Component, PropTypes } from 'react';
-import * as Redux from 'redux';
 import * as ReactRedux from 'react-redux';
-import * as Actions from '../actions/index';
 import RegisterLogin from './register-login';
 import MainHeader from './main-header';
 import MainNav from './main-nav';
@@ -23,12 +22,12 @@ class App extends Component {
         showRegister={() => {
           this.setState({
             showRegister: true,
-          })
+          });
         }}
         showLogin={() => {
           this.setState({
             showLogin: true,
-          })
+          });
         }}
         logout={() => {
           dispatch(User.logout());
@@ -43,7 +42,9 @@ class App extends Component {
       return (
         <RegisterLogin
           type={"register"}
-          onClose={() => this.setState({showRegister: false})}
+          onClose={() => this.setState({
+            showRegister: false,
+          })}
           onSubmit={(account, password) => {
             this.setState({
               showRegister: false,
@@ -51,8 +52,9 @@ class App extends Component {
             dispatch(User.register(account, password));
           }}
         />
-      )
+      );
     }
+    return null;
   }
   renderLogin() {
     const { dispatch } = this.props;
@@ -61,21 +63,26 @@ class App extends Component {
       return (
         <RegisterLogin
           type={"login"}
-          onClose={() => this.setState({showLogin: false})}
+          onClose={() => this.setState({
+            showLogin: false,
+          })}
           onSubmit={(account, password) => {
-            this.setState({showLogin: false});
+            this.setState({
+              showLogin: false,
+            });
             dispatch(User.login(account, password));
           }}
         />
-      )
+      );
     }
+    return null;
   }
   render() {
     return (
       <div>
-        { this.renderMainHeader() }
-        { this.renderRegister() }
-        { this.renderLogin() }
+        {this.renderMainHeader()}
+        {this.renderRegister()}
+        {this.renderLogin()}
         <MainNav />
       </div>
     );
@@ -84,7 +91,6 @@ class App extends Component {
 
 App.propTypes = {
   user: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -96,12 +102,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: Redux.bindActionCreators(Actions, dispatch),
     dispatch,
   };
 }
 
 export default ReactRedux.connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(App);

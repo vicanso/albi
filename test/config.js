@@ -30,6 +30,9 @@ describe('config', () => {
       adminToken: Joi.string().required(),
       etcd: Joi.string(),
       IP: Joi.string().ip(),
+      sessionKey: Joi.string().required(),
+      mongoUri: Joi.string(),
+      redisUri: Joi.string(),
     });
     done(data.error);
   });

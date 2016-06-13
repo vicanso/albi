@@ -25,7 +25,7 @@ function version(opts) {
     }
     crc32Versions[name] = v;
     /* eslint no-param-reassign:0 */
-    file.path = file.path.replace(`${extname}.${v}${extname}`);
+    file.path = file.path.replace(extname, `.${v}${extname}`);
     cb(null, file);
   }
   return through.obj(addVersion);

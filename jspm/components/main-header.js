@@ -1,7 +1,7 @@
 'use strict';
+/* eslint import/no-unresolved:0 */
 import React, { PropTypes, Component } from 'react';
 import * as User from '../actions/user';
-
 
 class MainHeader extends Component {
   constructor() {
@@ -9,7 +9,6 @@ class MainHeader extends Component {
     this.state = {
       isMounted: false,
     };
-
   }
   componentWillMount() {
     const { dispatch } = this.props;
@@ -20,22 +19,23 @@ class MainHeader extends Component {
     const { user, showRegister, showLogin, logout } = this.props;
     const { isMounted } = this.state;
     if (!isMounted) {
-      return;
+      return null;
     }
     const getError = () => {
       if (user.status) {
         return (
-          <span className='warning'>
-            <i className='fa fa-exclamation-triangle' aria-hidden="true"></i>
+          <span className="warning">
+            <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
             {user.message}
           </span>
         );
       }
-    }
+      return null;
+    };
     if (user.status === 'fetching') {
       return (
         <li>
-          <i className='fa fa-spinner mright5' aria-hidden='true'></i>
+          <i className="fa fa-spinner mright5" aria-hidden="true"></i>
             Loading...
         </li>
       );
@@ -44,30 +44,29 @@ class MainHeader extends Component {
       return (
         <li>
           <span>{user.account}</span>
-          <a href='javascript:;' onClick={logout}>
-            <i className='fa fa-sign-out' aria-hidden='true'></i>
-            logout</a>
+          <a href="#" onClick={logout}>
+            <i className="fa fa-sign-out" aria-hidden="true"></i>
+          logout</a>
           {getError()}
         </li>
       );
     }
     return (
       <li>
-        <a href='javascript:;' className='mright5' onClick={showRegister}>
-          <i className='fa fa-user' aria-hidden='true'></i>
-          register</a>
-        <a href='javascript:;' onClick={showLogin}>
-          <i className='fa fa-sign-in' aria-hidden='true'></i>
-          login</a>
+        <a href="#" className="mright5" onClick={showRegister}>
+          <i className="fa fa-user" aria-hidden="true"></i>
+        register</a>
+        <a href="#" onClick={showLogin}>
+          <i className="fa fa-sign-in" aria-hidden="true"></i>
+        login</a>
         {getError()}
       </li>
     );
   }
 
   render() {
-    const { user } = this.props;
     return (
-      <header className='mainHeader'>
+      <header className="mainHeader">
         <ul className="pullRight">
           {this.renderUserInfo()}
           <li className="version">Version 3.x</li>
@@ -75,13 +74,14 @@ class MainHeader extends Component {
       </header>
     );
   }
-};
+}
 
 MainHeader.propTypes = {
   showRegister: PropTypes.func.isRequired,
   showLogin: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 };
-
-
 
 export default MainHeader;

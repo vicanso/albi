@@ -1,5 +1,5 @@
 'use strict';
-import * as _  from 'lodash';
+import * as _ from 'lodash';
 import {
   USER_FETCH,
   USER_FETCH_SUCC,
@@ -15,14 +15,12 @@ import {
 } from '../constants/action-types';
 import * as UserService from '../services/user';
 
-const fail = (dispatch, type) => {
-  return (err) => {
-    dispatch({
-      type: type,
-      message: _.get(err, 'response.body.message', err.message),
-      error: err,
-    });
-  };
+const fail = (dispatch, type) => (error) => {
+  dispatch({
+    type,
+    message: _.get(error, 'response.body.message', error.message),
+    error,
+  });
 };
 
 export function fetch() {
@@ -57,7 +55,7 @@ export function register(account, password) {
     return UserService.add(account, password).then(user => dispatch({
       type: USER_REGISTER_SUCC,
       user,
-    })).catch(fail(dispatch, USER_LOGIN_FAIL));
+    })).catch(fail(dispatch, USER_REGISTER_FAIL));
   };
 }
 
@@ -69,6 +67,6 @@ export function logout() {
     return UserService.logout().then(user => dispatch({
       type: USER_LOGOUT_SUCC,
       user,
-    })).catch(fail(dispatch, USER_LOGIN_FAIL));
+    })).catch(fail(dispatch, USER_LOGOUT_FAIL));
   };
 }
