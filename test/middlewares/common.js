@@ -101,7 +101,6 @@ describe('middleware/common', () => {
             return done(err);
           }
           assert.equal(res.status, 302);
-          console.dir(res.location);
           finished();
         });
 
@@ -114,6 +113,87 @@ describe('middleware/common', () => {
           }
           assert.equal(res.status, 200);
           finished();
+        });
+    });
+  });
+
+  describe('verion', () => {
+    it('valid version', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use((ctx, next) => {
+        ctx.versionConfig = {
+          version: 1,
+          type: 'json'
+        };
+        return next();
+      });
+      app.use(commonMiddleware.version([1, 2], 'json'));
+      app.use(ctx => {
+        ctx.body = null;
+      });
+      request(server)
+        .get('/')
+        .expect(204, done);
+    });
+
+    it('invalid version', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use((ctx, next) => {
+        ctx.versionConfig = {
+          version: 2,
+          type: 'json'
+        };
+        return next();
+      });
+      app.use(commonMiddleware.version([1, 3], 'json'));
+      app.use(ctx => {
+        ctx.body = null;
+      });
+      request(server)
+        .get('/')
+        .expect(406, done);
+    });
+
+    it('invalid type', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use((ctx, next) => {
+        ctx.versionConfig = {
+          version: 2,
+          type: 'xml'
+        };
+        return next();
+      });
+      app.use(commonMiddleware.version([1, 2], 'json'));
+      app.use(ctx => {
+        ctx.body = null;
+      });
+      request(server)
+        .get('/')
+        .expect(406, done);
+    });
+  });
+
+  describe('max-age', () => {
+    it('set max age', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use(commonMiddleware.cacheMaxAge(600));
+      app.use(ctx => {
+        ctx.body = null;
+      });
+
+      request(server)
+        .get('/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 204);
+          assert.equal(res.get('Cache-Control'), 'public, max-age=600');
+          done();
         });
     });
   });

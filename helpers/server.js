@@ -35,6 +35,7 @@ module.exports = (port) => {
   ));
   const staticOptions = config.staticOptions;
   // 开发环境中，实时编译stylus
+  /* istanbul ignore if */
   if (config.env === 'development') {
     app.use(mount(
       staticOptions.urlPrefix,
@@ -82,6 +83,7 @@ module.exports = (port) => {
   app.on('error', _.noop);
 
   const server = app.listen(port, (err) => {
+    /* istanbul ignore if */
     if (err) {
       console.error(`server listen on ${port} fail, err:${err.message}`);
     } else {

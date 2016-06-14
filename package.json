@@ -25,7 +25,7 @@
     "eslint-jspm": "node ./node_modules/.bin/eslint jspm/bootstrap.js jspm/store.js jspm/components/*.js jspm/actions/*.js jspm/constants/*.js jspm/reducers/*.js jspm/services/*.js",
     "eslint-node": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js",
     "eslint": "npm run eslint-node && npm run eslint-jspm",
-    "test": "npm run eslint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/helpers/*.js test/middlewares/*.js --",
+    "test": "npm run eslint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/controllers/*.js test/helpers/*.js test/middlewares/*.js --",
     "install-all": "npm i && node node_modules/.bin/jspm install",
     "gulp": "node ./node_modules/.bin/gulp",
     "start": "node app",

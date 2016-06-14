@@ -16,7 +16,6 @@ module.exports = field => (ctx, next) => {
     ctx.query = query;
   }
   return next().then(() => {
-    /* istanbul ignore if */
     if (!pickValue || !ctx.body) {
       return;
     }

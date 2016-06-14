@@ -36,7 +36,6 @@ function addToRouter(category, fns) {
     return;
   }
   _.forEach(fns, (v, k) => {
-    /* istanbul ignore else */
     if (_.isFunction(v)) {
       debug('init route:%s', `${category}.${k}`);
       router.add(`${category}.${k}`, v);
@@ -57,6 +56,10 @@ addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
 addToRouter('m.session', middlewares.session.normal);
 addToRouter('m.session.read', middlewares.session.readonly);
 addToRouter('m.version', middlewares.common.version);
+addToRouter('m.cache-60', middlewares.common.cacheMaxAge(60));
+addToRouter('m.cache-300', middlewares.common.cacheMaxAge(300));
+addToRouter('m.cache-600', middlewares.common.cacheMaxAge(600));
+
 addToRouter('v', views);
 
 

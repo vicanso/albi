@@ -7,7 +7,7 @@ exports.ajax = (ctx) => {
     console.info(`browser-ajax ua:${ua}, data:${JSON.stringify(item)}`);
   });
   /* eslint no-param-reassign:0 */
-  ctx.body = null;
+  ctx.status = 201;
 };
 
 exports.exception = (ctx) => {
@@ -16,7 +16,7 @@ exports.exception = (ctx) => {
     console.error(`browser-exception ua:${ua}, data:${JSON.stringify(item)}`);
   });
   /* eslint no-param-reassign:0 */
-  ctx.body = null;
+  ctx.status = 201;
 };
 
 exports.statistics = (ctx) => {
@@ -28,5 +28,5 @@ exports.statistics = (ctx) => {
     console.info(`browser-entry:${JSON.stringify(entry)}`);
   });
   /* eslint no-param-reassign:0 */
-  ctx.body = null;
+  ctx.status = 201;
 };

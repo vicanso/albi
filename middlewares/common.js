@@ -49,3 +49,7 @@ exports.version = (v, _t) => {
     return next();
   };
 };
+
+exports.cacheMaxAge = (maxAge) => (ctx, next) => next().then(() => {
+  ctx.set('Cache-Control', `public, max-age=${maxAge}`);
+});
