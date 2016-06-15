@@ -53,3 +53,24 @@ exports.version = (v, _t) => {
 exports.cacheMaxAge = (maxAge) => (ctx, next) => next().then(() => {
   ctx.set('Cache-Control', `public, max-age=${maxAge}`);
 });
+
+
+exports.routeStats = (ctx, next) => {
+  const start = Date.now();
+  return next().then(() => {
+    const use = Date.now() - start;
+    const method = ctx.method.toUpperCase();
+    const layer = _.find(ctx.matched, tmp => _.indexOf(tmp.methods, method) !== -1);
+    /* istanbul ignore if */
+    if (!layer) {
+      return;
+    }
+    influx.write('http-route', {
+      use,
+    }, {
+      method: method.toLowerCase(),
+      path: layer.path,
+      spdy: _.sortedIndex([30, 100, 300, 1000, 3000], use),
+    });
+  });
+};

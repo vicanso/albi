@@ -33,4 +33,17 @@ describe('middleware/ping', () => {
           });
       });
   });
+
+  it('it url not equal, call next success', done => {
+    const ping = localRequire('middlewares/ping');
+    const globals = localRequire('helpers/globals');
+    const app = new Koa();
+    const server = app.listen();
+    app.use(ping('/ping'));
+    app.use(ctx => ctx.body = null);
+
+    request(server)
+      .get('/')
+      .expect(204, done);
+  });
 });

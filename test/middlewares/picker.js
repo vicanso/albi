@@ -16,7 +16,9 @@ describe('middleware/picker', () => {
 
     app.use(ctx => {
       assert(!ctx.query['_fields']);
-      if (ctx.path === '/array') {
+      if (ctx.path === '/null') {
+        ctx.body = null;
+      } else if (ctx.path === '/array') {
         ctx.body = [{
           name: 'a',
           address: 'a-1',
@@ -44,7 +46,7 @@ describe('middleware/picker', () => {
           age: Joi.number().required()
         })));
         finishedCount++;
-        if (finishedCount == 2) {
+        if (finishedCount == 3) {
           done();
         }
       });
@@ -58,7 +60,17 @@ describe('middleware/picker', () => {
           age: Joi.number().required()
         }));
         finishedCount++;
-        if (finishedCount == 2) {
+        if (finishedCount == 3) {
+          done();
+        }
+      });
+
+    request(server)
+      .get('/null')
+      .end((err, res) => {
+        assert.equal(res.status, 204);
+        finishedCount++;
+        if (finishedCount == 3) {
           done();
         }
       });

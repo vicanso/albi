@@ -15,7 +15,11 @@ describe('middleware/error', () => {
     app.use(error);
 
     app.use(ctx => {
-      throw errors.get('error-message', 505);
+      throw errors.get('error-message', 505, {
+        extra: {
+          name: 'vicanso',
+        },
+      });
     });
 
     request(app.listen())

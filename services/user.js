@@ -40,14 +40,15 @@ exports.get = (account, password, token) => {
     if (!doc) {
       throw incorrectError;
     }
-    const user = doc.toJSON();
     const hash = crypto.createHash('sha256');
-    if (hash.update(user.password + token).digest('hex') !== password) {
+    if (hash.update(doc.password + token).digest('hex') !== password) {
       throw incorrectError;
     }
     doc.lastLoginedAt = (new Date()).toISOString();
     doc.loginCount++;
+    const user = doc.toJSON();
     doc.save(err => {
+      /* istanbul ignore if */
       if (err) {
         console.error(err);
       }

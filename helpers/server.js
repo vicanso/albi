@@ -20,9 +20,11 @@ module.exports = (port) => {
   app.use(localRequire('middlewares/ping')('/ping'));
 
   // http log
+  /* istanbul ignore if */
   if (config.env === 'development') {
     app.use(koaLog('dev'));
   } else {
+    /* istanbul ignore next */
     koaLog.morgan.token('request-id', (ctx) => ctx.get('X-Request-Id') || 'unknown');
     app.use(koaLog(config.httpLogFormat));
   }
@@ -81,6 +83,11 @@ module.exports = (port) => {
   app.use(localRequire('router').routes());
 
   app.on('error', _.noop);
+
+  /* istanbul ignore if */
+  if (!port) {
+    return app.listen();
+  }
 
   const server = app.listen(port, (err) => {
     /* istanbul ignore if */

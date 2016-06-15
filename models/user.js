@@ -26,6 +26,6 @@ module.exports = {
   indexes: [
     {
       account: 1,
-    }
+    },
   ],
 };

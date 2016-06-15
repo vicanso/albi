@@ -16,6 +16,7 @@ exports.byMobile = (mobile) => {
     .then(res => {
       const reg = new RegExp(mobile + '：(\\S+)\\s(\\S+)', 'gi');
       const result = reg.exec(res.text);
+      /* istanbul ignore if */
       if (!result || result.length < 2) {
         return null;
       }

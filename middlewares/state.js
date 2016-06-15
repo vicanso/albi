@@ -42,12 +42,7 @@ module.exports = (versions) => {
   /* eslint max-len:0 */
   const staticUrlPrefix = appUrlPrefix ? urlJoin(appUrlPrefix, staticOptions.urlPrefix) : staticOptions.urlPrefix;
   const imgUrlFn = getImgUrl(staticUrlPrefix, versions);
-  const anchorUrlFn = url => {
-    if (appUrlPrefix) {
-      return urlJoin(appUrlPrefix, url);
-    }
-    return url;
-  };
+  const anchorUrlFn = url => (appUrlPrefix ? urlJoin(appUrlPrefix, url) : url);
   return (ctx, next) => {
     const state = ctx.state;
     const importer = new Importer();

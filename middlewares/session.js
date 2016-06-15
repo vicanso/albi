@@ -10,6 +10,7 @@ const sessionMiddleware = session({
   prefix: `${config.app}-session:`,
   ttl: 48 * 3600 * 1000,
   errorHandler: err => {
+    /* istanbul ignore next */
     console.error(err);
   },
   store: new RedisStore({
@@ -19,7 +20,6 @@ const sessionMiddleware = session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     path: `${config.appUrlPrefix}/`,
-
   },
 });
 
@@ -32,4 +32,3 @@ exports.readonly = (ctx, next) => sessionMiddleware(ctx, () => {
   Object.freeze(ctx.session);
   return next();
 });
-

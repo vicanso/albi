@@ -41,6 +41,7 @@ describe('middleware/http-stats', () => {
 
     request(server)
       .get('/')
+      .set('X-Requested-At', Date.now())
       .end(function(err, res) {
         if (err) {
           done(err);

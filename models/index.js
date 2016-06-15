@@ -4,9 +4,10 @@ const Schema = mongoose.Schema;
 const _ = require('lodash');
 const config = localRequire('config');
 const requireTree = require('require-tree');
+mongoose.Promise = require('bluebird');
 
 const initModels = (client, modelPath) => {
-  const models = requireTree('.');
+  const models = requireTree(modelPath);
   _.forEach(models, (model, key) => {
     const name = model.name || (key.charAt(0).toUpperCase() + key.substring(1));
     const schema = new Schema(model.schema, model.options);
@@ -18,6 +19,7 @@ const initModels = (client, modelPath) => {
 };
 
 const initClient = (uri, options) => {
+  /* istanbul ignore if */
   if (!uri) {
     return null;
   }
@@ -34,15 +36,19 @@ const initClient = (uri, options) => {
     console.info(`${uri} connected`);
   });
   client.on('disconnected', () => {
+    /* istanbul ignore next */
     console.error(`${uri} disconnected`);
   });
-  client.on('reconnected', _.debounce(function() {
+  client.on('reconnected', _.debounce(() => {
+    /* istanbul ignore next */
     console.error(`${uri} reconnected`);
   }, 3000));
   client.on('connecting', () => {
+    /* istanbul ignore next */
     console.error(`${uri} connecting`);
   });
   client.on('error', err => {
+    /* istanbul ignore next */
     console.error(`${uri} error, %s`, err);
   });
   initModels(client, __dirname);
@@ -52,6 +58,7 @@ const initClient = (uri, options) => {
 const client = initClient(config.mongoUri);
 
 exports.get = (name) => {
+  /* istanbul ignore if */
   if (!client) {
     throw new Error('the db is not init!');
   }

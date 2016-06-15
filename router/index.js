@@ -4,27 +4,8 @@ const router = require('koa-router-parser');
 const debug = localRequire('helpers/debug');
 const middlewares = localRequire('middlewares');
 const config = localRequire('config');
-const influx = localRequire('helpers/influx');
 const views = localRequire('views');
 
-function routeStats(ctx, next) {
-  const start = Date.now();
-  return next().then(() => {
-    const use = Date.now() - start;
-    const method = ctx.method.toUpperCase();
-    const layer = _.find(ctx.matched, tmp => _.indexOf(tmp.methods, method) !== -1);
-    if (!layer) {
-      return;
-    }
-    influx.write('http-route', {
-      use,
-    }, {
-      method: method.toLowerCase(),
-      path: layer.path,
-      spdy: _.sortedIndex([30, 100, 300, 1000, 3000], use),
-    });
-  });
-}
 
 function getRouter(descList) {
   return router.parse(descList);
@@ -42,12 +23,13 @@ function addToRouter(category, fns) {
     } else if (_.isObject(v)) {
       addToRouter(`${category}.${k}`, v);
     } else {
+      /* istanbul ignore next */
       console.error(`${category}.${k} is invalid.`);
     }
   });
 }
 
-router.addDefault('common', routeStats);
+router.addDefault('common', middlewares.common.routeStats);
 
 addToRouter('c', localRequire('controllers'));
 addToRouter('m.noQuery', middlewares.common.noQuery());

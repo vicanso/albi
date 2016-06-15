@@ -10,7 +10,7 @@ describe('middleware/entry', () => {
     let total = 0;
     const finished = () => {
       total++;
-      if (total === 2) {
+      if (total === 3) {
         done();
       }
     };
@@ -21,7 +21,11 @@ describe('middleware/entry', () => {
     app.use(entry('/albi', 'ALBI'));
 
     app.use(ctx => {
-      ctx.body = ctx.url;
+      if (!~ctx.url.indexOf('error')) {
+        ctx.body = ctx.url;
+      } else {
+        throw new Error('error');
+      }
     });
 
     request(server)
@@ -53,6 +57,14 @@ describe('middleware/entry', () => {
           finished();
         }
       });
-
+    request(server)
+      .get('/albi/error')
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        assert.equal(res.status, 500);
+        finished();
+      });
   });
 });

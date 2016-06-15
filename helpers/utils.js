@@ -10,18 +10,24 @@ exports.getParam = (arr, validate, defaultValue) => {
   return defaultValue;
 };
 
-const checkToExit = exports.checkToExit = (times) => {
-  if (!times) {
-    console.error('exit while there are still connections');
-    process.exit(1);
-    return;
-  }
-  setTimeout(() => {
+exports.checkToExit = (times, checkInterval = 10 * 1000) => {
+  let count = times;
+  const timer = setInterval(() => {
+    /* istanbul ignore if */
+    if (!count) {
+      console.error('exit while there are still connections');
+      clearInterval(timer);
+      process.exit(1);
+      return;
+    }
+    /* istanbul ignore if */
     if (!globals.get('connectingTotal')) {
       console.info('exit without any connection');
+      clearInterval(timer);
       process.exit(0);
     } else {
-      checkToExit(times - 1);
+      --count;
     }
-  }, 10 * 1000).unref();
+  }, checkInterval).unref();
+  return timer;
 };

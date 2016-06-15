@@ -197,4 +197,31 @@ describe('middleware/common', () => {
         });
     });
   });
+
+  describe('route stats', () => {
+    it('get stats', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use(commonMiddleware.routeStats);
+      app.use(ctx => {
+        ctx.matched = [
+          {
+            methods: ['GET'],
+            path: '/'
+          }
+        ];
+        ctx.body = null;
+      });
+
+      request(server)
+        .get('/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 204);
+          done();
+        });
+    })
+  });
 });
