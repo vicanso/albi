@@ -1,74 +1,76 @@
 'use strict';
 const _ = require('lodash');
-const httpError = localRequire('helpers/http-error');
+const errors = localRequire('helpers/errors');
+const influx = localRequire('helpers/influx');
+const url = require('url');
 const checker = require('koa-query-checker');
 const noCacheQuery = checker('cache=false');
-const uuid = require('node-uuid');
+
+exports.noQuery = () => (ctx, next) => {
+  if (_.isEmpty(ctx.query)) {
+    return next();
+  }
+  throw errors.get('query string must be empty', 400);
+};
+
+exports.deprecate = (hint) => (ctx, next) => {
+  ctx.set('Warning', hint);
+  console.warn(`deprecate - ${ctx.url} is still used.`);
+  const urlInfo = url.parse(ctx.url);
+  influx.write('deprecate', {
+    path: urlInfo.pathname,
+  });
+  return next();
+};
+
+exports.noCache = () => (ctx, next) => {
+  const method = ctx.method.toUpperCase();
+  ctx.set('Cache-Control', 'no-cache, max-age=0');
+  if ((method !== 'GET' && method !== 'HEAD')
+    || ctx.get('Cache-Control') === 'no-cache') {
+    return next();
+  }
+  return noCacheQuery(ctx, next);
+};
+
+exports.version = (v, _t) => {
+  const versions = _.isArray(v) ? v : [v];
+  const t = _t || ['json'];
+  const typeList = _.isArray(t) ? t : [t];
+  return (ctx, next) => {
+    const version = _.get(ctx, 'versionConfig.version', 1);
+    if (_.indexOf(versions, version) === -1) {
+      throw errors.get(`version is invalid, it should be version:[${versions.join(',')}]`, 406);
+    }
+    const type = _.get(ctx, 'versionConfig.type', 'json');
+    if (_.indexOf(typeList, type) === -1) {
+      throw errors.get(`type is invalid, it should be type:[${typeList.join(',')}]`, 406);
+    }
+    return next();
+  };
+};
+
+exports.cacheMaxAge = (maxAge) => (ctx, next) => next().then(() => {
+  ctx.set('Cache-Control', `public, max-age=${maxAge}`);
+});
 
 
-exports.noQuery = noQuery;
-exports.deprecate = deprecate;
-exports.noCache = noCache;
-exports.noStore = noStore;
-
-/**
- * [noQuery description]
- * @param  {[type]}   ctx  [description]
- * @param  {Function} next [description]
- * @return {[type]}        [description]
- */
-function noQuery() {
-	return (ctx, next) => {
-		if (_.isEmpty(ctx.query)) {
-			return next();
-		} else {
-			throw httpError('query must be empty', 400);
-		}
-	};
-}
-
-/**
- * [deprecate description]
- * @param  {[type]} hint [description]
- * @return {[type]}      [description]
- */
-function deprecate(hint, dueDay) {
-	hint = hint || 'This request should not be used any more.';
-	return (ctx, next) => {
-		ctx.set('Warning', hint);
-		if (dueDay) {
-			ctx.set('X-Due-Day', dueDay);
-		}
-		console.warn(`deprecate - ${ctx.url} is still used.${hint}`);
-		return next();
-	};
-}
-
-
-/**
- * [noCache description]
- * @return {[type]} [description]
- */
-function noCache() {
-	return (ctx, next) => {
-		const method = ctx.method.toUpperCase();
-		if ((method !== 'GET' && method !== 'HEAD') || ctx.get('Cache-Control') === 'no-cache') {
-			return next();
-		} else {
-			return noCacheQuery(ctx, next);
-		}
-	};
-}
-
-
-/**
- * [noStore description]
- * @return {[type]} [description]
- */
-function noStore() {
-	return (ctx, next) => {
-		ctx.set('Cache-Control', 'no-store');
-		ctx.set('ETag', uuid.v1());
-		return next();
-	};
-}
+exports.routeStats = (ctx, next) => {
+  const start = Date.now();
+  return next().then(() => {
+    const use = Date.now() - start;
+    const method = ctx.method.toUpperCase();
+    const layer = _.find(ctx.matched, tmp => _.indexOf(tmp.methods, method) !== -1);
+    /* istanbul ignore if */
+    if (!layer) {
+      return;
+    }
+    influx.write('http-route', {
+      use,
+    }, {
+      method: method.toLowerCase(),
+      path: layer.path,
+      spdy: _.sortedIndex([30, 100, 300, 1000, 3000], use),
+    });
+  });
+};

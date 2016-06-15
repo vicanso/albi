@@ -1,80 +1,48 @@
 'use strict';
 const _ = require('lodash');
 const router = require('koa-router-parser');
-const controllers = localRequire('controllers');
+const debug = localRequire('helpers/debug');
 const middlewares = localRequire('middlewares');
-const globals = localRequire('globals');
-const stats = localRequire('helpers/stats');
+const config = localRequire('config');
 const views = localRequire('views');
 
-// add route handler stats，common is for all http method
-router.addDefault('common', routeStats);
 
-addToRouter('c', controllers);
-addToRouter('m.noCache', middlewares.common.noCache());
-addToRouter('m.noQuery', middlewares.common.noQuery());
-addToRouter('m.auth.admin', middlewares.auth.admin);
-addToRouter('m.deprecate', middlewares.common.deprecate());
-addToRouter('m.noStore', middlewares.common.noStore());
-addToRouter('v', views);
-module.exports = getRouter(localRequire('router/config'));
-
-
-/**
- * [routeStats description]
- * @param  {[type]}   ctx  [description]
- * @param  {Function} next [description]
- * @return {[type]}        [description]
- */
-function routeStats(ctx, next) {
-	const routePerformance = globals.get('performance.route');
-	if (!routePerformance.createdAt) {
-		routePerformance.createdAt = (new Date()).toISOString();
-	}
-	const method = ctx.method.toUpperCase();
-	_.forEach(ctx.matched, (layer => {
-		const key = method + layer.path;
-		stats.write('http-route', {
-			method: method,
-			route: layer.path
-		});
-		// sdc.increment('route.' + key);
-		if (!routePerformance[key]) {
-			routePerformance[key] = 1;
-		} else {
-			routePerformance[key]++;
-		}
-	}));
-	return next();
-}
-
-/**
- * [addToRouter description]
- * @param {[type]} category [description]
- * @param {[type]} fns      [description]
- */
-function addToRouter(category, fns) {
-	if (_.isFunction(fns)) {
-		router.add(category, fns);
-		return;
-	}
-	_.forEach(fns, (v, k) => {
-		/* istanbul ignore else */
-		if (_.isFunction(v)) {
-			router.add(category + '.' + k, v);
-		} else if (_.isObject(v)) {
-			addToRouter(category + '.' + k, v);
-		} else {
-			console.error(category + '.' + k + ' is invalid.');
-		}
-	});
-}
-
-/**
- * [getRouter description]
- * @param  {[type]} descList [description]
- * @return {[type]}          [description]
- */
 function getRouter(descList) {
-	return router.parse(descList);
+  return router.parse(descList);
 }
+
+function addToRouter(category, fns) {
+  if (_.isFunction(fns)) {
+    router.add(category, fns);
+    return;
+  }
+  _.forEach(fns, (v, k) => {
+    if (_.isFunction(v)) {
+      debug('init route:%s', `${category}.${k}`);
+      router.add(`${category}.${k}`, v);
+    } else if (_.isObject(v)) {
+      addToRouter(`${category}.${k}`, v);
+    } else {
+      /* istanbul ignore next */
+      console.error(`${category}.${k} is invalid.`);
+    }
+  });
+}
+
+router.addDefault('common', middlewares.common.routeStats);
+
+addToRouter('c', localRequire('controllers'));
+addToRouter('m.noQuery', middlewares.common.noQuery());
+addToRouter('m.noCache', middlewares.common.noCache());
+addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
+addToRouter('m.session', middlewares.session.normal);
+addToRouter('m.session.read', middlewares.session.readonly);
+addToRouter('m.version', middlewares.common.version);
+addToRouter('m.cache-60', middlewares.common.cacheMaxAge(60));
+addToRouter('m.cache-300', middlewares.common.cacheMaxAge(300));
+addToRouter('m.cache-600', middlewares.common.cacheMaxAge(600));
+
+addToRouter('v', views);
+
+
+module.exports = getRouter(localRequire('router/config'));

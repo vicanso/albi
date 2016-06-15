@@ -1,46 +1,47 @@
 'use strict';
 const _ = require('lodash');
 const config = localRequire('config');
+const influx = localRequire('helpers/influx');
+const url = require('url');
 
-module.exports = error;
+module.exports = (ctx, next) => next().then(_.noop, err => {
+  const urlInfo = url.parse(ctx.url);
+  ctx.set('Cache-Control', 'no-cache, max-age=0');
+  const data = {
+    code: err.code || 0,
+    message: err.message,
+    expected: false,
+  };
+  _.forEach(err, (v, k) => {
+    data[k] = v;
+  });
+  /* istanbul ignore else */
+  if (config.env !== 'production') {
+    data.stack = err.stack;
+  }
+  const logList = [];
+  if (data.expected) {
+    logList.push('[H-E]');
+  } else {
+    logList.push('[H-U]');
+  }
+  influx.write('excetion', {
+    code: data.code,
+    path: urlInfo.pathname,
+  }, {
+    type: data.expected ? 'E' : 'U',
+  });
+  _.forEach(data, (v, k) => {
+    if (_.isObject(v)) {
+      return;
+    }
+    logList.push(`${k}=${v}`);
+  });
 
-function error(ctx, next) {
-	return next().then(_.noop, (err) => {
-		ctx.status = err.status || 500;
-		ctx.set('Cache-Control', 'no-cache');
-		const data = {
-			code: err.code || 0,
-			error: err.message,
-			expected: false
-		};
-		_.forEach(err, (v, k) => {
-			data[k] = v;
-		});
-		if (config.env !== 'production') {
-			data.stack = err.stack;
-		}
-		const str = JSON.stringify(data);
-		if (data.expected) {
-			console.error('http-error:' + str);
-		} else {
-			console.error('http-unexpectd-error:' + str);
-		}
+  console.error(logList.join(' '));
 
-		if (ctx.state.TEMPLATE) {
-			const htmlArr = ['<html>'];
-			/* istanbul ignore else */
-			if (config.env !== 'production') {
-				htmlArr.push('<pre>' + err.stack +
-					'</pre>');
-			} else {
-				htmlArr.push('<pre>' + err.message.replace(config.viewPath, '') +
-					'</pre>');
-			}
-			htmlArr.push('</html>');
-			ctx.body = htmlArr.join('');
-		} else {
-			ctx.body = data;
-		}
-
-	});
-}
+  /* eslint no-param-reassign:0 */
+  ctx.status = err.status || 500;
+  /* eslint no-param-reassign:0 */
+  ctx.body = data;
+});

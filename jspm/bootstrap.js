@@ -1,70 +1,73 @@
 'use strict';
-import * as http from './components/http';
-import _ from 'lodash';
-import $ from 'jquery';
-import * as globals from './components/globals';
-import * as lazyLoad from './components/lazy-load';
+/* eslint import/no-unresolved:0 */
+import React from 'react';
+import ReactDOM from 'react-dom';
+import * as ReactRedux from 'react-redux';
+import * as _ from 'lodash';
+import * as globals from './services/globals';
+import * as http from './services/http';
+import store from './store';
+import App from './components/app';
 
-_.defer(() => {
-
-	statistics();
-	init();
-	$('.lazyLoadImage').each(function() {
-		lazyLoad.load($(this));
-	});
-
-	$('#navLink').click(function() {
-		const obj = $(this);
-		obj.next('.navContainer').addBack().toggleClass('active');
-	});
-
-	http.get('/user/me', {
-		'Cache-Control': 'no-cache'
-	})
+const globarErrorCatch = () => globals.set('onerror', (msg, url, line, row, err) => {
+  let stack = '';
+  if (err) {
+    stack = err.stack;
+  }
+  const data = {
+    url,
+    line,
+    row,
+    msg,
+    stack,
+    type: 'uncaughtException',
+  };
+  if (globals.get('CONFIG.env') === 'development') {
+    /* eslint no-alert:0 */
+    alert(JSON.stringify(data));
+  }
 });
 
-function statistics() {
-	// post performance
-	const data = {
-		screen: _.pick(globals.get('screen'), 'width height availWidth availHeight'.split(
-			' ')),
-		template: globals.get('CONFIG.template')
-	};
-	const timing = globals.get('TIMING');
-	if (timing) {
-		timing.end('page');
-		data.timing = timing.toJSON();
-	}
 
-	const performance = globals.get('performance');
-	if (performance) {
-		data.performance = performance.timing;
-		if (performance.getEntries) {
-			data.entries = _.filter(performance.getEntries(), function(tmp) {
-				return tmp.initiatorType !== 'xmlhttprequest';
-			});
-		}
-	}
-	http.post('/stats/statistics', data);
-}
+const statistics = () => {
+  const data = {
+    screen: _.pick(globals.get('screen'), 'width height availWidth availHeight'.split(
+      ' ')),
+    template: globals.get('CONFIG.template'),
+  };
+  const timing = globals.get('TIMING');
+  if (timing) {
+    timing.end('page');
+    data.timing = timing.toJSON();
+  }
 
-function init() {
-	globals.set('onerror', (msg, url, line, row, err) => {
-		var stack = '';
-		if (err) {
-			stack = err.stack;
-		}
-		const data = {
-			url: url,
-			line: line,
-			row: row,
-			msg: msg,
-			stack: stack,
-			type: 'uncaughtException'
-		};
-		if (global.get('CONFIG.env') === 'development') {
-			alert(JSON.stringify(data));
-		}
-		http.statsException(data);
-	});
-}
+  const performance = globals.get('performance');
+  if (performance) {
+    data.performance = performance.timing;
+    if (performance.getEntries) {
+      const entries = performance.getEntries();
+      data.entries = _.filter(entries, tmp => tmp.initiatorType !== 'xmlhttprequest');
+    }
+  }
+  http.post('/stats/statistics', data).then(() => {
+    console.info('post statistics success');
+  }).catch(err => {
+    console.error('post statistics fail, %s', err);
+  });
+};
+
+const initRender = () => {
+  const Provider = ReactRedux.Provider;
+  ReactDOM.render(
+    <Provider store={store()}>
+      <App />
+    </Provider>,
+    document.getElementById('rootContainer')
+  );
+};
+
+_.defer(() => {
+  globarErrorCatch();
+  statistics();
+  initRender();
+});

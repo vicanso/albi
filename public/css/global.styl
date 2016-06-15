@@ -1,34 +1,84 @@
-@import './constant'
-
 *
-	box-sizing border-box
-	&:before, &:after
-		box-sizing border-box
-
+  box-sizing border-box
+  &:before, &:after
+    box-sizing border-box
+.clearfix:before, .clearfix:after
+  display table
+  content " "
+.clearfix:after
+  clear both
+  
 body
-	color #333
-	font-size 16px
-	line-height 1.6
-	font-weight 100
-	letter-spacing 0.01em
-	font-family Helvetica, Arial, sans-serif
+  font 14px 'Helvetica Neue', Helvetica, Arial, sans-serif
+  line-height 1.4em
+  background #f5f5f5
+  color #4d4d4d
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  font-weight 300
+    
 
 a
-	color #3b8bba
-	text-decoration none
-	&:visited
-		color #265778
-		
-
-
-.clearfix:before, .clearfix:after
-	display table
-	content " "
-.clearfix:after
-	clear both
-		
-.pageContentContainer
-	margin 0
-	margin-left $NAV_WIDTH
-	@media (max-width:760px)
-		margin-left 0
+  color #3b8bba
+  text-decoration none
+  &:visited, &:hover
+    color #265778
+.tac
+  text-align center
+.pullRight
+  float right
+.mleft5
+  margin-left 5px
+.mright5
+  margin-right 5px
+.margin10
+  margin-right 10px
+  
+.maskContainer
+  background-color rgba(0, 0, 0, 0.8)
+  position fixed
+  left 0
+  right 0
+  top 0
+  bottom 0
+  
+.warning
+  background-color rgb(223, 117, 20)
+  padding 6px 15px
+  color #f0f0f0
+  border-radius 3px
+  .fa
+    margin-right 3px
+  
+.dialog
+  position fixed
+  width 500px
+  border 1px solid #c4c4c4
+  left 50%
+  top 50%
+  margin-left -(@width / 2)
+  border-radius 3px
+  box-shadow inset 0 -2px 1px rgba(0,0,0,0.03)
+  .title
+    margin 0
+    background-color #f0f0f0
+    border-bottom 1px solid #dadada
+    line-height 2em
+    padding-left 1em
+    .close
+      float right
+      height 100%
+      width 30px
+  .content
+    background-color #f5f5f5
+    padding 30px
+    input[type="text"], input[type="password"]
+      width 250px
+    .submit
+      border-radius 3px
+      width 150px
+      line-height 1.7em
+      color #fff
+.registerLoginDialog
+  .content
+    padding-bottom 10px

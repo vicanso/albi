@@ -1,110 +1,80 @@
 'use strict';
-const Joi = require('joi');
-const httpError = localRequire('helpers/http-error');
-const config = localRequire('config');
 const uuid = require('node-uuid');
+const errors = localRequire('helpers/errors');
+const Joi = require('joi');
 const _ = require('lodash');
-const js2xmlparser = require('js2xmlparser');
-exports.me = me;
-exports.login = login;
-exports.filter = filter;
+const UserService = localRequire('services/user');
 
+const pickUserInfo = (data) => {
+  const keys = 'account lastLoginedAt loginCount'.split(' ');
+  return _.pick(data, keys);
+};
 
-/**
- * [me description]
- * @param  {[type]} ctx [description]
- * @return {[type]}     [description]
- */
-function me(ctx) {
-	const version = _.get(ctx, 'versionConfig.version');
-	const dataType = _.get(ctx, 'versionConfig.type');
-	const track = config.trackCookie;
+exports.me = (ctx) => {
+  const data = _.clone(ctx.session.user || {});
+  data.date = new Date();
+  /* eslint no-param-reassign:0 */
+  ctx.body = data;
+};
 
-	if (!version) {
-		// 接口说明
-		return ctx.body = apiDesc();
-	}
-	const cookies = ctx.cookies;
-	if (!cookies.get(track)) {
-		cookies.set(track, `${uuid.v4().replace(/-/g, '')}${Date.now().toString(32)}`, {
-			expires: new Date(Date.now() + 365 * 24 * 3600 * 1000)
-		});
-	}
-	const data = {
-		name: 'vicanso'
-	};
-	if (version !== 1) {
-		data.uuid = uuid.v4();
-	}
+exports.logout = (ctx) => {
+  delete ctx.session.user;
+  /* eslint no-param-reassign:0 */
+  ctx.body = null;
+};
 
-	if (dataType === 'xml') {
-		ctx.body = js2xmlparser('person', data);
-	} else {
-		ctx.body = data;
-	}
+exports.login = (ctx) => {
+  const session = ctx.session;
+  if (_.get(session, 'user.account')) {
+    throw errors.get('已经是登录状态，请先退出登录', 400);
+  }
+  if (ctx.method === 'GET') {
+    const user = session.user || {
+      token: uuid.v4(),
+    };
+    session.user = user;
+    /* eslint no-param-reassign:0 */
+    ctx.body = user;
+    return null;
+  }
 
+  const token = _.get(session, 'user.token');
+  if (!token) {
+    throw errors.get('登录流程异常，token为空', 400);
+  }
+  const { account, password } = ctx.request.body;
+  // 如果密码错误，是否需要刷新 token，但是 error 的时候，session 不会做保存
+  return UserService.get(account, password, token).then(doc => {
+    const user = pickUserInfo(doc);
+    /* eslint no-param-reassign:0 */
+    ctx.session.user = user;
+    /* eslint no-param-reassign:0 */
+    ctx.body = user;
+  }, err => {
+    const newToken = uuid.v4();
+    session.user.token = newToken;
+    ctx.status = err.status;
+    ctx.body = {
+      token: newToken,
+      message: err.message,
+      expected: err.expected || false,
+    };
+  });
+};
 
-	function apiDesc() {
-		return {
-			path: _.map(ctx.matched, item => item.path),
-			'data-type': ['xml', 'json'],
-			'Cache-Control': 'no-cache',
-			versions: [1, 2],
-			query: {
-				cache: false
-			},
-			response : {
-				name: {
-					type: 'String',
-					version: '>=1'
-				},
-				uuid: {
-					type: 'String',
-					version: '>=2'
-				}
-			},
-			desc: `返回用户的信息，若用户是首次访问时，设置cookie(${track})`
-		};
-	}
-}
-
-
-/**
- * [login description]
- * @param  {[type]} ctx [description]
- * @return {[type]}     [description]
- */
-function login(ctx) {
-	const data = Joi.validateThrow(ctx.request.body, {
-		// 账号长度限制
-		account: Joi.string().trim().min(4).max(16).required(),
-		password: Joi.string().trim().min(6).max(32).required()
-	});
-	if (data.password === '123123') {
-		ctx.body = {
-			name: 'vicanso'
-		};
-	} else {
-		throw httpError('账号或密码不正确', 400);
-	}
-}
-
-
-/**
- * [filter description]
- * @param  {[type]} ctx [description]
- * @return {[type]}     [description]
- */
-function filter(ctx) {
-	const params = Joi.validateThrow(ctx.params, {
-		category: Joi.string().valid('vip', 'vvip').required()
-	});
-	console.info(params);
-	ctx.body = [{
-		account: 'vicanso',
-		createdAt: '2015-12-25'
-	}, {
-		account: 'jenny',
-		createdAt: '2015-12-25'
-	}];
-}
+exports.register = (ctx) => {
+  const data = Joi.validateThrow(ctx.request.body, {
+    account: Joi.string().min(4).required(),
+    password: Joi.string().required(),
+  });
+  if (_.get(ctx, 'session.user.account')) {
+    throw errors.get('已经是登录状态，请先退出登录', 400);
+  }
+  return UserService.add(data).then(doc => {
+    const user = pickUserInfo(doc);
+    /* eslint no-param-reassign:0 */
+    ctx.session.user = user;
+    /* eslint no-param-reassign:0 */
+    ctx.body = user;
+  });
+};

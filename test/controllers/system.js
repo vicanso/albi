@@ -1,93 +1,79 @@
 'use strict';
-const request = require('supertest');
-const Koa = require('koa');
+require('../../helpers/local-require');
 const util = require('util');
+const Koa = require('koa');
+const request = require('supertest');
 const assert = require('assert');
-const globals = localRequire('globals');
-const Joi = require('joi');
-require('../../init');
+const pkg = localRequire('package');
+const globals = localRequire('helpers/globals');
 
-describe('controller/system', () => {
-	const systemCtrl = localRequire('controllers/system');
-	it('should get versions successful', done => {
-		const app = new Koa();
-		app.use(systemCtrl.version);
-		request(app.listen())
-			.get('/')
-			.end((err, res) => {
-				if (err) {
-					return done(err);
-				}
-				assert.equal(res.status, 200);
-				assert(res.body.exec);
-				assert.equal(res.body.exec, res.body.code);
-				done();
-			});
-	});
+describe('controllers/system', () => {
+  const systemCtrls = localRequire('controllers/system');
+  it('version', done => {
+    const app = new Koa();
+    const server = app.listen();
+    app.use(systemCtrls.version);
+    request(server)
+      .get('/')
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        assert.equal(res.body.code, pkg.version);
+        assert.equal(res.body.exec, pkg.version);
+        done();
+      });
+  });
 
+  it('pause', done => {
+    const app = new Koa();
+    const server = app.listen();
+    app.use(systemCtrls.pause);
+    request(server)
+      .get('/')
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        assert.equal(res.status, 204);
+        assert.equal(globals.get('status'), 'pause');
+        done();
+      });
+  });
 
-	it('should pause/resume app successful', done => {
-		const app = new Koa();
-		app.use(systemCtrl.pause);
-		request(app.listen())
-			.get('/')
-			.end((err, res) => {
-				if (err) {
-					return done(err);
-				}
-				assert.equal(res.status, 204);
-				assert.equal(globals.get('status'), 'pause');
-				const b = new Koa();
-				b.use(systemCtrl.resume);
-				request(b.listen())
-					.get('/')
-					.end((err, res) => {
-						if (err) {
-							return done(err);
-						}
-						assert.equal(res.status, 204);
-						assert.equal(globals.get('status'), 'running');
-						done();
-					});
-			});
-	});
+  it('resume', done => {
+    const app = new Koa();
+    const server = app.listen();
+    app.use(systemCtrls.resume);
+    request(server)
+      .get('/')
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        assert.equal(res.status, 204);
+        assert.equal(globals.get('status'), 'running');
+        done();
+      });
+  });
 
-	it('should get stats successful', done => {
-		const app = new Koa();
-		app.use(systemCtrl.stats);
-		request(app.listen())
-			.get('/')
-			.end((err, res) => {
-				if (err) {
-					return done(err);
-				}
-				assert.equal(res.status, 200);
-				Joi.validateThrow(res.body, Joi.object({
-					version: Joi.object({
-						code: Joi.string().required(),
-						exec: Joi.string().required()
-					}),
-					uptime: Joi.string().required(),
-					startedAt: Joi.string().required(),
-					performance: Joi.object({
-						http: Joi.object({
-							createdAt: Joi.string().required(),
-							total: Joi.number().required(),
-							connecting: Joi.number().required(),
-							status: Joi.object().required(),
-							time: Joi.object().required(),
-							size: Joi.object().required()
-						}),
-						lag: Joi.number().required(),
-						memory: Joi.object({
-							exec: Joi.string().required(),
-							physical: Joi.string().required()
-						}),
-						route: Joi.object().required(),
-						concurrency: Joi.string().required()
-					})
-				}));
-				done();
-			});
-	});
+  it('stats', done => {
+    const app = new Koa();
+    const server = app.listen();
+    app.use(systemCtrls.stats);
+    request(server)
+      .get('/')
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        assert.equal(res.body.connectingTotal, 0);
+        assert.equal(res.body.status, 'running');
+        assert(res.body.version);
+        assert(res.body.uptime);
+        assert(res.body.startedAt);
+        done();
+      });
+  });
+
 });

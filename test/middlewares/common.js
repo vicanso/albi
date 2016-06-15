@@ -1,148 +1,227 @@
 'use strict';
-const request = require('supertest');
+require('../../helpers/local-require');
 const Koa = require('koa');
-const util = require('util');
+const request = require('supertest');
 const assert = require('assert');
 
-require('../../init');
-
-
 describe('middleware/common', () => {
-	const commonMiddleware = localRequire('middlewares/common');
-	describe('no-query', () => {
-		it('should check no query success', done => {
-			const app = new Koa();
-			const server = app.listen();
-			let total = 0;
-			const finished = () => {
-				total++;
-				if (total === 2) {
-					done();
-				}
-			};
-			app.use(commonMiddleware.noQuery());
+  const commonMiddleware = localRequire('middlewares/common');
+  describe('no-query', () => {
+    it('check no query', done => {
+      const app = new Koa();
+      const server = app.listen();
+      let total = 0;
+      const finished = () => {
+        total++;
+        if (total === 2) {
+          done();
+        }
+      };
+      app.use(commonMiddleware.noQuery());
 
-			app.use(ctx => {
-				ctx.body = 'OK';
-			});
+      app.use(ctx => {
+        ctx.body = 'OK';
+      });
 
-			request(server)
-				.get('/?name=test')
-				.end((err, res) => {
-					if (err) {
-						return done(err);
-					}
-					assert.equal(res.status, 400);
-					assert.equal(res.text, 'query must be empty');
-					finished();
-				});
+      request(server)
+        .get('/?name=test')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 400);
+          assert.equal(res.text, 'query string must be empty');
+          finished();
+        });
 
-			request(server)
-				.get('/')
-				.end((err, res) => {
-					if (err) {
-						return done(err);
-					}
-					assert.equal(res.status, 200);
-					assert.equal(res.text, 'OK');
-					finished();
-				});
-		});
-	});
+      request(server)
+        .get('/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'OK');
+          finished();
+        });
+    });
+  });
 
+  describe('deprecate', () => {
+    it('add deprecate header', done => {
+      const app = new Koa();
+      const server = app.listen();
+      const hint = 'This rest api will be deprecate because of security(2016-10-01). Please use xxx instead.'
+      app.use(commonMiddleware.deprecate(hint));
+      app.use(ctx => {
+        ctx.body = 'OK';
+      });
+      request(server)
+        .get('/?a=1')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.get('Warning'), hint);
+          done();
+        });
+    });
+  });
 
-	describe('deprecate', () => {
-		it('should set a deprecate response header success', done => {
-			const app = new Koa();
-			const hint = 'all request will be deprecate, please use v2.0 instead';
-			const dueDay = '2015-12-25';
-			app.use(commonMiddleware.deprecate(hint, dueDay));
-			app.use(ctx => {
-				ctx.body = 'OK';
-			});
+  describe('noCache', () => {
+    it('not get/head will be pass', done => {
+      let total = 0;
+      const finished = () => {
+        total++;
+        if (total === 3) {
+          done();
+        }
+      };
+      const app = new Koa();
+      const server = app.listen();
+      app.use(commonMiddleware.noCache());
+      app.use(ctx => {
+        ctx.body = 'OK';
+      });
 
-			request(app.listen())
-				.get('/')
-				.end((err, res) => {
-					assert.equal(res.get('Warning'), hint);
-					assert.equal(res.get('X-Due-Day'), dueDay);
-					done();
-				});
-		});
-	});
+      request(server)
+        .post('/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 200);
+          finished();
+        });
 
-	describe('no-cache', () => {
-		it('should redirect successful', done => {
-			const app = new Koa();
-			const noCache = commonMiddleware.noCache;
-			app.use(noCache());
-			app.use(ctx => {
-				ctx.body = ctx.url;
-			});
+      request(server)
+        .get('/?a=1')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 302);
+          finished();
+        });
 
-			request(app.listen())
-				.get('/user')
-				.end((err, res) => {
-					assert.equal(res.status, 302);
-					assert.equal(res.text, 'Redirecting to <a href="/user?cache=false">/user?cache=false</a>.');
-					done();
-				});
+      request(server)
+        .get('/')
+        .set('Cache-Control', 'no-cache')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 200);
+          finished();
+        });
+    });
+  });
 
-		});
+  describe('verion', () => {
+    it('valid version', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use((ctx, next) => {
+        ctx.versionConfig = {
+          version: 1,
+          type: 'json'
+        };
+        return next();
+      });
+      app.use(commonMiddleware.version([1, 2], 'json'));
+      app.use(ctx => {
+        ctx.body = null;
+      });
+      request(server)
+        .get('/')
+        .expect(204, done);
+    });
 
+    it('invalid version', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use((ctx, next) => {
+        ctx.versionConfig = {
+          version: 2,
+          type: 'json'
+        };
+        return next();
+      });
+      app.use(commonMiddleware.version([1, 3], 'json'));
+      app.use(ctx => {
+        ctx.body = null;
+      });
+      request(server)
+        .get('/')
+        .expect(406, done);
+    });
 
-		it('should http status to be 200 when url include cache=false', done => {
-			const app = new Koa();
-			const noCache = commonMiddleware.noCache;
-			app.use(noCache());
-			app.use(ctx => {
-				ctx.body = ctx.url;
-			});
+    it('invalid type', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use((ctx, next) => {
+        ctx.versionConfig = {
+          version: 2,
+          type: 'xml'
+        };
+        return next();
+      });
+      app.use(commonMiddleware.version([1, 2], 'json'));
+      app.use(ctx => {
+        ctx.body = null;
+      });
+      request(server)
+        .get('/')
+        .expect(406, done);
+    });
+  });
 
-			request(app.listen())
-				.get('/user?cache=false')
-				.end((err, res) => {
-					assert.equal(res.status, 200);
-					done();
-				});
+  describe('max-age', () => {
+    it('set max age', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use(commonMiddleware.cacheMaxAge(600));
+      app.use(ctx => {
+        ctx.body = null;
+      });
 
-		});
+      request(server)
+        .get('/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 204);
+          assert.equal(res.get('Cache-Control'), 'public, max-age=600');
+          done();
+        });
+    });
+  });
 
+  describe('route stats', () => {
+    it('get stats', done => {
+      const app = new Koa();
+      const server = app.listen();
+      app.use(commonMiddleware.routeStats);
+      app.use(ctx => {
+        ctx.matched = [
+          {
+            methods: ['GET'],
+            path: '/'
+          }
+        ];
+        ctx.body = null;
+      });
 
-		it('should http status to be 200 when request header set Cache-Control:no-cache', done => {
-			const app = new Koa();
-			const noCache = commonMiddleware.noCache;
-			app.use(noCache());
-			app.use(ctx => {
-				ctx.body = ctx.url;
-			});
-
-			request(app.listen())
-				.get('/user')
-				.set('Cache-Control', 'no-cache')
-				.end((err, res) => {
-					assert.equal(res.status, 200);
-					done();
-				});
-
-		});
-	});
-
-	describe('no-store', () => {
-		it('should set a no-store response header success', done => {
-			const app = new Koa();
-			app.use(commonMiddleware.noStore());
-			app.use(ctx => {
-				ctx.body = 'OK';
-			});
-			request(app.listen())
-				.get('/')
-				.end((err, res) => {
-					assert.equal(res.get('Cache-Control'), 'no-store');
-					assert(res.get('ETag'));
-					done();
-				});
-		});
-	});
-
+      request(server)
+        .get('/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(res.status, 204);
+          done();
+        });
+    })
+  });
 });

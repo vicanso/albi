@@ -1,0 +1,28 @@
+.mainHeader
+  height 40px
+  line-height @height
+  background-color #f0f0f0
+  border-bottom 1px solid #dadada
+  ul
+    margin 0
+    padding 0
+    list-style none
+    li
+      display inline-block
+      &.version
+        width 125px
+        text-align right
+        margin-right 5px
+        font-size 12px
+        color #111
+      .fa
+        margin-right 8px
+      > *
+        border-left 1px solid #ccc
+        padding-left 10px
+        margin 0 5px
+        &:first-child
+          border-left 0
+    .warning
+      color rgb(223, 117, 20)
+      background-color transparent
