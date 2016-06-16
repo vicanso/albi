@@ -8,12 +8,7 @@ const getToken = () => http.get('/users/login')
 export function me() {
   return http.get('/users/me')
     .set('Cache-Control', 'no-cache')
-    .then(res => res.body, err => {
-      if (err.status === 403) {
-        return {};
-      }
-      throw err;
-    });
+    .then(res => res.body);
 }
 
 export function add(account, password) {

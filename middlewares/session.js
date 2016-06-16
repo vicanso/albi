@@ -26,9 +26,6 @@ const sessionMiddleware = session({
 exports.normal = sessionMiddleware;
 
 exports.readonly = (ctx, next) => sessionMiddleware(ctx, () => {
-  if (!_.get(ctx, 'session.user.account')) {
-    throw errors.get('用户尚未登录', 403);
-  }
   Object.freeze(ctx.session);
   return next();
 });
