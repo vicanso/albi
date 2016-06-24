@@ -1,7 +1,7 @@
 'use strict';
 /* eslint  import/no-unresolved:0 */
 import React, { PropTypes } from 'react';
-import Dialog from './dialog';
+import Dialog from '../components/dialog';
 
 class Register extends Dialog {
   getData() {

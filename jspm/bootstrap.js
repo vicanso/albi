@@ -4,10 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as ReactRedux from 'react-redux';
 import * as _ from 'lodash';
-import * as globals from './services/globals';
-import * as http from './services/http';
+import * as globals from './helpers/globals';
+import * as http from './helpers/http';
 import store from './store';
-import App from './components/app';
+import App from './containers/app';
 
 const globarErrorCatch = () => globals.set('onerror', (msg, url, line, row, err) => {
   let stack = '';

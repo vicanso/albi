@@ -30,7 +30,7 @@
     "install-all": "npm i && node node_modules/.bin/jspm install",
     "gulp": "node ./node_modules/.bin/gulp",
     "start": "node app",
-    "start-dev": "MONGO=mongodb://127.0.0.1/albi nodemon app"
+    "dev": "MONGO=mongodb://127.0.0.1/albi nodemon app"
   },
   "license": "MIT",
   "dependencies": {
