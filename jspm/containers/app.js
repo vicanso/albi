@@ -1,11 +1,13 @@
 'use strict';
 /* eslint import/no-unresolved:0 */
 import React, { Component, PropTypes } from 'react';
+import { Router, Route } from 'react-enroute';
 import * as ReactRedux from 'react-redux';
 import RegisterLogin from './register-login';
 import MainHeader from './main-header';
 import MainNav from './main-nav';
 import * as User from '../actions/user';
+import * as urls from '../constants/urls';
 
 
 class App extends Component {
@@ -13,48 +15,20 @@ class App extends Component {
     super(props);
     this.state = {};
   }
-  renderMainHeader() {
-    const { user, dispatch } = this.props;
-    return (
-      <MainHeader
-        dispatch={dispatch}
-        user={user}
-        showRegister={() => {
-          this.setState({
-            showRegister: true,
-          });
-        }}
-        showLogin={() => {
-          this.setState({
-            showLogin: true,
-          });
-        }}
-        logout={() => {
-          dispatch(User.logout());
-        }}
-      />
-    );
-  }
   renderRegister() {
     const { dispatch } = this.props;
-    const { showRegister } = this.state;
-    if (showRegister) {
-      return (
-        <RegisterLogin
-          type={"register"}
-          onClose={() => this.setState({
-            showRegister: false,
-          })}
-          onSubmit={(account, password) => {
-            this.setState({
-              showRegister: false,
-            });
-            dispatch(User.register(account, password));
-          }}
-        />
-      );
-    }
-    return null;
+    return <RegisterLogin
+      type={"register"}
+      onClose={() => this.setState({
+        showRegister: false,
+      })}
+      onSubmit={(account, password) => {
+        this.setState({
+          showRegister: false,
+        });
+        dispatch(User.register(account, password));
+      }}
+    />
   }
   renderLogin() {
     const { dispatch } = this.props;
@@ -78,14 +52,17 @@ class App extends Component {
     return null;
   }
   render() {
-    return (
-      <div>
-        {this.renderMainHeader()}
-        {this.renderRegister()}
-        {this.renderLogin()}
-        <MainNav />
-      </div>
-    );
+    const { user, navigation, dispatch } = this.props;
+    return <div>
+      <MainHeader
+        dispatch={dispatch}
+        user={user}
+      />
+      <MainNav />
+      <Router {...navigation}>
+        <Route path={urls.REGISTER} component={this.renderRegister.bind(this)} />
+      </Router>
+    </div>
   }
 }
 
@@ -97,6 +74,7 @@ App.propTypes = {
 function mapStateToProps(state) {
   return {
     user: state.user,
+    navigation: state.navigation,
   };
 }
 

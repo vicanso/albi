@@ -1,26 +1,24 @@
 'use strict';
 /* eslint import/no-unresolved:0 */
 import React, { PropTypes, Component } from 'react';
-import * as User from '../actions/user';
+import * as userAction from '../actions/user';
+import * as navigationAction from '../actions/navigation';
 
 class MainHeader extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isMounted: false,
-    };
+  constructor(props) {
+    super(props);
   }
   componentWillMount() {
     const { dispatch } = this.props;
-    dispatch(User.fetch());
-    this.state.isMounted = true;
+    dispatch(userAction.fetch());
+  }
+  register(e) {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    dispatch(navigationAction.register());
   }
   renderUserInfo() {
-    const { user, showRegister, showLogin, logout } = this.props;
-    const { isMounted } = this.state;
-    if (!isMounted) {
-      return null;
-    }
+    const { user, dispatch } = this.props;
     const getError = () => {
       if (user.status) {
         return (
@@ -44,7 +42,7 @@ class MainHeader extends Component {
       return (
         <li>
           <span>{user.account}</span>
-          <a href="#" onClick={logout}>
+          <a href="#">
             <i className="fa fa-sign-out" aria-hidden="true"></i>
           logout</a>
           {getError()}
@@ -53,10 +51,10 @@ class MainHeader extends Component {
     }
     return (
       <li>
-        <a href="#" className="mright5" onClick={showRegister}>
+        <a href="#" className="mright5" onClick={e => this.register(e)}>
           <i className="fa fa-user" aria-hidden="true"></i>
         register</a>
-        <a href="#" onClick={showLogin}>
+        <a href="#">
           <i className="fa fa-sign-in" aria-hidden="true"></i>
         login</a>
         {getError()}
@@ -77,11 +75,8 @@ class MainHeader extends Component {
 }
 
 MainHeader.propTypes = {
-  showRegister: PropTypes.func.isRequired,
-  showLogin: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired,
 };
 
 export default MainHeader;

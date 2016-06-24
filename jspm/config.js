@@ -22,6 +22,7 @@ System.config({
     "lodash": "npm:lodash@4.13.1",
     "react": "npm:react@15.1.0",
     "react-dom": "npm:react-dom@15.1.0",
+    "react-enroute": "npm:react-enroute@0.0.1",
     "react-redux": "npm:react-redux@4.4.5",
     "redux": "npm:redux@3.5.2",
     "redux-logger": "npm:redux-logger@2.6.1",
@@ -64,7 +65,7 @@ System.config({
       "path-browserify": "npm:path-browserify@0.0.0"
     },
     "github:jspm/nodelibs-process@0.1.2": {
-      "process": "npm:process@0.11.3"
+      "process": "npm:process@0.11.5"
     },
     "github:jspm/nodelibs-querystring@0.1.0": {
       "querystring": "npm:querystring@0.2.0"
@@ -274,6 +275,10 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "iconv-lite": "npm:iconv-lite@0.4.13"
     },
+    "npm:enroute@1.0.1": {
+      "object-assign": "npm:object-assign@4.1.0",
+      "path-to-regexp": "npm:path-to-regexp@1.5.3"
+    },
     "npm:evp_bytestokey@1.0.0": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "create-hash": "npm:create-hash@1.1.2",
@@ -397,6 +402,9 @@ System.config({
     "npm:path-browserify@0.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
+    "npm:path-to-regexp@1.5.3": {
+      "isarray": "npm:isarray@0.0.1"
+    },
     "npm:pbkdf2@3.0.4": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "child_process": "github:jspm/nodelibs-child_process@0.1.0",
@@ -409,8 +417,10 @@ System.config({
     "npm:process-nextick-args@1.0.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:process@0.11.3": {
-      "assert": "github:jspm/nodelibs-assert@0.1.0"
+    "npm:process@0.11.5": {
+      "assert": "github:jspm/nodelibs-assert@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "vm": "github:jspm/nodelibs-vm@0.1.0"
     },
     "npm:promise@7.1.1": {
       "asap": "npm:asap@2.0.4",
@@ -434,6 +444,11 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:react-dom@15.1.0": {
+      "react": "npm:react@15.1.0"
+    },
+    "npm:react-enroute@0.0.1": {
+      "enroute": "npm:enroute@1.0.1",
+      "invariant": "npm:invariant@2.2.1",
       "react": "npm:react@15.1.0"
     },
     "npm:react-redux@4.4.5": {
