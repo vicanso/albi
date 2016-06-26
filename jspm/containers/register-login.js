@@ -2,8 +2,15 @@
 /* eslint  import/no-unresolved:0 */
 import React, { PropTypes } from 'react';
 import Dialog from '../components/dialog';
+import * as userAction from '../actions/user';
+import * as navigationAction from '../actions/navigation';
 
-class Register extends Dialog {
+class RegisterLogin extends Dialog {
+  onClose(e) {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    dispatch(navigationAction.home());
+  }
   getData() {
     const refs = this.refs;
     return {
@@ -12,6 +19,7 @@ class Register extends Dialog {
     };
   }
   handleSubmit() {
+    const { dispatch } = this.props;
     const { account, password } = this.getData();
     let error = '';
     const type = this.props.type || 'login';
@@ -33,7 +41,11 @@ class Register extends Dialog {
       });
       return;
     }
-    this.props.onSubmit(account, password);
+    dispatch(userAction.register(account, password)).then(user => {
+      console.dir(user);
+    }).catch(err => {
+      console.dir(err);
+    });
   }
   getError() {
     const state = this.state;
@@ -110,10 +122,9 @@ class Register extends Dialog {
   }
 }
 
-Register.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+RegisterLogin.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   type: PropTypes.string,
 };
 
-export default Register;
+export default RegisterLogin;

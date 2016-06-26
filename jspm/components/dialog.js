@@ -14,7 +14,7 @@ class Dialog extends Component {
         <div className="maskContainer"></div>
         <div className="dialog" style={state.style}>
           <h3 className="title">
-            <a className="close tac" href="#" onClick={this.props.onClose}>
+            <a className="close tac" href="#" onClick={e => this.onClose(e)}>
               <i className="fa fa-times" aria-hidden="true"></i>
             </a>
             {state.title || ''}
@@ -27,9 +27,5 @@ class Dialog extends Component {
     );
   }
 }
-
-Dialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-};
 
 export default Dialog;

@@ -6,9 +6,8 @@ import * as ReactRedux from 'react-redux';
 import RegisterLogin from './register-login';
 import MainHeader from './main-header';
 import MainNav from './main-nav';
-import * as User from '../actions/user';
 import * as urls from '../constants/urls';
-
+import * as navigationAction from '../actions/navigation';
 
 class App extends Component {
   constructor(props) {
@@ -19,15 +18,7 @@ class App extends Component {
     const { dispatch } = this.props;
     return <RegisterLogin
       type={"register"}
-      onClose={() => this.setState({
-        showRegister: false,
-      })}
-      onSubmit={(account, password) => {
-        this.setState({
-          showRegister: false,
-        });
-        dispatch(User.register(account, password));
-      }}
+      dispatch={dispatch}
     />
   }
   renderLogin() {
@@ -40,12 +31,6 @@ class App extends Component {
           onClose={() => this.setState({
             showLogin: false,
           })}
-          onSubmit={(account, password) => {
-            this.setState({
-              showLogin: false,
-            });
-            dispatch(User.login(account, password));
-          }}
         />
       );
     }

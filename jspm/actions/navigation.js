@@ -17,3 +17,7 @@ export function to(path) {
 export function register() {
   return to(urls.REGISTER);
 }
+
+export function home() {
+  return to(urls.HOME);
+}

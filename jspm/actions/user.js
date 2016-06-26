@@ -88,13 +88,16 @@ export function login(account, password) {
 
 export function register(account, password) {
   return dispatch => {
-    dispatch({
-      type: USER_REGISTER,
+    return addUser(account, password).then(user => {
+
     });
-    return addUser(account, password).then(user => dispatch({
-      type: USER_REGISTER_SUCC,
-      user,
-    })).catch(fail(dispatch, USER_REGISTER_FAIL));
+    // dispatch({
+    //   type: USER_REGISTER,
+    // });
+    // return addUser(account, password).then(user => dispatch({
+    //   type: USER_REGISTER_SUCC,
+    //   user,
+    // })).catch(fail(dispatch, USER_REGISTER_FAIL));
   };
 }
 
