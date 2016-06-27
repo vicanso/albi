@@ -9,7 +9,7 @@ class RegisterLogin extends Dialog {
   onClose(e) {
     e.preventDefault();
     const { dispatch } = this.props;
-    dispatch(navigationAction.home());
+    dispatch(navigationAction.back());
   }
   getData() {
     const refs = this.refs;
@@ -49,7 +49,7 @@ class RegisterLogin extends Dialog {
       action = userAction.login(account, password);
     }
     dispatch(action).then(user => {
-      dispatch(navigationAction.home());
+      dispatch(navigationAction.back());
     }).catch(err => {
       this.setState({
         error: err.response.body.message,
@@ -57,8 +57,11 @@ class RegisterLogin extends Dialog {
     });
   }
   onKeyUp(e) {
-    if (e.keyCode === 0x0d) {
-      this.handleSubmit(e);
+    switch(e.keyCode) {
+      case 13:
+        return this.handleSubmit(e);
+      case 27:
+        return this.onClose(e);
     }
   }
   getError() {
