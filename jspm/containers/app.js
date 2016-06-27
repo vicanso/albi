@@ -23,18 +23,10 @@ class App extends Component {
   }
   renderLogin() {
     const { dispatch } = this.props;
-    const { showLogin } = this.state;
-    if (showLogin) {
-      return (
-        <RegisterLogin
-          type={"login"}
-          onClose={() => this.setState({
-            showLogin: false,
-          })}
-        />
-      );
-    }
-    return null;
+    return <RegisterLogin
+      type={"login"}
+      dispatch={dispatch}
+    />
   }
   render() {
     const { user, navigation, dispatch } = this.props;
@@ -46,6 +38,7 @@ class App extends Component {
       <MainNav />
       <Router {...navigation}>
         <Route path={urls.REGISTER} component={this.renderRegister.bind(this)} />
+        <Route path={urls.LOGIN} component={this.renderLogin.bind(this)} />
       </Router>
     </div>
   }

@@ -10,7 +10,7 @@ export function to(path) {
     dispatch({
       type: LOCATION,
       path,
-    })
+    });
   };
 }
 
@@ -20,4 +20,8 @@ export function register() {
 
 export function home() {
   return to(urls.HOME);
+}
+
+export function login() {
+  return to(urls.LOGIN);
 }

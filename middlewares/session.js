@@ -2,9 +2,6 @@
 const session = require('koa-simple-session');
 const RedisStore = require('koa-simple-redis');
 const config = localRequire('config');
-const errors = localRequire('helpers/errors');
-const _ = require('lodash');
-
 const sessionMiddleware = session({
   key: config.app,
   prefix: `${config.app}-session:`,
@@ -23,9 +20,17 @@ const sessionMiddleware = session({
   },
 });
 
-exports.normal = sessionMiddleware;
+const normal = exports.normal = (ctx, next) => {
+  const startAt = process.hrtime();
+  return sessionMiddleware(ctx, () => {
+    const diff = process.hrtime(startAt);
+    const time = diff[0] * 1e3 + diff[1] * 1e-6;
+    console.info(`get session use:${time.toFixed(2)}`);
+    return next();
+  });
+};
 
-exports.readonly = (ctx, next) => sessionMiddleware(ctx, () => {
+exports.readonly = (ctx, next) => normal(ctx, () => {
   Object.freeze(ctx.session);
   return next();
 });

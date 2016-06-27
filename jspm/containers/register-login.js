@@ -18,7 +18,8 @@ class RegisterLogin extends Dialog {
       password: (refs.password.value || '').trim(),
     };
   }
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     const { dispatch } = this.props;
     const { account, password } = this.getData();
     let error = '';
@@ -41,11 +42,24 @@ class RegisterLogin extends Dialog {
       });
       return;
     }
-    dispatch(userAction.register(account, password)).then(user => {
-      console.dir(user);
+    let action;
+    if (type === 'register') {
+      action = userAction.register(account, password);
+    } else {
+      action = userAction.login(account, password);
+    }
+    dispatch(action).then(user => {
+      dispatch(navigationAction.home());
     }).catch(err => {
-      console.dir(err);
+      this.setState({
+        error: err.response.body.message,
+      });
     });
+  }
+  onKeyUp(e) {
+    if (e.keyCode === 0x0d) {
+      this.handleSubmit(e);
+    }
   }
   getError() {
     const state = this.state;
@@ -95,6 +109,7 @@ class RegisterLogin extends Dialog {
             type="text"
             autoFocus="true"
             placeholder="Username"
+            onKeyUp={e => this.onKeyUp(e)}
             onChange={() => this.handleChange()}
             ref="account"
           />
@@ -105,6 +120,7 @@ class RegisterLogin extends Dialog {
             id="password"
             type="password"
             placeholder="Password"
+            onKeyUp={e => this.onKeyUp(e)}
             onChange={() => this.handleChange()}
             ref="password"
           />
@@ -113,7 +129,7 @@ class RegisterLogin extends Dialog {
           <a
             href="#"
             className="pure-button pure-button-primary submit"
-            onClick={() => this.handleSubmit()}
+            onClick={e => this.handleSubmit(e)}
           >Submit</a>
         </div>
         {this.getError()}

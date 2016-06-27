@@ -1,6 +1,6 @@
 'use strict';
 /* eslint import/no-unresolved:0 */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 
 class Dialog extends Component {

@@ -1,21 +1,4 @@
 'use strict';
-export const REGISTER = 'REGISTER';
-export const DOING_REGISTER = 'DOING_REGISTER';
-
-export const USER_REGISTER = 'USER_REGISTER';
-export const USER_REGISTER_SUCC = 'USER_REGISTER_SUCC';
-export const USER_REGISTER_FAIL = 'USER_REGISTER_FAIL';
-
-export const USER_FETCH = 'USER_FETCH';
-export const USER_FETCH_SUCC = 'USER_FETCH_SUCC';
-export const USER_FETCH_FAIL = 'USER_FETCH_FAIL';
-
-export const USER_LOGIN = 'USER_LOGIN';
-export const USER_LOGIN_FAIL = 'USER_LOGIN_FAIL';
-export const USER_LOGIN_SUCC = 'USER_LOGIN_SUCC';
-
-export const USER_LOGOUT = 'USER_LOGOUT';
-export const USER_LOGOUT_FAIL = 'USER_LOGOUT_FAIL';
-export const USER_LOGOUT_SUCC = 'USER_LOGOUT_SUCC';
+export const USER_INFO = 'USER_INFO';
 
 export const LOCATION = 'LOCATION';

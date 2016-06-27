@@ -8,13 +8,12 @@ const initState = {
 };
 
 export default function navigation(state = initState, action) {
-  switch (action.type)  {
+  switch (action.type) {
     case LOCATION:
-      return {
-        ...state,
+      return Object.assign({}, state, {
         location: action.path,
-      };
+      });
     default:
-      return state;
+      return Object.assign({}, state);
   }
 }

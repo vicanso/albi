@@ -1,19 +1,8 @@
 'use strict';
-import * as _ from 'lodash';
 import * as http from '../helpers/http';
 import * as crypto from '../helpers/crypto';
 import {
-  USER_FETCH,
-  USER_FETCH_SUCC,
-  USER_LOGIN,
-  USER_LOGIN_FAIL,
-  USER_LOGIN_SUCC,
-  USER_REGISTER,
-  USER_REGISTER_FAIL,
-  USER_REGISTER_SUCC,
-  USER_LOGOUT,
-  USER_LOGOUT_FAIL,
-  USER_LOGOUT_SUCC,
+  USER_INFO,
 } from '../constants/action-types';
 
 function getToken() {
@@ -21,7 +10,6 @@ function getToken() {
     .set('Cache-Control', 'no-cache')
     .then(res => res.body.token);
 }
-
 
 function getUser() {
   return http.get('/users/me')
@@ -54,61 +42,30 @@ function userLogout() {
   .then(res => res.body || { account: '' });
 }
 
-const fail = (dispatch, type) => (error) => {
-  dispatch({
-    type,
-    message: _.get(error, 'response.body.message', error.message),
-    error,
-  });
-};
-
 export function fetch() {
-  return dispatch => {
-    dispatch({
-      type: USER_FETCH,
-    });
-    return getUser().then(user => dispatch({
-      type: USER_FETCH_SUCC,
-      user,
-    }));
-  };
+  return dispatch => getUser().then(user => dispatch({
+    type: USER_INFO,
+    user,
+  }));
 }
 
 export function login(account, password) {
-  return dispatch => {
-    dispatch({
-      type: USER_LOGIN,
-    });
-    return userLogin(account, password).then(user => dispatch({
-      type: USER_LOGIN_SUCC,
-      user,
-    })).catch(fail(dispatch, USER_LOGIN_FAIL));
-  };
+  return dispatch => userLogin(account, password).then(user => dispatch({
+    type: USER_INFO,
+    user,
+  }));
 }
 
 export function register(account, password) {
-  return dispatch => {
-    return addUser(account, password).then(user => {
-
-    });
-    // dispatch({
-    //   type: USER_REGISTER,
-    // });
-    // return addUser(account, password).then(user => dispatch({
-    //   type: USER_REGISTER_SUCC,
-    //   user,
-    // })).catch(fail(dispatch, USER_REGISTER_FAIL));
-  };
+  return dispatch => addUser(account, password).then(user => dispatch({
+    type: USER_INFO,
+    user,
+  }));
 }
 
 export function logout() {
-  return dispatch => {
-    dispatch({
-      type: USER_LOGOUT,
-    });
-    return userLogout().then(user => dispatch({
-      type: USER_LOGOUT_SUCC,
-      user,
-    })).catch(fail(dispatch, USER_LOGOUT_FAIL));
-  };
+  return dispatch => userLogout().then(user => dispatch({
+    type: USER_INFO,
+    user,
+  }));
 }

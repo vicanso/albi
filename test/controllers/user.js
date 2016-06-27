@@ -99,7 +99,8 @@ describe('controllers/user', () => {
         if (err) {
           return done(err);
         }
-        assert.equal(res.status, 403);
+        assert.equal(res.status, 200);
+        assert(!res.body.account);
         request(server)
           .get(meUrl)
           .set('Cache-Control', 'no-cache')
