@@ -27,6 +27,6 @@ export default function navigation(state = initState, action) {
         history: history,
       });
     default:
-      return Object.assign({}, state);
+      return state;
   }
 }

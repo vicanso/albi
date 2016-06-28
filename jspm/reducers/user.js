@@ -13,6 +13,6 @@ export default function user(state = defaultStates, action) {
     case USER_INFO:
       return Object.assign({}, this.state, action.user);
     default:
-      return Object.assign({}, state);
+      return state;
   }
 }
