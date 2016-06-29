@@ -8,7 +8,7 @@ class Dialog extends Component {
     return;
   }
   render() {
-    const state = this.state;
+    const state = this.state || {};
     return (
       <div className={classnames(state.classes)}>
         <div className="maskContainer"></div>
