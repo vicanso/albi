@@ -17,15 +17,16 @@ export default function navigation(state = initState, action) {
       history.push(state.location);
       return Object.assign({}, state, {
         location: action.path,
-        history: history,
+        history,
       });
-    case LOCATION_BACK:
+    case LOCATION_BACK: {
       history = state.history.slice(0);
       const path = history.pop();
       return Object.assign({}, state, {
         location: path,
-        history: history,
+        history,
       });
+    }
     default:
       return state;
   }

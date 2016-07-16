@@ -14,6 +14,13 @@ const initModels = (client, modelPath) => {
     if (model.indexes) {
       _.forEach(model.indexes, options => schema.index(options));
     }
+    _.forEach(model.static, (fn, k) => schema.static(k, fn));
+    _.forEach(['pre', 'post'], type => {
+      _.forEach(model[type], (fns, k) => {
+        _.forEach(fns, fn => schema[type](k, fn));
+      });
+    });
+
     client.model(name, schema);
   });
 };

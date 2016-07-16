@@ -1,4 +1,18 @@
 'use strict';
+
+function beforeValidate(next) {
+  console.info(`${this.account} before validate`);
+  next();
+}
+
+function afterValidate(doc) {
+  console.info(`${doc.account} after validate`);
+}
+
+function get(conditions) {
+  return this.find(conditions);
+}
+
 module.exports = {
   schema: {
     account: {
@@ -28,4 +42,17 @@ module.exports = {
       account: 1,
     },
   ],
+  pre: {
+    validate: [
+      beforeValidate,
+    ],
+  },
+  post: {
+    validate: [
+      afterValidate,
+    ],
+  },
+  static: {
+    get,
+  },
 };
