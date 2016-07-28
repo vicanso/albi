@@ -6,20 +6,20 @@ import {
 } from '../constants/action-types';
 
 function getToken() {
-  return http.get('/users/login')
+  return http.get('/api/users/login')
     .set('Cache-Control', 'no-cache')
     .then(res => res.body.token);
 }
 
 function getUser() {
-  return http.get('/users/me')
+  return http.get('/api/users/me')
     .set('Cache-Control', 'no-cache')
     .then(res => res.body);
 }
 
 function addUser(account, password) {
   const code = crypto.sha256(`${account}-${password}`);
-  return http.post('/users/register')
+  return http.post('/api/users/register')
     .send({
       account,
       password: code,
@@ -30,7 +30,7 @@ function addUser(account, password) {
 function userLogin(account, password) {
   return getToken().then(token => {
     const code = crypto.sha256(crypto.sha256(`${account}-${password}`) + token);
-    return http.post('/users/login', {
+    return http.post('/api/users/login', {
       account,
       password: code,
     }).then(res => res.body);
@@ -38,7 +38,7 @@ function userLogin(account, password) {
 }
 
 function userLogout() {
-  return http.del('/users/logout')
+  return http.del('/api/users/logout')
   .then(res => res.body || { account: '' });
 }
 
