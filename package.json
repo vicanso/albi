@@ -22,7 +22,7 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "eslint-jspm": "node ./node_modules/.bin/eslint jspm/bootstrap.js jspm/store.js jspm/components/*.js jspm/actions/*.js jspm/constants/*.js jspm/reducers/*.js jspm/services/*.js",
+    "eslint-es6": "node ./node_modules/.bin/eslint public/js/*.js public/js/*/*.js",
     "eslint-node": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js models/*.js",
     "eslint": "npm run eslint-node && npm run eslint-jspm",
     "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/controllers/*.js test/helpers/*.js test/middlewares/*.js test/services/*.js --",
@@ -65,6 +65,12 @@
     "node-uuid": "^1.4.7",
     "performance-nodejs": "^1.0.2",
     "pug": "^2.0.0-beta6",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-redux": "^4.4.5",
+    "redux": "^3.6.0",
+    "redux-logger": "^2.7.0",
+    "redux-thunk": "^2.1.0",
     "require-tree": "^1.1.1",
     "superagent": "^2.3.0",
     "url-join": "^1.1.0"
@@ -90,10 +96,6 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
     "nib": "^1.1.2",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-redux": "^4.4.5",
-    "redux": "^3.6.0",
     "supertest": "^2.0.0",
     "through2": "^2.0.1",
     "webpack": "^1.13.2"

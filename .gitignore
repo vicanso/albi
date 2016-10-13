@@ -4,3 +4,4 @@ coverage
 assets
 jspm/packages
 jspm/bundles
+public/bundle
