@@ -1,14 +1,15 @@
-'use strict';
 const BlueBird = require('bluebird');
-const fs = BlueBird.promisifyAll(require('fs'));
 const path = require('path');
+const moment = require('moment');
+
+const fs = BlueBird.promisifyAll(require('fs'));
+
 const config = localRequire('config');
 const globals = localRequire('helpers/globals');
-const moment = require('moment');
 const utils = localRequire('helpers/utils');
 
 function getVersion() {
-  return fs.readFileAsync(path.join(__dirname, '../package.json')).then(buf => {
+  return fs.readFileAsync(path.join(__dirname, '../package.json')).then((buf) => {
     const pkg = JSON.parse(buf);
     return {
       code: pkg.version,
@@ -17,7 +18,7 @@ function getVersion() {
   });
 }
 
-exports.version = (ctx) => getVersion().then(data => {
+exports.version = ctx => getVersion().then((data) => {
   ctx.set('Cache-Control', 'public, max-age=600');
   /* eslint no-param-reassign:0 */
   ctx.body = data;
@@ -35,8 +36,8 @@ exports.resume = (ctx) => {
   ctx.body = null;
 };
 
-exports.stats = (ctx) => getVersion().then(version => {
-  const uptime = moment(Date.now() - Math.ceil(process.uptime()) * 1000);
+exports.stats = ctx => getVersion().then((version) => {
+  const uptime = moment(Date.now() - (Math.ceil(process.uptime()) * 1000));
   ctx.body = {
     connectingTotal: globals.get('connectingTotal'),
     status: globals.get('status'),

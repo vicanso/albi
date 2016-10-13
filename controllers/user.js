@@ -1,8 +1,8 @@
-'use strict';
 const uuid = require('node-uuid');
-const errors = localRequire('helpers/errors');
 const Joi = require('joi');
 const _ = require('lodash');
+
+const errors = localRequire('helpers/errors');
 const UserService = localRequire('services/user');
 
 const pickUserInfo = (data) => {
@@ -44,13 +44,13 @@ exports.login = (ctx) => {
   }
   const { account, password } = ctx.request.body;
   // 如果密码错误，是否需要刷新 token，但是 error 的时候，session 不会做保存
-  return UserService.get(account, password, token).then(doc => {
+  return UserService.get(account, password, token).then((doc) => {
     const user = pickUserInfo(doc);
     /* eslint no-param-reassign:0 */
     ctx.session.user = user;
     /* eslint no-param-reassign:0 */
     ctx.body = user;
-  }, err => {
+  }, (err) => {
     const newToken = uuid.v4();
     session.user.token = newToken;
     ctx.status = err.status;
@@ -70,7 +70,7 @@ exports.register = (ctx) => {
   if (_.get(ctx, 'session.user.account')) {
     throw errors.get('已经是登录状态，请先退出登录', 400);
   }
-  return UserService.add(data).then(doc => {
+  return UserService.add(data).then((doc) => {
     const user = pickUserInfo(doc);
     /* eslint no-param-reassign:0 */
     ctx.session.user = user;

@@ -1,7 +1,7 @@
-'use strict';
 const globals = localRequire('helpers/globals');
 const errors = localRequire('helpers/errors');
-module.exports = (url) => (ctx, next) => {
+
+module.exports = url => (ctx, next) => {
   if (ctx.url !== url) {
     return next();
   }

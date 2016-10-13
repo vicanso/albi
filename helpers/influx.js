@@ -1,18 +1,15 @@
-'use strict';
 const Influx = require('influxdb-nodejs');
+const _ = require('lodash');
+
 const config = localRequire('config');
 const utils = localRequire('helpers/utils');
-const _ = require('lodash');
 const debug = localRequire('helpers/debug');
 
-const getClient = url => {
+const getClient = (url) => {
   const client = new Influx(url);
   client.createDatabaseNotExists().then(() => {
     console.info('create influxdb database success');
-  }).catch(err => {
-    /* istanbul ignore next */
-    console.error(`create influxdb database fail, err:${err.message}`);
-  });
+  }).catch(err => console.error(`create influxdb database fail, err:${err.message}`));
   return client;
 };
 const client = config.influx ? getClient(config.influx) : null;

@@ -1,4 +1,3 @@
-'use strict';
 module.exports = [
   // system start
   '[GET] [/api/sys/version] [m.noQuery & c.system.version]',

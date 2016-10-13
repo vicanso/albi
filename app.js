@@ -1,5 +1,5 @@
-'use strict';
 require('./helpers/local-require');
+
 localRequire('helpers/bluebird');
 localRequire('helpers/exception');
 localRequire('helpers/joi');

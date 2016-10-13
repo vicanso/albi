@@ -1,9 +1,9 @@
-'use strict';
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const _ = require('lodash');
-const config = localRequire('config');
 const requireTree = require('require-tree');
+
+const config = localRequire('config');
+const Schema = mongoose.Schema;
 mongoose.Promise = require('bluebird');
 
 const initModels = (client, modelPath) => {
@@ -15,7 +15,7 @@ const initModels = (client, modelPath) => {
       _.forEach(model.indexes, options => schema.index(options));
     }
     _.forEach(model.static, (fn, k) => schema.static(k, fn));
-    _.forEach(['pre', 'post'], type => {
+    _.forEach(['pre', 'post'], (type) => {
       _.forEach(model[type], (fns, k) => {
         _.forEach(fns, fn => schema[type](k, fn));
       });
@@ -54,10 +54,7 @@ const initClient = (uri, options) => {
     /* istanbul ignore next */
     console.error(`${uri} connecting`);
   });
-  client.on('error', err => {
-    /* istanbul ignore next */
-    console.error(`${uri} error, %s`, err);
-  });
+  client.on('error', err => console.error(`${uri} error, %s`, err));
   initModels(client, __dirname);
   return client;
 };

@@ -1,10 +1,10 @@
-'use strict';
-const config = localRequire('config');
 const urlJoin = require('url-join');
 const Importer = require('jtfileimporter');
 const _ = require('lodash');
 const moment = require('moment');
 const path = require('path');
+
+const config = localRequire('config');
 
 /**
  * [getImgUrl description]

@@ -1,6 +1,6 @@
-'use strict';
-const globals = localRequire('helpers/globals');
 const limit = require('koa-connection-limit');
+
+const globals = localRequire('helpers/globals');
 
 module.exports = (options, interval) => {
   let connectionLimitTimer;

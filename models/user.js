@@ -1,5 +1,3 @@
-'use strict';
-
 function beforeValidate(next) {
   console.info(`${this.account} before validate`);
   next();

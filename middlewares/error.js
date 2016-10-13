@@ -1,13 +1,14 @@
-'use strict';
+const url = require('url');
 const _ = require('lodash');
+
 const config = localRequire('config');
 const influx = localRequire('helpers/influx');
-const url = require('url');
 
-module.exports = (ctx, next) => next().then(_.noop, err => {
+module.exports = (ctx, next) => next().then(_.noop, (err) => {
   const urlInfo = url.parse(ctx.url);
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   const data = {
+    url: ctx.url,
     code: err.code || 0,
     message: err.message,
     expected: false,

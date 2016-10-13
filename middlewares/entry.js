@@ -1,6 +1,7 @@
-'use strict';
 const _ = require('lodash');
+
 const globals = localRequire('helpers/globals');
+
 module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   const currentPath = ctx.path;
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
@@ -20,7 +21,7 @@ module.exports = (appUrlPrefix, processName) => (ctx, next) => {
     globals.set('connectingTotal', globals.get('connectingTotal') - 1);
     ctx.set('X-Use', Date.now() - start);
   };
-  return next().then(complete, err => {
+  return next().then(complete, (err) => {
     complete();
     throw err;
   });

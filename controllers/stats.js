@@ -1,4 +1,3 @@
-'use strict';
 const _ = require('lodash');
 
 exports.ajax = (ctx) => {
@@ -24,9 +23,7 @@ exports.statistics = (ctx) => {
   console.info(`browser-screen:${JSON.stringify(data.screen)}`);
   console.info(`browser-timing:${data.template}, ${JSON.stringify(data.timing)}`);
   console.info(`browser-performance:${JSON.stringify(data.performance)}`);
-  _.forEach(data.entries, entry => {
-    console.info(`browser-entry:${JSON.stringify(entry)}`);
-  });
+  _.forEach(data.entries, entry => console.info(`browser-entry:${JSON.stringify(entry)}`));
   /* eslint no-param-reassign:0 */
   ctx.status = 201;
 };

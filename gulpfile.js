@@ -1,4 +1,4 @@
-'use strict';
+/* eslint import/no-extraneous-dependencies:0 */
 const gulp = require('gulp');
 const del = require('del');
 const stylus = require('gulp-stylus');
@@ -12,6 +12,7 @@ const through = require('through2');
 const shell = require('gulp-shell');
 const _ = require('lodash');
 const fs = require('fs');
+
 const assetsPath = 'assets';
 // 保存静态文件的crc32版本号
 const crc32Versions = {};
@@ -103,10 +104,10 @@ gulp.task('static:img', ['copy:others'], () => {
   .pipe(gulp.dest(assetsPath));
 });
 
-gulp.task('crc32', ['static:css', 'static:js', 'static:img', 'static:jspm'], cb => {
+gulp.task('crc32', ['static:css', 'static:js', 'static:img', 'static:jspm'], (cb) => {
   const data = {};
   const keys = _.keys(crc32Versions).sort();
-  _.forEach(keys, k => {
+  _.forEach(keys, (k) => {
     data[k] = crc32Versions[k];
   });
   fs.writeFile(path.join(__dirname, 'versions.json'), JSON.stringify(data, null, 2), cb);

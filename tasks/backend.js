@@ -1,7 +1,8 @@
-'use strict';
-const config = localRequire('config');
 const fs = require('fs');
+const _ = require('lodash');
 const MicroService = require('micro-service');
+
+const config = localRequire('config');
 
 const getIPAddress = () => {
   if (config.IP) {
@@ -13,7 +14,7 @@ const getIPAddress = () => {
   }
   const hosts = fs.readFileSync('/etc/hosts', 'utf8');
   // etc hosts中的ip都是正常的，因此正则的匹配考虑的简单一些
-  const reg = new RegExp('((?:[0-9]{1,3}\.){3}[0-9]{1,3})\\s*' + hostname);
+  const reg = new RegExp(`((?:[0-9]{1,3}.){3}[0-9]{1,3})\\s*${hostname}`);
   return _.get(reg.exec(hosts), 1);
 };
 
@@ -23,13 +24,13 @@ const refresh = (client, interval) => {
     setTimeout(() => {
       refresh(client, interval);
     }, interval).unref();
-  }).catch(err => {
+  }).catch((err) => {
     console.error('refresh backend etcd config fail, %s', err);
     setTimeout(() => {
       refresh(client, interval);
     }, 10 * 1000).unref();
   });
-}
+};
 
 module.exports = (interval) => {
   if (!config.etcd) {
@@ -52,12 +53,10 @@ module.exports = (interval) => {
   client.set(data);
   client.addTag('backend:http', `app:${config.app}`, 'ping:http');
   client.ttl(600);
-  client.register().then(data => {
-    console.info(`register backend etcd config success, data:${JSON.stringify(data)}`);
+  client.register().then((res) => {
+    console.info(`register backend etcd config success, data:${JSON.stringify(res)}`);
     setTimeout(() => {
       refresh(client, interval);
     }, interval).unref();
-  }).catch(err => {
-    console.error('register backend etcd config fail, %s', err);
-  });
+  }).catch(err => console.error('register backend etcd config fail, %s', err));
 };

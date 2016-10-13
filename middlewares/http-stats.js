@@ -1,10 +1,10 @@
-'use strict';
 const _ = require('lodash');
 const httpStats = require('koa-http-stats');
+
 const globals = localRequire('helpers/globals');
 const influx = localRequire('helpers/influx');
 
-module.exports = (options) => httpStats(options, (p, statsData, ctx) => {
+module.exports = options => httpStats(options, (p, statsData, ctx) => {
   const tagKeys = 'status spdy size busy'.split(' ');
   const performance = p;
   if (!performance.createdAt) {

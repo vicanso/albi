@@ -1,6 +1,6 @@
-'use strict';
 const _ = require('lodash');
 const router = require('koa-router-parser');
+
 const debug = localRequire('helpers/debug');
 const middlewares = localRequire('middlewares');
 const config = localRequire('config');

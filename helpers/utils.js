@@ -1,5 +1,5 @@
-'use strict';
 const _ = require('lodash');
+
 const globals = localRequire('helpers/globals');
 
 exports.getParam = (arr, validate, defaultValue) => {
@@ -26,7 +26,7 @@ exports.checkToExit = (times, checkInterval = 10 * 1000) => {
       clearInterval(timer);
       process.exit(0);
     } else {
-      --count;
+      count -= 1;
     }
   }, checkInterval).unref();
   return timer;

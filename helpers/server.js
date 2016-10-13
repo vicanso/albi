@@ -1,12 +1,11 @@
-'use strict';
 const Koa = require('koa');
-const config = localRequire('config');
 const koaLog = require('koa-log');
 const _ = require('lodash');
 const mount = require('koa-mounting');
 const koaConvert = require('koa-convert');
 const staticServe = require('koa-static-serve');
 
+const config = localRequire('config');
 
 module.exports = (port) => {
   const app = new Koa();
@@ -25,7 +24,7 @@ module.exports = (port) => {
     app.use(koaLog('dev'));
   } else {
     /* istanbul ignore next */
-    koaLog.morgan.token('request-id', (ctx) => ctx.get('X-Request-Id') || 'unknown');
+    koaLog.morgan.token('request-id', ctx => ctx.get('X-Request-Id') || 'unknown');
     app.use(koaLog(config.httpLogFormat));
   }
   // http stats
@@ -92,9 +91,9 @@ module.exports = (port) => {
   const server = app.listen(port, (err) => {
     /* istanbul ignore if */
     if (err) {
-      console.error(`server listen on ${port} fail, err:${err.message}`);
+      console.error(`server listen on http://127.0.0.1:${port}/ fail, err:${err.message}`);
     } else {
-      console.info(`server listen on ${port}`);
+      console.info(`server listen on http://127.0.0.1:${port}/`);
     }
   });
   return server;

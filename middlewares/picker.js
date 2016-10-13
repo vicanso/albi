@@ -1,4 +1,3 @@
-'use strict';
 const _ = require('lodash');
 
 /**
@@ -25,7 +24,7 @@ module.exports = field => (ctx, next) => {
       pickValue = pickValue.substring(1);
     }
     const keys = pickValue.split(',');
-    const fn = (item) => pickFn(item, keys);
+    const fn = item => pickFn(item, keys);
     if (_.isArray(ctx.body)) {
       /* eslint no-param-reassign:0 */
       ctx.body = _.map(ctx.body, fn);
