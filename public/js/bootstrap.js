@@ -8,6 +8,7 @@ import * as statsService from './services/stats';
 import store from './store';
 import App from './containers/app';
 
+
 function globarErrorCatch() {
   globals.set('onerror', (msg, url, line, row, err) => {
     let stack = '';

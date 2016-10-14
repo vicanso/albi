@@ -34,6 +34,7 @@ module.exports = {
       type: Number,
       required: true,
     },
+    ip: String,
   },
   indexes: [
     {

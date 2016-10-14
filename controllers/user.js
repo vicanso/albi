@@ -50,6 +50,12 @@ exports.login = (ctx) => {
     ctx.session.user = user;
     /* eslint no-param-reassign:0 */
     ctx.body = user;
+    /* eslint no-underscore-dangle:0 */
+    UserService.update(doc._id, {
+      lastLoginedAt: (new Date()).toISOString(),
+      loginCount: doc.loginCount + 1,
+      ip: ctx.ip,
+    });
   }, (err) => {
     const newToken = uuid.v4();
     session.user.token = newToken;
@@ -70,6 +76,7 @@ exports.register = (ctx) => {
   if (_.get(ctx, 'session.user.account')) {
     throw errors.get('已经是登录状态，请先退出登录', 400);
   }
+  data.ip = ctx.ip;
   return UserService.add(data).then((doc) => {
     const user = pickUserInfo(doc);
     /* eslint no-param-reassign:0 */

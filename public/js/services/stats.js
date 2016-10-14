@@ -8,6 +8,6 @@ export function statistics(data) {
   return http.post(STATS_STATISTICS, data);
 }
 
-export function exception() {
+export function exception(data) {
   return http.post(STATS_EXCEPTION, data);
 }
