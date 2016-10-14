@@ -7,7 +7,7 @@ module.exports = [
   '[POST] [/api/sys/restart] [m.auth.admin & c.system.restart]',
 
   // page view
-  '[GET] [/] [v.home & c.home]',
+  '[GET] [/,/login] [v.home & c.home]',
 
   // user
   '[GET] [/api/users/me] [m.noCache & m.session.read & c.user.me]',
