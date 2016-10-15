@@ -4,11 +4,13 @@ const webpack = require('webpack');
 module.exports = {
   entry: {
     vendor: [
+      'classnames',
       'lodash',
       'debug',
       'node-uuid',
       'react',
       'react-dom',
+      'react-enroute',
       'react-redux',
       'redux',
       'redux-logger',

@@ -5,12 +5,16 @@ import * as ReactRedux from 'react-redux';
 import {
   VIEW_LOGIN,
 } from '../constants/urls';
+import Login from './login';
 
 
 class App extends Component {
   renderLogin() {
+    const { dispatch } = this.props;
     return (
-      <div>login</div>
+      <Login
+        dispatch={dispatch}
+      />
     );
   }
   render() {

@@ -9,13 +9,11 @@
   clear both
   
 body
-  font 14px 'Helvetica Neue', Helvetica, Arial, sans-serif
-  line-height 1.4em
+  font-size 14px
+  font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+  line-height 1.5
   background #f5f5f5
-  color #4d4d4d
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  font-weight 300
+  color #333
 
 input, .pure-form input[type="text"], .pure-form input[type="password"]
   font-size 13px
@@ -29,14 +27,17 @@ input, .pure-form input[type="text"], .pure-form input[type="password"]
     border-color #aeaeae
     box-shadow inset 0 2px 2px #e9e9e9, 0 0 10px 0 rgba(73, 107, 125, 0.3)
 
-a
-  color #3b8bba
+a   
+  color #4078c0
   text-decoration none
-  &:visited, &:hover
-    color #265778
+  &:focus, &:hover
+    text-decoration underline
+    outline 0
+.font12
+  font-size 12px
 .tac
   text-align center
-.pullRight
+.pull-right
   float right
 .mleft5
   margin-left 5px
@@ -46,3 +47,4 @@ a
   margin-right 10px
 
 @import './widget'
+@import './login'

@@ -1,3 +1,1 @@
-module.exports = (ctx) => {
-  ctx.set('Cache-Control', 'public, max-age=600');
-};
+module.exports = ctx => ctx.set('Cache-Control', 'public, max-age=600');
