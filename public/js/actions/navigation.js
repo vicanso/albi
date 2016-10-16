@@ -18,3 +18,11 @@ function to(path) {
 export function login() {
   return to(VIEW_LOGIN);
 }
+
+export function back() {
+  return dispatch => {
+    dispatch({
+      type: LOCATION_BACK,
+    });
+  };
+}
