@@ -4,19 +4,26 @@ const _ = require('lodash');
 const Models = localRequire('models');
 const errors = localRequire('helpers/errors');
 
-const isExists = (account) => {
+const isExists = (condition) => {
   const User = Models.get('User');
-  return User.findOne({
-    account,
-  }).exec().then(doc => !_.isNil(doc));
+  return User.findOne(condition).exec().then(doc => !_.isNil(doc));
 };
 
 exports.add = (data) => {
   const User = Models.get('User');
-  return isExists(data.account).then((exists) => {
+  return isExists({
+    account: data.account
+  }).then((exists) => {
     if (exists) {
-      throw errors.get('This ID has been used', 400);
+      throw errors.get('This account has been used', 400);
     }
+    return isExists({
+      email: data.email,
+    });
+  }).then((exists) => {
+    if (exists) {
+      throw errors.get('This email has been used', 400);
+    }    
     const userData = _.clone(data);
     const date = (new Date()).toISOString();
     userData.createdAt = date;
@@ -40,12 +47,6 @@ exports.get = (account, password, token) => {
       throw incorrectError;
     }
     return doc.toJSON();
-    /* eslint no-param-reassign: 0 */
-    // doc.lastLoginedAt = (new Date()).toISOString();
-    // doc.loginCount += 1;
-    // const user = doc.toJSON();
-    // doc.save(err => console.error(err));
-    // return user;
   });
 };
 

@@ -72,6 +72,7 @@ exports.register = (ctx) => {
   const data = Joi.validateThrow(ctx.request.body, {
     account: Joi.string().min(4).required(),
     password: Joi.string().required(),
+    email: Joi.string().email().required(),
   });
   if (_.get(ctx, 'session.user.account')) {
     throw errors.get('已经是登录状态，请先退出登录', 400);

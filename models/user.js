@@ -22,6 +22,10 @@ module.exports = {
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     createdAt: {
       type: String,
       required: true,

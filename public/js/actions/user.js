@@ -10,8 +10,15 @@ export function login(account, password) {
   }));
 }
 
-export function register(account, password) {
-  return dispatch => user.add(account, password).then(data => dispatch({
+export function register(account, password, email) {
+  return dispatch => user.add(account, password, email).then(data => dispatch({
+    type: USER_INFO,
+    user: data,
+  }));
+}
+
+export function me() {
+  return dispatch => user.me().then(data => dispatch({
     type: USER_INFO,
     user: data,
   }));

@@ -1,19 +1,23 @@
 import React, { PropTypes } from 'react';
 import * as userAction from '../actions/user';
 import * as navigationAction from '../actions/navigation';
-import {
-  VIEW_REGISTER,
-} from '../constants/urls';
 import FormView from '../components/form';
+import {
+  VIEW_LOGIN,
+} from '../constants/urls';
 
-class Login extends FormView {
+class Register extends FormView {
   constructor(props) {
     super(props);
     this.state.fields = [
       {
-        label: 'Username or email address',
+        label: 'Username',
         id: 'account',
         autoFocus: true,
+      },
+      {
+        label: 'Email Address',
+        id: 'email',
       },
       {
         label: 'Password',
@@ -27,9 +31,9 @@ class Login extends FormView {
       status,
     } = this.state;
     if (status === 'submitting') {
-      return 'Signing In...';
+      return 'Creating an account...';
     }
-    return 'Sign In';
+    return 'Create an account';
   }
   handleSubmit(e) {
     e.preventDefault();
@@ -40,10 +44,10 @@ class Login extends FormView {
       return;
     }
     const { dispatch } = this.props;
-    const { account, password } = this.getData();
+    const { account, password, email } = this.getData();
     let error = '';
-    if (!account || !password) {
-      error = 'Account and Password can\'t be empty';
+    if (!account || !password || !email) {
+      error = 'Account Password and Email can\'t be empty';
     } else {
       if (password.length < 6) {
         error = 'Password catn\'t be less than 6 character!';
@@ -61,7 +65,7 @@ class Login extends FormView {
     this.setState({
       status: 'submitting',
     });
-    dispatch(userAction.login(account, password))
+    dispatch(userAction.register(account, password, email))
       .then(() => {
         dispatch(navigationAction.back());
       })
@@ -76,7 +80,7 @@ class Login extends FormView {
     const { dispatch } = this.props;
     return (
       <div className="login-register-container">
-        <h3 className="tac">Sign in to Albi</h3>
+        <h3 className="tac">Join Albi</h3>
         {
           this.renderError()
         }
@@ -84,20 +88,20 @@ class Login extends FormView {
           super.render()
         }
         <a
-          href={VIEW_REGISTER}
+          href={VIEW_LOGIN}
           onClick={(e) => {
             e.preventDefault();
-            dispatch(navigationAction.to(VIEW_REGISTER));
+            dispatch(navigationAction.to(VIEW_LOGIN));
           }}
           className="create-account"
-        >Create an account.</a>
+        >Login</a>
       </div>
     );
   }
 }
 
-Login.propTypes = {
+Register.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default Register;

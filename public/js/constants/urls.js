@@ -13,3 +13,4 @@ export const USER_LOGOUT = '/api/users/logout';
 
 export const VIEW_HOME = `${appUrlPrfix}/`;
 export const VIEW_LOGIN = `${appUrlPrfix}/login`;
+export const VIEW_REGISTER = `${appUrlPrfix}/register`;

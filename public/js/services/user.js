@@ -13,11 +13,12 @@ export function me() {
     .then(res => res.body);
 }
 
-export function add(account, password) {
+export function add(account, password, email) {
   const code = crypto.sha256(`${account}-${password}`);
   return http.post(USER_REGISTER, {
     account,
     password: code,
+    email,
   }).then(res => res.body);
 }
 
