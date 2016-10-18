@@ -36,11 +36,10 @@ gulp.task('del:assets', () => del([assetsPath]));
 
 gulp.task('del:build', () => del(['build']));
 
-gulp.task('del:jspm', () => del(['jspm/config.*.js', 'jspm/bundles', 'jspm/packages/system.*.js']));
 gulp.task('clean', ['crc32'], () => del(['build']));
 
 /* eslint max-len:0 */
-gulp.task('reset', ['del:jspm', 'del:assets', 'del:build'], () => del(['jspm/packages', 'node_modules']));
+gulp.task('reset', ['del:assets', 'del:build'], () => del(['jspm/packages', 'node_modules']));
 
 gulp.task('stylus', ['del:assets', 'del:build'], () => gulp.src('public/**/*.styl')
   .pipe(stylus({
@@ -71,13 +70,13 @@ gulp.task('static:js', ['copy:others'], () => gulp.src(['public/**/*.js', '!publ
   .pipe(gulp.dest(assetsPath))
 );
 
-gulp.task('jspm:bundle', ['del:jspm'], shell.task([
-  'node node_modules/.bin/jspm bundle-sfx bootstrap.js jspm/bundles/bootstrap.js --inject --minify',
+gulp.task('webpack:bundle', shell.task([
+  'node node_modules/.bin/webpack --progress --colors -d',
 ]));
 
-gulp.task('static:jspm', ['jspm:bundle'], () => gulp.src(['jspm/*/system.js', 'jspm/config.js', 'jspm/*/bootstrap.js'])
+gulp.task('static:webpack', ['webpack:bundle'], () => gulp.src(['public/bundle/*.js'])
   .pipe(version({
-    prefix: '/jspm',
+    prefix: '/webpack',
   }))
   .pipe(gulp.dest('jspm'))
 );
@@ -120,7 +119,7 @@ gulp.task('default', [
   'copy:others',
   'static:css',
   'static:js',
-  'static:jspm',
-  'crc32',
-  'clean',
+  // 'static:webpack',
+  // 'crc32',
+  // 'clean',
 ]);
