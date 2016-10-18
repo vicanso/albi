@@ -9,13 +9,14 @@ class Form extends Component {
       status: '',
       error: '',
     };
+    this.inputs = {};
   }
   getData() {
-    const refs = this.refs;
+    const inputs = this.inputs;
     const data = {};
     _.forEach(this.state.fields, (field) => {
       const key = field.id;
-      const ref = refs[key];
+      const ref = inputs[key];
       data[key] = ref.value || '';
     });
     return data;
@@ -64,7 +65,7 @@ class Form extends Component {
         btn: true,
         'btn-primary': true,
         'btn-block': true,
-        disabled: status === 'submitting' ? true : false,
+        disabled: status === 'submitting',
       },
     };
     const fieldsList = _.map(fields, (field, index) => {
@@ -82,7 +83,9 @@ class Form extends Component {
             autoFocus={field.autoFocus || false}
             type={field.type || 'text'}
             tabIndex={index + 1}
-            ref={id}
+            ref={(c) => {
+              this.inputs[id] = c;
+            }}
             onChange={() => this.handleChange()}
           />
         </div>

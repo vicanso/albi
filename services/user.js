@@ -53,7 +53,6 @@ exports.get = (account, password, token) => {
 exports.update = (id, data) => {
   const User = Models.get('User');
   return User.findByIdAndUpdate(id, data).then((doc) => {
-    console.dir(doc);
     return doc.toJSON();
   });
 };

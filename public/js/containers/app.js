@@ -23,7 +23,29 @@ class App extends Component {
     globals.set('onpopstate', () => {
       dispatch(navigationAction.back());
     });
-    dispatch(userAction.me());
+    this.state = {
+      isFetchingUserInfo: true,
+    };
+    dispatch(userAction.me()).then(() => {
+      this.setState({
+        isFetchingUserInfo: false,
+      });
+    }).catch((err) => {
+      this.setState({
+        isFetchingUserInfo: false,
+      });
+      console.error(err);
+    });
+    this.handleLink = this.handleLink.bind(this);
+  }
+  handleLink(url) {
+    const {
+      dispatch,
+    } = this.props;
+    return (e) => {
+      e.preventDefault();
+      dispatch(navigationAction.to(url));
+    };
   }
   renderLogin() {
     const { dispatch } = this.props;
@@ -42,11 +64,22 @@ class App extends Component {
     );
   }
   render() {
-    const { user, navigation } = this.props;
+    const {
+      isFetchingUserInfo,
+    } = this.state;
+    const {
+      user,
+      navigation,
+      dispatch,
+    } = this.props;
+    const handleLink = this.handleLink;
     return (
       <div>
         <MainHeader
           user={user}
+          isFetchingUserInfo={isFetchingUserInfo}
+          handleLink={handleLink}
+          dispatch={dispatch}
         />
         <Router {...navigation}>
           <Route

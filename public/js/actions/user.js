@@ -23,3 +23,10 @@ export function me() {
     user: data,
   }));
 }
+
+export function logout() {
+  return dispatch => user.logout().then(data => dispatch({
+    type: USER_INFO,
+    user: data,
+  }));
+}
