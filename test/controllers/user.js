@@ -17,6 +17,7 @@ describe('controllers/user', () => {
   const server = app.listen();
   const account = uuid.v4();
   const password = uuid.v4();
+  const email = `${uuid.v4()}@gmail.com`;
   const registerUrl = `${config.appUrlPrefix}/users/register`;
   const meUrl = `${config.appUrlPrefix}/users/me`;
   const logoutUrl = `${config.appUrlPrefix}/users/logout`;
@@ -62,6 +63,7 @@ describe('controllers/user', () => {
       .send({
         account,
         password,
+        email,
       })
       .end((err, res) => {
         if (err) {

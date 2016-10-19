@@ -8,12 +8,22 @@ const cssmin = require('gulp-cssmin');
 const copy = require('gulp-copy');
 const path = require('path');
 const through = require('through2');
-const webpack = require("webpack");
+const webpack = require('webpack');
 const crc32 = require('buffer-crc32');
 const _ = require('lodash');
 const fs = require('fs');
 
 const webpackConfig = require('./webpack.config');
+
+webpackConfig.plugins.push(
+  new webpack.optimize.UglifyJsPlugin({
+    mangle: {
+      except: ['$super', '$', 'exports', 'require'],
+    },
+  })
+);
+webpackConfig.output.filename = '[name].[hash].js';
+webpackConfig.output.sourceMapFilename = '[file].map';
 
 const assetsPath = 'assets';
 // 保存静态文件的crc32版本号
@@ -50,21 +60,20 @@ gulp.task('stylus', ['del:assets', 'del:build'], () => gulp.src('public/**/*.sty
   .pipe(gulp.dest('build'))
 );
 
-gulp.task('copy:others', ['del:assets', 'del:build'], () => gulp.src(['public/**/*',
-    '!public/**/*.styl',
-    '!public/**/*.js',
-  ]).pipe(copy('build', {
-    prefix: 1,
-  }))
-);
+gulp.task('copy:others', ['del:assets', 'del:build'], () => gulp.src([
+  'public/**/*',
+  '!public/**/*.styl',
+  '!public/**/*.js',
+]).pipe(copy('build', {
+  prefix: 1,
+})));
 
 gulp.task('copy:source', ['del:assets', 'del:build'], () => gulp.src([
-    'public/js/*',
-    'public/js/**/*.js',
-  ]).pipe(copy(assetsPath, {
-    prefix: 1,
-  }))
-);
+  'public/js/*',
+  'public/js/**/*.js',
+]).pipe(copy(assetsPath, {
+  prefix: 1,
+})));
 
 gulp.task('static:css', ['stylus', 'copy:others'], () => gulp.src(['build/**/*.css'])
   .pipe(base64())
@@ -78,9 +87,6 @@ gulp.task('static:js', ['copy:others'], () => gulp.src(['public/bundle/*.js'])
   .pipe(gulp.dest(assetsPath))
 );
 
-// gulp.task('webpack:bundle', shell.task([
-//   'node node_modules/.bin/webpack --progress --colors -d',
-// ]));
 gulp.task('webpack:bundle', (cb) => {
   webpack(webpackConfig, cb);
 });
@@ -100,7 +106,7 @@ gulp.task('static:webpack-sourcemap', ['webpack:bundle'], () => gulp.src(['publi
     prefix: 1,
   }))
 );
-gulp.task('static:webpack-version', ['static:webpack', 'static:webpack-sourcemap'], () => gulp.src([assetsPath + '/bundle/*.js'])
+gulp.task('static:webpack-version', ['static:webpack', 'static:webpack-sourcemap'], () => gulp.src([`${assetsPath}/bundle/*.js`])
   .pipe(through.obj((file, encoding, cb) => {
     const fileName = file.path.replace(path.join(__dirname, assetsPath), '');
     const arr = fileName.split('.');

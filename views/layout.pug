@@ -13,10 +13,6 @@ html(lang='zh-CN')
     include ./inlinejs
     //CSS_FILES_CONTAINER
     - importer.import('//o3tra507p.qnssl.com/font-awesome-4.6.3.css', '//o3tra507p.qnssl.com/pure-0.6.0.css', '/css/global.css')
-    //- if ENV === 'development' || DEBUG
-    //-   - importer.import('/jspm/packages/system.js', '/jspm/config.js')
-    //- else 
-    //-   - importer.import('/jspm/bundles/bootstrap.js')
   body
     block bodyContainer
 
@@ -31,6 +27,3 @@ html(lang='zh-CN')
   script.
     TIMING.end('js')
   - importer.import('/bundle/vendor.js', '/bundle/app.js')
-    //- if (CONFIG.env === 'development' || CONFIG.debug) {
-    //-   System.import(CONFIG.staticUrlPrefix + '/jspm/bootstrap.js')
-    //- }

@@ -7,7 +7,7 @@ const debug = localRequire('helpers/debug');
 
 const getClient = (url) => {
   const client = new Influx(url);
-  client.createDatabaseNotExists().then(() => {
+  client.createDatabase().then(() => {
     console.info('create influxdb database success');
   }).catch(err => console.error(`create influxdb database fail, err:${err.message}`));
   return client;

@@ -78,6 +78,10 @@ class MainHeader extends Component {
         name: 'Sign out',
         action: 'logout',
       },
+      {
+        name: `Token`,
+        action: 'showToken',
+      },
     ];
     const onSelect = (e, item) => {
       e.preventDefault();

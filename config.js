@@ -17,7 +17,7 @@ exports.app = pkg.name;
 exports.influx = process.env.INFLUX;
 
 // app url prefix for all request
-exports.appUrlPrefix = env === 'development' ? '' : '/albi';
+exports.appUrlPrefix = env === 'development' ? '' : `/${pkg.name}`;
 
 exports.staticOptions = {
   urlPrefix: '/static',
@@ -43,7 +43,11 @@ exports.connectLimitOptions = {
   interval: 5000,
 };
 // cookie name
-exports.sessionKey = 'albi';
+exports.session = {
+  key: pkg.name,
+  ttl: 48 * 3600 * 1000,
+  maxAge: 24 * 3600 * 1000,
+};
 // admin token (jenny)
 exports.adminToken = '6a3f4389a53c889b623e67f385f28ab8e84e5029';
 // etcd server address http://192.168.99.100:2379/v2

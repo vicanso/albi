@@ -29,10 +29,11 @@ exports.login = (ctx) => {
     throw errors.get('已经是登录状态，请先退出登录', 400);
   }
   if (ctx.method === 'GET') {
-    const user = session.user || {
+    const user = {
       token: uuid.v4(),
     };
     session.user = user;
+    ctx.set('Cache-Control', 'no-store');
     /* eslint no-param-reassign:0 */
     ctx.body = user;
     return null;
@@ -46,6 +47,8 @@ exports.login = (ctx) => {
   // 如果密码错误，是否需要刷新 token，但是 error 的时候，session 不会做保存
   return UserService.get(account, password, token).then((doc) => {
     const user = pickUserInfo(doc);
+    const ip = ctx.ip;
+    user.token = uuid.v4();
     /* eslint no-param-reassign:0 */
     ctx.session.user = user;
     /* eslint no-param-reassign:0 */
@@ -54,8 +57,14 @@ exports.login = (ctx) => {
     UserService.update(doc._id, {
       lastLoginedAt: (new Date()).toISOString(),
       loginCount: doc.loginCount + 1,
-      ip: ctx.ip,
+      ip,
     });
+    UserService.addLoginRecord({
+      account: user.account,
+      token: user.token,
+      userAgent: ctx.get('User-Agent'),
+      ip,
+    })
   }, (err) => {
     const newToken = uuid.v4();
     session.user.token = newToken;

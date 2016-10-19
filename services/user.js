@@ -57,3 +57,11 @@ exports.update = (id, data) => {
   });
 };
 
+exports.addLoginRecord = (data) => {
+  const Login = Models.get('Login');
+  data.createdAt = (new Date()).toISOString();
+  return (new Login(data)).save().catch(err => {
+    console.error(`add login record fail, account:${data.account}`);
+  });
+};
+
