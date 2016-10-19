@@ -6,12 +6,14 @@ const base64 = require('gulp-base64');
 const nib = require('nib');
 const cssmin = require('gulp-cssmin');
 const copy = require('gulp-copy');
-const crc32 = require('buffer-crc32');
 const path = require('path');
 const through = require('through2');
-const shell = require('gulp-shell');
+const webpack = require("webpack");
+const crc32 = require('buffer-crc32');
 const _ = require('lodash');
 const fs = require('fs');
+
+const webpackConfig = require('./webpack.config');
 
 const assetsPath = 'assets';
 // 保存静态文件的crc32版本号
@@ -24,7 +26,7 @@ function version(opts) {
     if (opts && opts.prefix) {
       name = opts.prefix + name;
     }
-    crc32Versions[name] = v;
+    crc32Versions[name] = `${v}`;
     /* eslint no-param-reassign:0 */
     file.path = file.path.replace(extname, `.${v}${extname}`);
     cb(null, file);
@@ -34,12 +36,10 @@ function version(opts) {
 
 gulp.task('del:assets', () => del([assetsPath]));
 
-gulp.task('del:build', () => del(['build']));
+gulp.task('del:build', () => del(['build', 'public/bundle']));
 
 gulp.task('clean', ['crc32'], () => del(['build']));
 
-/* eslint max-len:0 */
-gulp.task('reset', ['del:assets', 'del:build'], () => del(['jspm/packages', 'node_modules']));
 
 gulp.task('stylus', ['del:assets', 'del:build'], () => gulp.src('public/**/*.styl')
   .pipe(stylus({
@@ -58,6 +58,14 @@ gulp.task('copy:others', ['del:assets', 'del:build'], () => gulp.src(['public/**
   }))
 );
 
+gulp.task('copy:source', ['del:assets', 'del:build'], () => gulp.src([
+    'public/js/*',
+    'public/js/**/*.js',
+  ]).pipe(copy(assetsPath, {
+    prefix: 1,
+  }))
+);
+
 gulp.task('static:css', ['stylus', 'copy:others'], () => gulp.src(['build/**/*.css'])
   .pipe(base64())
   .pipe(cssmin())
@@ -65,20 +73,41 @@ gulp.task('static:css', ['stylus', 'copy:others'], () => gulp.src(['build/**/*.c
   .pipe(gulp.dest(assetsPath))
 );
 
-gulp.task('static:js', ['copy:others'], () => gulp.src(['public/**/*.js', '!public/components/*.js'])
+gulp.task('static:js', ['copy:others'], () => gulp.src(['public/bundle/*.js'])
   .pipe(version())
   .pipe(gulp.dest(assetsPath))
 );
 
-gulp.task('webpack:bundle', shell.task([
-  'node node_modules/.bin/webpack --progress --colors -d',
-]));
+// gulp.task('webpack:bundle', shell.task([
+//   'node node_modules/.bin/webpack --progress --colors -d',
+// ]));
+gulp.task('webpack:bundle', (cb) => {
+  webpack(webpackConfig, cb);
+});
 
-gulp.task('static:webpack', ['webpack:bundle'], () => gulp.src(['public/bundle/*.js'])
-  .pipe(version({
-    prefix: '/webpack',
+gulp.task('static:webpack-compile', ['webpack:bundle'], () => gulp.src(['public/bundle/*'])
+  .pipe(copy('build', {
+    prefix: 1,
   }))
-  .pipe(gulp.dest('jspm'))
+);
+gulp.task('static:webpack', ['static:webpack-compile'], () => gulp.src(['build/bundle/*.js'])
+  .pipe(copy(assetsPath, {
+    prefix: 1,
+  }))
+);
+gulp.task('static:webpack-sourcemap', ['webpack:bundle'], () => gulp.src(['public/bundle/*.map'])
+  .pipe(copy(assetsPath, {
+    prefix: 1,
+  }))
+);
+gulp.task('static:webpack-version', ['static:webpack', 'static:webpack-sourcemap'], () => gulp.src([assetsPath + '/bundle/*.js'])
+  .pipe(through.obj((file, encoding, cb) => {
+    const fileName = file.path.replace(path.join(__dirname, assetsPath), '');
+    const arr = fileName.split('.');
+    const v = arr.splice(-2, 1);
+    crc32Versions[arr.join('.')] = v[0];
+    cb();
+  }))
 );
 
 gulp.task('static:img', ['copy:others'], () => {
@@ -103,7 +132,7 @@ gulp.task('static:img', ['copy:others'], () => {
   .pipe(gulp.dest(assetsPath));
 });
 
-gulp.task('crc32', ['static:css', 'static:js', 'static:img', 'static:jspm'], (cb) => {
+gulp.task('crc32', ['static:css', 'static:js', 'static:img', 'static:webpack', 'static:webpack-version'], (cb) => {
   const data = {};
   const keys = _.keys(crc32Versions).sort();
   _.forEach(keys, (k) => {
@@ -118,8 +147,8 @@ gulp.task('default', [
   'stylus',
   'copy:others',
   'static:css',
+  'static:webpack',
   'static:js',
-  // 'static:webpack',
-  // 'crc32',
-  // 'clean',
+  'crc32',
+  'clean',
 ]);

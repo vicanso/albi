@@ -1,12 +1,12 @@
 {
-  "/css/global.css": 2193749319,
-  "/css/home.css": 1227325271,
-  "/css/main-header.css": 3948081057,
-  "/css/main-nav.css": 595923994,
-  "/css/pure.css": 259838965,
-  "/img/favicon.ico": 3375527646,
-  "/img/forkme.png": 3191153849,
-  "/jspm/bundles/bootstrap.js": 2119841773,
-  "/jspm/config.js": 207421358,
-  "/jspm/packages/system.js": 1711486672
+  "/bundle/app.js": "e34c5d73467afc7e1a37",
+  "/bundle/vendor.js": "e34c5d73467afc7e1a37",
+  "/css/global.css": "3010087764",
+  "/css/home.css": "1418467894",
+  "/css/login-register.css": "3194994627",
+  "/css/main-header.css": "3650180037",
+  "/css/main-nav.css": "595923994",
+  "/css/widget.css": "417345319",
+  "/img/favicon.ico": "3375527646",
+  "/img/forkme.png": "3191153849"
 }

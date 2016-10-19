@@ -19,9 +19,11 @@ module.exports = {
     ],
     app: './public/js/bootstrap.js',
   },
+  devtool: 'source-map',
   output: {
     path: __dirname + '/public/bundle',
-    filename: '[name].js',
+    filename: '[name].[hash].js',
+    sourceMapFilename: '[file].map',
   },
   module: {
     loaders: [
@@ -43,6 +45,11 @@ module.exports = {
       minChunks: Infinity,
       // (with more entries, this ensures that no other module
       //  goes into the vendor chunk)
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: {
+        except: ['$super', '$', 'exports', 'require']
+      }
     }),
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {
