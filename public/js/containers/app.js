@@ -12,6 +12,7 @@ import {
 import Login from './login';
 import Register from './register';
 import MainHeader from './main-header';
+import APIView from './api-view';
 
 import * as navigationAction from '../actions/navigation';
 import * as userAction from '../actions/user';
@@ -46,6 +47,12 @@ class App extends Component {
       e.preventDefault();
       dispatch(navigationAction.to(url));
     };
+  }
+  renderAPIView() {
+    return (
+      <APIView
+      />
+    );
   }
   renderLogin() {
     const { dispatch } = this.props;
@@ -89,6 +96,10 @@ class App extends Component {
           <Route
             path={VIEW_REGISTER}
             component={() => this.renderRegister()}
+          />
+          <Route
+            path="*"
+            component={() => this.renderAPIView()}
           />
         </Router>
       </div>

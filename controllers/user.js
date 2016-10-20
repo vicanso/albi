@@ -26,7 +26,7 @@ exports.logout = (ctx) => {
 exports.login = (ctx) => {
   const session = ctx.session;
   if (_.get(session, 'user.account')) {
-    throw errors.get('已经是登录状态，请先退出登录', 400);
+    throw errors.get('Already logged in, please sign out first', 400);
   }
   if (ctx.method === 'GET') {
     const user = {
@@ -41,7 +41,7 @@ exports.login = (ctx) => {
 
   const token = _.get(session, 'user.token');
   if (!token) {
-    throw errors.get('登录流程异常，token为空', 400);
+    throw errors.get('Login fail, token can not be null', 400);
   }
   const { account, password } = ctx.request.body;
   // 如果密码错误，是否需要刷新 token，但是 error 的时候，session 不会做保存
@@ -64,7 +64,7 @@ exports.login = (ctx) => {
       token: user.token,
       userAgent: ctx.get('User-Agent'),
       ip,
-    })
+    });
   }, (err) => {
     const newToken = uuid.v4();
     session.user.token = newToken;
@@ -84,14 +84,39 @@ exports.register = (ctx) => {
     email: Joi.string().email().required(),
   });
   if (_.get(ctx, 'session.user.account')) {
-    throw errors.get('已经是登录状态，请先退出登录', 400);
+    throw errors.get('Already logged in, please sign out first', 400);
   }
-  data.ip = ctx.ip;
+  const ip = ctx.ip;
+  data.ip = ip;
   return UserService.add(data).then((doc) => {
     const user = pickUserInfo(doc);
+    user.token = uuid.v4();
     /* eslint no-param-reassign:0 */
     ctx.session.user = user;
     /* eslint no-param-reassign:0 */
     ctx.body = user;
+    UserService.addLoginRecord({
+      account: user.account,
+      token: user.token,
+      userAgent: ctx.get('User-Agent'),
+      ip,
+    });
   });
 };
+
+exports.like = (ctx) => {
+  const {
+    version,
+    type,
+  } = ctx.versionConfig;
+  if (version < 3) {
+    ctx.set('Warning', 'Version 2 is deprecated.');
+  }
+  /* eslint no-param-reassign:0 */
+  ctx.body = {
+    count: 10,
+    version,
+    type,
+  };
+};
+

@@ -74,6 +74,7 @@
     "redux-logger": "^2.7.0",
     "redux-thunk": "^2.1.0",
     "require-tree": "^1.1.1",
+    "simple-stringify": "^1.0.0",
     "superagent": "^2.3.0",
     "url-join": "^1.1.0"
   },

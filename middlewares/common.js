@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const url = require('url');
 const checker = require('koa-query-checker');
+const stringify = require('simple-stringify');
 
 const errors = localRequire('helpers/errors');
 const influx = localRequire('helpers/influx');
@@ -73,4 +74,28 @@ exports.routeStats = (ctx, next) => {
       spdy: _.sortedIndex([30, 100, 300, 1000, 3000], use),
     });
   });
+};
+
+
+exports.tracker = (category, params) => {
+  return (ctx, next) => {
+    const data = {
+      category,
+      token: ctx.get('X-Token') || 'unknow',
+    };
+    _.forEach(params, (param) => {
+      const v = ctx.request.body[param] || ctx.query[param];
+      if (!_.isUndefined(v)) {
+        data[param] = v;
+      }
+    });
+    return next().then(() => {
+      data.result = 'success';
+      console.info(`user tracker ${stringify.json(data)}`);
+    }, (err) => {
+      data.result = 'fail';
+      console.info(`user tracker ${stringify.json(data)}`);
+      throw err;
+    });
+  };
 };

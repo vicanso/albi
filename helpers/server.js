@@ -25,6 +25,7 @@ module.exports = (port) => {
   } else {
     /* istanbul ignore next */
     koaLog.morgan.token('request-id', ctx => ctx.get('X-Request-Id') || 'unknown');
+    koaLog.morgan.token('token', ctx => ctx.get('X-Token') || 'unknown');
     app.use(koaLog(config.httpLogFormat));
   }
   // http stats

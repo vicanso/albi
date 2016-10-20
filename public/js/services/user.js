@@ -3,6 +3,7 @@ import * as crypto from '../helpers/crypto';
 import {
   USER_ME,
   USER_LOGIN,
+  USER_LIKE,
   USER_REGISTER,
   USER_LOGOUT,
 } from '../constants/urls';
@@ -39,3 +40,10 @@ export function logout() {
   return http.del(USER_LOGOUT)
     .then(res => res.body || { account: '' });
 }
+
+export function like(data, version = 3) {
+  return http.post(USER_LIKE)
+    .version(version)
+    .send(data)
+    .then(res => res.body);
+};

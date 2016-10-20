@@ -1,3 +1,8 @@
+const middlewares = localRequire('middlewares');
+const {
+  version,
+  tracker,
+} = middlewares.common;
 module.exports = [
   // system start
   '[GET] [/api/sys/version] [m.noQuery & c.system.version]',
@@ -14,6 +19,16 @@ module.exports = [
   '[DELETE] [/api/users/logout] [m.session & c.user.logout]',
   '[GET,POST] [/api/users/login] [m.noCache & m.session & c.user.login]',
   '[POST] [/api/users/register] [m.session & c.user.register]',
+  {
+    methods: ['POST'],
+    urls: ['/api/users/like'],
+    handlers: [
+      tracker('user-like', ['code']),
+      version([2, 3]),
+      'm.session.read',
+      'c.user.like',
+    ],
+  },
 
   // stats
   '[POST] [/api/stats/ajax] [c.stats.ajax]',

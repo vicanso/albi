@@ -9,6 +9,11 @@ import {
 } from '../constants/urls';
 import debug from './debug';
 
+request.Request.prototype.version = function (v) {
+  this.set('Accept', `application/vnd.app-name.v${v}+json`);
+  return this;
+};
+
 // request timeout(ms)
 export const timeout = 0;
 // plugin for superagent

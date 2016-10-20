@@ -37,7 +37,7 @@ addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
 addToRouter('m.session', middlewares.session.normal);
 addToRouter('m.session.read', middlewares.session.readonly);
-addToRouter('m.version', middlewares.common.version);
+// addToRouter('m.version', middlewares.common.version);
 addToRouter('m.cache-60', middlewares.common.cacheMaxAge(60));
 addToRouter('m.cache-300', middlewares.common.cacheMaxAge(300));
 addToRouter('m.cache-600', middlewares.common.cacheMaxAge(600));
