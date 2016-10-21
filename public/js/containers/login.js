@@ -49,7 +49,7 @@ class Login extends FormView {
         error = 'Password catn\'t be less than 6 character!';
       }
       if (account.length < 4) {
-        error = 'Password catn\'t be less than 4 character!';
+        error = 'Account catn\'t be less than 4 character!';
       }
     }
     if (error) {

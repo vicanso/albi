@@ -16,12 +16,13 @@ const defaultStates = {
 
 export default function user(state = defaultStates, action) {
   switch (action.type) {
-    case USER_INFO:
-      const user = action.user;
-      if (userToken !== user.token) {
-        userToken = user.token;
+    case USER_INFO: {
+      const data = action.user;
+      if (userToken !== data.token) {
+        userToken = data.token;
       }
-      return Object.assign({}, state, user);
+      return Object.assign({}, state, data);
+    }
     default:
       return state;
   }

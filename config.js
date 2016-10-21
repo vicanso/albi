@@ -35,7 +35,7 @@ exports.jspmPath = path.join(__dirname, 'jspm');
 // user track cookie
 exports.trackCookie = '_jt';
 /* eslint max-len:0 */
-exports.httpLogFormat = `:token :request-id :method :url :status :length ":referrer"`;
+exports.httpLogFormat = ':token :request-id :method :url :status :length ":referrer"';
 // http connection limit options
 exports.connectLimitOptions = {
   mid: 100,

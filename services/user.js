@@ -15,14 +15,14 @@ exports.add = (data) => {
     account: data.account
   }).then((exists) => {
     if (exists) {
-      throw errors.get('This account has been used', 400);
+      throw errors.get(104);
     }
     return isExists({
       email: data.email,
     });
   }).then((exists) => {
     if (exists) {
-      throw errors.get('This email has been used', 400);
+      throw errors.get(105);
     }    
     const userData = _.clone(data);
     const date = (new Date()).toISOString();
@@ -38,7 +38,7 @@ exports.get = (account, password, token) => {
   return User.findOne({
     account,
   }).then((doc) => {
-    const incorrectError = errors.get('ID/Password is incorrect', 400);
+    const incorrectError = errors.get(106);
     if (!doc) {
       throw incorrectError;
     }

@@ -1,5 +1,6 @@
 const url = require('url');
 const _ = require('lodash');
+const stringify = require('simple-stringify');
 
 const config = localRequire('config');
 const influx = localRequire('helpers/influx');
@@ -32,12 +33,8 @@ module.exports = (ctx, next) => next().then(_.noop, (err) => {
   }, {
     type: data.expected ? 'E' : 'U',
   });
-  _.forEach(data, (v, k) => {
-    if (_.isObject(v)) {
-      return;
-    }
-    logList.push(`${k}=${v}`);
-  });
+
+  logList.push(stringify.json(data));
 
   console.error(logList.join(' '));
 

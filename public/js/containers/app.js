@@ -49,8 +49,12 @@ class App extends Component {
     };
   }
   renderAPIView() {
+    const {
+      dispatch,
+    } = this.props;
     return (
       <APIView
+        dispatch={dispatch}
       />
     );
   }

@@ -11,7 +11,7 @@ exports.noQuery = () => (ctx, next) => {
   if (_.isEmpty(ctx.query)) {
     return next();
   }
-  throw errors.get('query string must be empty', 400);
+  throw errors.get(2);
 };
 
 exports.deprecate = hint => (ctx, next) => {
@@ -77,25 +77,23 @@ exports.routeStats = (ctx, next) => {
 };
 
 
-exports.tracker = (category, params) => {
-  return (ctx, next) => {
-    const data = {
-      category,
-      token: ctx.get('X-Token') || 'unknow',
-    };
-    _.forEach(params, (param) => {
-      const v = ctx.request.body[param] || ctx.query[param];
-      if (!_.isUndefined(v)) {
-        data[param] = v;
-      }
-    });
-    return next().then(() => {
-      data.result = 'success';
-      console.info(`user tracker ${stringify.json(data)}`);
-    }, (err) => {
-      data.result = 'fail';
-      console.info(`user tracker ${stringify.json(data)}`);
-      throw err;
-    });
+exports.tracker = (category, params) => (ctx, next) => {
+  const data = {
+    category,
+    token: ctx.get('X-Token') || 'unknow',
   };
+  _.forEach(params, (param) => {
+    const v = ctx.request.body[param] || ctx.params[param] || ctx.query[param];
+    if (!_.isUndefined(v)) {
+      data[param] = v;
+    }
+  });
+  return next().then(() => {
+    data.result = 'success';
+    console.info(`user tracker ${stringify.json(data)}`);
+  }, (err) => {
+    data.result = 'fail';
+    console.info(`user tracker ${stringify.json(data)}`);
+    throw err;
+  });
 };

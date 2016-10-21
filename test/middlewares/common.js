@@ -30,7 +30,7 @@ describe('middleware/common', () => {
             return done(err);
           }
           assert.equal(res.status, 400);
-          assert.equal(res.text, 'query string must be empty');
+          assert.equal(res.text, 'Query string must be empty');
           finished();
         });
 

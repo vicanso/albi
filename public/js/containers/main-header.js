@@ -79,7 +79,7 @@ class MainHeader extends Component {
         action: 'logout',
       },
       {
-        name: `Token`,
+        name: 'Token',
         action: 'showToken',
       },
     ];

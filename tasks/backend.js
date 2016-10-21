@@ -1,6 +1,6 @@
 const fs = require('fs');
 const _ = require('lodash');
-const MicroService = require('micro-service');
+const EtcdRegister = require('etcd-register');
 
 const config = localRequire('config');
 
@@ -36,7 +36,7 @@ module.exports = (interval) => {
   if (!config.etcd) {
     return;
   }
-  const client = new MicroService(config.etcd, {
+  const client = new EtcdRegister(config.etcd, {
     key: 'backend',
   });
   const data = {

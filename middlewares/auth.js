@@ -9,5 +9,5 @@ exports.admin = adminToken => (ctx, next) => {
   if (token && shasum.update(token).digest('hex') === adminToken) {
     return next();
   }
-  throw errors.get('token is invalid', 403);
+  throw errors.get(1);
 };

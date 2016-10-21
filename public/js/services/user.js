@@ -46,4 +46,4 @@ export function like(data, version = 3) {
     .version(version)
     .send(data)
     .then(res => res.body);
-};
+}

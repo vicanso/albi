@@ -9,8 +9,9 @@ import {
 } from '../constants/urls';
 import debug from './debug';
 
-request.Request.prototype.version = function (v) {
-  this.set('Accept', `application/vnd.app-name.v${v}+json`);
+const APP_NAME = globals.get('CONFIG.app');
+request.Request.prototype.version = function version(v) {
+  this.set('Accept', `application/vnd.${APP_NAME}.v${v}+json`);
   return this;
 };
 

@@ -7,7 +7,7 @@ describe('errors', () => {
   it('get custom error', () => {
     const errors = localRequire('helpers/errors');
     const err = errors.get('MY ERROR', 401);
-    assert.equal(err.code, 401);
+    assert.equal(err.status, 401);
     assert.equal(err.message, 'MY ERROR');
     assert(err.expected);
   });
@@ -17,7 +17,7 @@ describe('errors', () => {
     const err = errors.get('ERROR', {
       account: 'vicanso'
     });
-    assert.equal(err.code, 500);
+    assert.equal(err.status, 500);
     assert.equal(err.message, 'ERROR');
     assert(err.expected);
     assert.equal(err.account, 'vicanso');

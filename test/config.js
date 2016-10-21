@@ -30,7 +30,11 @@ describe('config', () => {
       adminToken: Joi.string().required(),
       etcd: Joi.string(),
       IP: Joi.string().ip(),
-      sessionKey: Joi.string().required(),
+      session: Joi.object().keys({
+        key: Joi.string().required(),
+        ttl: Joi.number().integer().required(),
+        maxAge: Joi.number().integer().required(),
+      }),
       mongoUri: Joi.string(),
       redisUri: Joi.string(),
     });

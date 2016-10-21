@@ -20,7 +20,8 @@ describe('joi', () => {
         name: Joi.string().required()
       });
     }).catch(err => {
-      assert.equal(err.code, 400);
+      assert.equal(err.status, 400);
+      assert.equal(err.code, -1);
       assert.equal(err.expected, true);
       done();
     });
