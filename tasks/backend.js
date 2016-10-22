@@ -1,6 +1,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 const EtcdRegister = require('etcd-register');
+const stringify = require('simple-stringify');
 
 const config = localRequire('config');
 
@@ -53,8 +54,9 @@ module.exports = (interval) => {
   client.set(data);
   client.addTag('backend:http', `app:${config.app}`, 'ping:http');
   client.ttl(600);
+  console.info(`register backend to etcd, config:${stringify.json(data)}`);
   client.register().then((res) => {
-    console.info(`register backend etcd config success, data:${JSON.stringify(res)}`);
+    console.info('register backend etcd config success');
     setTimeout(() => {
       refresh(client, interval);
     }, interval).unref();

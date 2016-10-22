@@ -1,7 +1,7 @@
 {
   "name": "albi",
   "description": "backend framework base on koa",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "author": "Tree Xie <vicansocanbico@gmail.com>",
   "repository": {
     "type": "git",
