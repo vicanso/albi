@@ -9,8 +9,8 @@ describe('middleware/ping', () => {
     const ping = localRequire('middlewares/ping');
     const globals = localRequire('helpers/globals');
     const app = new Koa();
-    const server = app.listen();
     app.use(ping('/ping'));
+    const server = app.listen();
 
     request(server)
       .get('/ping')
@@ -38,9 +38,9 @@ describe('middleware/ping', () => {
     const ping = localRequire('middlewares/ping');
     const globals = localRequire('helpers/globals');
     const app = new Koa();
-    const server = app.listen();
     app.use(ping('/ping'));
     app.use(ctx => ctx.body = null);
+    const server = app.listen();
 
     request(server)
       .get('/')

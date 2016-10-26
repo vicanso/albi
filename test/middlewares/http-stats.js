@@ -9,7 +9,6 @@ describe('middleware/http-stats', () => {
     const app = new Koa();
     const stats = localRequire('middlewares/http-stats');
     const globals = localRequire('helpers/globals');
-    const server = app.listen();
 
     app.use(stats());
 
@@ -25,6 +24,7 @@ describe('middleware/http-stats', () => {
         ctx.body = 'OK';
       }
     });
+    const server = app.listen();
 
     request(server)
       .get('/wait')

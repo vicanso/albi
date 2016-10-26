@@ -44,7 +44,6 @@ exports.login = (ctx) => {
     throw errors.get(102);
   }
   const { account, password } = ctx.request.body;
-  // 如果密码错误，是否需要刷新 token，但是 error 的时候，session 不会做保存
   return UserService.get(account, password, token).then((doc) => {
     const user = pickUserInfo(doc);
     const ip = ctx.ip;
@@ -66,15 +65,6 @@ exports.login = (ctx) => {
       userAgent: ctx.get('User-Agent'),
       ip,
     });
-  }, (err) => {
-    const newToken = uuid.v4();
-    session.user.token = newToken;
-    ctx.status = err.status;
-    ctx.body = {
-      token: newToken,
-      message: err.message,
-      expected: err.expected || false,
-    };
   });
 };
 

@@ -7,10 +7,13 @@ const influx = localRequire('helpers/influx');
 
 module.exports = (ctx, next) => next().then(_.noop, (err) => {
   const urlInfo = url.parse(ctx.url);
+  const token = ctx.get('X-Token') || 'unknown';
   ctx.set('Cache-Control', 'no-cache, max-age=0');
+  const code = err.code || -1;
   const data = {
     url: ctx.url,
-    code: err.code || 0,
+    code,
+    token,
     message: err.message,
     expected: false,
   };
@@ -28,7 +31,7 @@ module.exports = (ctx, next) => next().then(_.noop, (err) => {
     logList.push('[H-U]');
   }
   influx.write('excetion', {
-    code: data.code,
+    code,
     path: urlInfo.pathname,
   }, {
     type: data.expected ? 'E' : 'U',

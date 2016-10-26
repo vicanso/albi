@@ -5,10 +5,12 @@ module.exports = () => {
   const renameList = {
     DEBUG: '_debug',
     MOCK: '_mock',
+    STATUS: '_status',
   };
   let schema = Joi.object().keys({
     DEBUG: Joi.boolean(),
     MOCK: Joi.object(),
+    STATUS: Joi.number().integer(),
   });
 
   _.forEach(renameList, (v, k) => {
@@ -20,6 +22,13 @@ module.exports = () => {
     const result = Joi.validateThrow(query, schema, {
       stripUnknown: true,
     });
+    if (result.MOCK) {
+      if (result.STATUS) {
+        ctx.status = result.STATUS;
+      }
+      ctx.body = result.MOCK;
+      return null;
+    }
     if (!_.isEmpty(result)) {
       _.forEach(result, (v, k) => {
         delete query[renameList[k]];

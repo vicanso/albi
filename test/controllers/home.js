@@ -7,8 +7,8 @@ const assert = require('assert');
 describe('controllers/home', () => {
   it('home controller', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(localRequire('controllers/home'));
+    const server = app.listen();
     request(server)
       .get('/')
       .end((err, res) => {

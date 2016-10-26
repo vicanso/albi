@@ -7,10 +7,9 @@ const assert = require('assert');
 describe('controllers/stats', () => {
   it('ajax', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(require('koa-bodyparser')());
     app.use(localRequire('controllers/stats').ajax);
-
+    const server = app.listen();
     request(server)
       .post('/')
       .send([
@@ -24,10 +23,9 @@ describe('controllers/stats', () => {
 
   it('exception', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(require('koa-bodyparser')());
     app.use(localRequire('controllers/stats').exception);
-
+    const server = app.listen();
     request(server)
       .post('/')
       .send([
@@ -41,10 +39,9 @@ describe('controllers/stats', () => {
 
   it('statistics', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(require('koa-bodyparser')());
     app.use(localRequire('controllers/stats').statistics);
-
+    const server = app.listen();
     request(server)
       .post('/')
       .send({

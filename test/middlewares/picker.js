@@ -10,7 +10,6 @@ describe('middleware/picker', () => {
   it('should pick fields successful', done => {
     const app = new Koa();
     const picker = localRequire('middlewares/picker');
-    const server = app.listen();
     let finishedCount = 0;
     app.use(picker('_fields'));
 
@@ -36,6 +35,7 @@ describe('middleware/picker', () => {
         };
       }
     });
+    const server = app.listen();
 
     request(server)
       .get('/array?_fields=name,age')
@@ -80,7 +80,6 @@ describe('middleware/picker', () => {
   it('should omit fields successful', done => {
     const app = new Koa();
     const picker = localRequire('middlewares/picker');
-    const server = app.listen();
     app.use(picker('_fields'));
 
     app.use(ctx => {
@@ -102,6 +101,7 @@ describe('middleware/picker', () => {
         };
       }
     });
+    const server = app.listen();
 
     request(server)
       .get('/array?_fields=-address')

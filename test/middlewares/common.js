@@ -9,7 +9,6 @@ describe('middleware/common', () => {
   describe('no-query', () => {
     it('check no query', done => {
       const app = new Koa();
-      const server = app.listen();
       let total = 0;
       const finished = () => {
         total++;
@@ -22,6 +21,7 @@ describe('middleware/common', () => {
       app.use(ctx => {
         ctx.body = 'OK';
       });
+      const server = app.listen();
 
       request(server)
         .get('/?name=test')
@@ -50,12 +50,12 @@ describe('middleware/common', () => {
   describe('deprecate', () => {
     it('add deprecate header', done => {
       const app = new Koa();
-      const server = app.listen();
       const hint = 'This rest api will be deprecate because of security(2016-10-01). Please use xxx instead.'
       app.use(commonMiddleware.deprecate(hint));
       app.use(ctx => {
         ctx.body = 'OK';
       });
+      const server = app.listen();
       request(server)
         .get('/?a=1')
         .end((err, res) => {
@@ -78,11 +78,11 @@ describe('middleware/common', () => {
         }
       };
       const app = new Koa();
-      const server = app.listen();
       app.use(commonMiddleware.noCache());
       app.use(ctx => {
         ctx.body = 'OK';
       });
+      const server = app.listen();
 
       request(server)
         .post('/')
@@ -120,7 +120,6 @@ describe('middleware/common', () => {
   describe('verion', () => {
     it('valid version', done => {
       const app = new Koa();
-      const server = app.listen();
       app.use((ctx, next) => {
         ctx.versionConfig = {
           version: 1,
@@ -132,6 +131,7 @@ describe('middleware/common', () => {
       app.use(ctx => {
         ctx.body = null;
       });
+      const server = app.listen();
       request(server)
         .get('/')
         .expect(204, done);
@@ -139,7 +139,6 @@ describe('middleware/common', () => {
 
     it('invalid version', done => {
       const app = new Koa();
-      const server = app.listen();
       app.use((ctx, next) => {
         ctx.versionConfig = {
           version: 2,
@@ -151,6 +150,7 @@ describe('middleware/common', () => {
       app.use(ctx => {
         ctx.body = null;
       });
+      const server = app.listen();
       request(server)
         .get('/')
         .expect(406, done);
@@ -158,7 +158,6 @@ describe('middleware/common', () => {
 
     it('invalid type', done => {
       const app = new Koa();
-      const server = app.listen();
       app.use((ctx, next) => {
         ctx.versionConfig = {
           version: 2,
@@ -170,6 +169,7 @@ describe('middleware/common', () => {
       app.use(ctx => {
         ctx.body = null;
       });
+      const server = app.listen();
       request(server)
         .get('/')
         .expect(406, done);
@@ -179,11 +179,11 @@ describe('middleware/common', () => {
   describe('max-age', () => {
     it('set max age', done => {
       const app = new Koa();
-      const server = app.listen();
       app.use(commonMiddleware.cacheMaxAge(600));
       app.use(ctx => {
         ctx.body = null;
       });
+      const server = app.listen();
 
       request(server)
         .get('/')
@@ -201,7 +201,6 @@ describe('middleware/common', () => {
   describe('route stats', () => {
     it('get stats', done => {
       const app = new Koa();
-      const server = app.listen();
       app.use(commonMiddleware.routeStats);
       app.use(ctx => {
         ctx.matched = [
@@ -212,6 +211,7 @@ describe('middleware/common', () => {
         ];
         ctx.body = null;
       });
+      const server = app.listen();
 
       request(server)
         .get('/')

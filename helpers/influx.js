@@ -5,14 +5,7 @@ const config = localRequire('config');
 const utils = localRequire('helpers/utils');
 const debug = localRequire('helpers/debug');
 
-const getClient = (url) => {
-  const client = new Influx(url);
-  client.createDatabase().then(() => {
-    console.info('create influxdb database success');
-  }).catch(err => console.error(`create influxdb database fail, err:${err.message}`));
-  return client;
-};
-const client = config.influx ? getClient(config.influx) : null;
+const client = config.influx ? new Influx(config.influx) : null;
 
 exports.client = client;
 

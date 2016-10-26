@@ -8,7 +8,6 @@ const assert = require('assert');
 describe('middleware/limit', () => {
   it('should set limit middleware success', done => {
     const app = new Koa();
-    const server = app.listen();
     const limit = localRequire('middlewares/limit');
     const globals = localRequire('helpers/globals');
     const info = console.info;
@@ -31,6 +30,7 @@ describe('middleware/limit', () => {
       }
     });
 
+    const server = app.listen();
 
     request(server)
       .get('/wait')

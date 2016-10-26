@@ -21,7 +21,7 @@ describe('joi', () => {
       });
     }).catch(err => {
       assert.equal(err.status, 400);
-      assert.equal(err.code, -1);
+      assert.equal(err.code, 99999);
       assert.equal(err.expected, true);
       done();
     });

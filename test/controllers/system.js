@@ -11,8 +11,8 @@ describe('controllers/system', () => {
   const systemCtrls = localRequire('controllers/system');
   it('version', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(systemCtrls.version);
+    const server = app.listen();
     request(server)
       .get('/')
       .end((err, res) => {
@@ -27,8 +27,8 @@ describe('controllers/system', () => {
 
   it('pause', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(systemCtrls.pause);
+    const server = app.listen();
     request(server)
       .get('/')
       .end((err, res) => {
@@ -43,8 +43,8 @@ describe('controllers/system', () => {
 
   it('resume', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(systemCtrls.resume);
+    const server = app.listen();
     request(server)
       .get('/')
       .end((err, res) => {
@@ -59,8 +59,8 @@ describe('controllers/system', () => {
 
   it('stats', done => {
     const app = new Koa();
-    const server = app.listen();
     app.use(systemCtrls.stats);
+    const server = app.listen();
     request(server)
       .get('/')
       .end((err, res) => {

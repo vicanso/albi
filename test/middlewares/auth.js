@@ -9,7 +9,6 @@ describe('middleware/auth', () => {
   const authMiddleware = localRequire('middlewares/auth');
   it('admin', done => {
     const app = new Koa();
-    const server = app.listen();
     const token = 'jenny';
     const sha1Token = crypto.createHash('sha1').update(token).digest('hex');
     app.use(require('koa-bodyparser')());
@@ -17,6 +16,7 @@ describe('middleware/auth', () => {
     app.use(ctx => {
       ctx.body = null;
     });
+    const server = app.listen();
 
     request(server)
       .post('/')

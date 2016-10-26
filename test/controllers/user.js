@@ -14,7 +14,6 @@ describe('controllers/user', () => {
   const session = localRequire('middlewares/session');
   const userCtrls = localRequire('controllers/user');
   const app = new Koa();
-  const server = app.listen();
   const account = uuid.v4();
   const password = uuid.v4();
   const email = `${uuid.v4()}@gmail.com`;
@@ -50,7 +49,7 @@ describe('controllers/user', () => {
     }
     return next();
   });
-
+  const server = app.listen();
 
   let cookie = '';
   it('delay', done => {

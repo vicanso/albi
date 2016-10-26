@@ -17,7 +17,6 @@ describe('middleware/entry', () => {
 
     const app = new Koa();
     const entry = localRequire('middlewares/entry');
-    const server = app.listen();
     app.use(entry('/albi', 'ALBI'));
 
     app.use(ctx => {
@@ -27,6 +26,7 @@ describe('middleware/entry', () => {
         throw new Error('error');
       }
     });
+    const server = app.listen();
 
     request(server)
       .get('/albi')
