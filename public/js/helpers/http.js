@@ -25,12 +25,21 @@ export function use(fn) {
   }
 }
 
+function sortQuery(query) {
+  const keys = _.keys(query).sort();
+  const result = {};
+  _.forEach(keys, (k) => {
+    result[k] = query[k];
+  });
+  return result;
+}
+
 function defaultHandle(req, query) {
   if (timeout) {
     req.timeout(timeout);
   }
   if (query) {
-    req.query(query);
+    req.query(sortQuery(query));
   }
   _.forEach(plugins, plugin => req.use(plugin));
   return req;
