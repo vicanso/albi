@@ -4,6 +4,11 @@ const assert = require('assert');
 const influx = localRequire('helpers/influx');
 
 describe('influx', () => {
+  it('create database', done => {
+    influx.client.createDatabase().then(() => done())
+      .catch(() => done());
+  });
+
   it('write data to influxdb, sync now', done => {
     influx.write('http', {
       use: 50,

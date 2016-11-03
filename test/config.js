@@ -8,6 +8,7 @@ describe('config', () => {
     const data = Joi.validate(config, {
       version: Joi.string().required(),
       env: Joi.string().required(),
+      name: Joi.string().required(),
       port: Joi.number().integer().required(),
       app: Joi.string().required(),
       influx: Joi.string(),
