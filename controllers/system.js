@@ -1,6 +1,7 @@
 const BlueBird = require('bluebird');
 const path = require('path');
 const moment = require('moment');
+const _ = require('lodash');
 
 const fs = BlueBird.promisifyAll(require('fs'));
 
@@ -53,4 +54,17 @@ exports.restart = (ctx) => {
   utils.checkToExit(3);
   console.info('application will restart soon');
   ctx.body = null;
+};
+
+exports.level = (ctx) => {
+  const method = ctx.method.toUpperCase();
+  if (method === 'POST') {
+    const level = _.get(ctx, 'request.body.level');
+    if (level) {
+      globals.set('level', level);
+    }
+    ctx.body = null;
+    return;
+  }
+  ctx.body = globals.get('level');
 };

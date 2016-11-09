@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const globals = {
+  level: 100,
   // running, pause
   status: 'running',
   // handling request count

@@ -3,6 +3,7 @@ const {
   version,
   tracker,
 } = middlewares.common;
+const level = middlewares.level;
 module.exports = [
   // system start
   '[GET] [/api/sys/version] [m.noQuery & c.system.version]',
@@ -10,7 +11,8 @@ module.exports = [
   '[POST] [/api/sys/resume] [m.auth.admin & c.system.resume]',
   '[GET] [/api/sys/stats] [m.noQuery & c.system.stats]',
   '[POST] [/api/sys/restart] [m.auth.admin & c.system.restart]',
-
+  '[POST] [/api/sys/level] [m.auth.admin & c.system.level]',
+  '[GET] [/api/sys/level] [c.system.level]',
   // page view
   '[GET] [/,/login,/register] [v.home & c.home]',
 
@@ -23,6 +25,7 @@ module.exports = [
     methods: ['POST'],
     urls: ['/api/users/like'],
     handlers: [
+      level(5),
       tracker('user-like', ['code']),
       version([2, 3]),
       'm.session.read',

@@ -6,5 +6,9 @@ module.exports = {
   2: {
     en: 'Query string must be empty',
     status: 400,
-  }
+  },
+  3: {
+    en: 'System is in level #{systemLevel} below #{level}',
+    status: 500,
+  },
 };

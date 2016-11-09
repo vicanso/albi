@@ -62,9 +62,9 @@ class Form extends Component {
     const submitOptions = {
       value: this.getSubmitText(),
       cls: {
-        btn: true,
-        'btn-primary': true,
-        'btn-block': true,
+        'pure-button': true,
+        'pure-button-primary': true,
+        'pure-button-block': true,
         disabled: status === 'submitting',
       },
     };
@@ -100,12 +100,11 @@ class Form extends Component {
         <fieldset>
           {fieldsList}
           <div className="pure-control-group">
-            <input
+            <button
               type="submit"
               className={classnames(submitOptions.cls)}
-              value={submitOptions.value}
               tabIndex={fieldsList.length + 1}
-            />
+            >{submitOptions.value}</button>
           </div>
         </fieldset>
       </form>

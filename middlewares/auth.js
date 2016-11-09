@@ -3,6 +3,7 @@ const _ = require('lodash');
 
 const errors = localRequire('helpers/errors');
 
+// token is 'jenny'
 exports.admin = adminToken => (ctx, next) => {
   const shasum = crypto.createHash('sha1');
   const token = _.get(ctx, 'request.body.token');
