@@ -20,7 +20,7 @@ export function add(account, password, email) {
     account,
     password: code,
     email,
-  }).then(res => res.body);
+  }).set('Cache-Control', 'no-cache').then(res => res.body);
 }
 
 export function login(account, password) {
@@ -32,12 +32,13 @@ export function login(account, password) {
       return http.post(USER_LOGIN, {
         account,
         password: code,
-      });
+      }).set('Cache-Control', 'no-cache');
     }).then(res => res.body);
 }
 
 export function logout() {
   return http.del(USER_LOGOUT)
+    .set('Cache-Control', 'no-cache')
     .then(res => res.body || { account: '' });
 }
 

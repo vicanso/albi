@@ -2,6 +2,7 @@ const session = require('koa-simple-session');
 const RedisStore = require('koa-simple-redis');
 const _ = require('lodash');
 
+const errors = localRequire('helpers/errors');
 const config = localRequire('config');
 
 const sessionMiddleware = session({
@@ -18,7 +19,7 @@ const sessionMiddleware = session({
   },
 });
 
-const normal = exports.normal = (ctx, next) => {
+const normal = (ctx, next) => {
   const startAt = process.hrtime();
   return sessionMiddleware(ctx, () => {
     const diff = process.hrtime(startAt);
@@ -27,6 +28,13 @@ const normal = exports.normal = (ctx, next) => {
     console.info(`get session user:${account} use:${time.toFixed(2)}ms`);
     return next();
   });
+};
+
+exports.writable = (ctx, next) => {
+  if (ctx.get('Cache-Control') !== 'no-cache' && ctx.query.cache !== 'false') {
+    throw errors.get(4);
+  }
+  return normal(ctx, next);
 };
 
 exports.readonly = (ctx, next) => normal(ctx, () => {

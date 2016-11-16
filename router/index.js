@@ -35,7 +35,7 @@ addToRouter('c', localRequire('controllers'));
 addToRouter('m.noQuery', middlewares.common.noQuery());
 addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
-addToRouter('m.session', middlewares.session.normal);
+addToRouter('m.session', middlewares.session.writable);
 addToRouter('m.session.read', middlewares.session.readonly);
 // addToRouter('m.version', middlewares.common.version);
 addToRouter('m.cache-60', middlewares.common.cacheMaxAge(60));

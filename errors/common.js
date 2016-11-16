@@ -11,4 +11,8 @@ module.exports = {
     en: 'System is in level #{systemLevel} below #{level}',
     status: 500,
   },
+  4: {
+    en: 'Request should be set no-cache',
+    status: 406,
+  },
 };

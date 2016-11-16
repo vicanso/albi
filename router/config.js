@@ -19,7 +19,7 @@ module.exports = [
   // user
   '[GET] [/api/users/me] [m.noCache & m.session.read & c.user.me]',
   '[DELETE] [/api/users/logout] [m.session & c.user.logout]',
-  '[GET,POST] [/api/users/login] [m.noCache & m.session & c.user.login]',
+  '[GET,POST] [/api/users/login] [m.session & c.user.login]',
   '[POST] [/api/users/register] [m.session & c.user.register]',
   {
     methods: ['POST'],
