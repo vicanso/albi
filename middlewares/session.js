@@ -20,6 +20,9 @@ const sessionMiddleware = session({
 });
 
 const normal = (ctx, next) => {
+  if (ctx.get('Cache-Control') !== 'no-cache' && ctx.query.cache !== 'false') {
+    throw errors.get(4);
+  }
   const startAt = process.hrtime();
   return sessionMiddleware(ctx, () => {
     const diff = process.hrtime(startAt);
@@ -30,12 +33,7 @@ const normal = (ctx, next) => {
   });
 };
 
-exports.writable = (ctx, next) => {
-  if (ctx.get('Cache-Control') !== 'no-cache' && ctx.query.cache !== 'false') {
-    throw errors.get(4);
-  }
-  return normal(ctx, next);
-};
+exports.writable = normal;
 
 exports.readonly = (ctx, next) => normal(ctx, () => {
   Object.freeze(ctx.session);
