@@ -29,7 +29,7 @@
     "test": "npm run eslint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb MONGO=mongodb://127.0.0.1/albi REDIS=redis://127.0.0.1:6379 npm run coverage",
     "install-all": "npm i && node node_modules/.bin/jspm install",
     "build": "NODE_ENV=production node ./node_modules/.bin/gulp",
-    "watch": "node node_modules/.bin/webpack --progress --colors --watch -d",
+    "watch": "node node_modules/.bin/webpack --progress --colors --watch",
     "start": "node app",
     "dev": "MONGO=mongodb://127.0.0.1/albi nodemon app"
   },
