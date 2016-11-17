@@ -31,3 +31,13 @@ exports.checkToExit = (times, checkInterval = 10 * 1000) => {
   }, checkInterval).unref();
   return timer;
 };
+
+exports.randomToken = (length = 6) => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+  const charsCount = chars.length;
+  const arr = [];
+  for (let i = 0; i < length; i += 1) {
+    arr.push(chars[_.random(0, charsCount)]);
+  }
+  return arr.join('');
+};

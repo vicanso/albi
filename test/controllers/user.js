@@ -26,7 +26,7 @@ describe('controllers/user', () => {
 
   app.use((ctx, next) => {
     if (ctx.url === registerUrl || ctx.url === logoutUrl || ctx.url === loginUrl) {
-      return session.normal(ctx, next);
+      return session.writable(ctx, next);
     }
     if (ctx.url === meUrl) {
       return session.readonly(ctx, next);
@@ -59,6 +59,7 @@ describe('controllers/user', () => {
   it('register', done => {
     request(server)
       .post(registerUrl)
+      .set('Cache-Control', 'no-cache')
       .send({
         account,
         password,
@@ -79,6 +80,7 @@ describe('controllers/user', () => {
   it('register exists account', done => {
     request(server)
       .post(registerUrl)
+      .set('Cache-Control', 'no-cache')
       .send({
         account,
         password,
@@ -121,6 +123,7 @@ describe('controllers/user', () => {
   it('logout', done => {
     request(server)
       .del(logoutUrl)
+      .set('Cache-Control', 'no-cache')
       .end((err, res) => {
         if (err) {
           return done(err);
@@ -144,6 +147,7 @@ describe('controllers/user', () => {
         assert(token);
         request(server)
           .post(loginUrl)
+          .set('Cache-Control', 'no-cache')
           .set('cookie', cookie)
           .send({
             account,
@@ -174,6 +178,7 @@ describe('controllers/user', () => {
   it('register when is logined', done => {
     request(server)
       .post(registerUrl)
+      .set('Cache-Control', 'no-cache')
       .set('cookie', cookie)
       .send({
         account,
@@ -191,6 +196,7 @@ describe('controllers/user', () => {
   it('login without token', done => {
     request(server)
       .post(loginUrl)
+      .set('Cache-Control', 'no-cache')
       .send({
         account,
         password,
@@ -217,6 +223,7 @@ describe('controllers/user', () => {
         assert(token);
         request(server)
           .post(loginUrl)
+          .set('Cache-Control', 'no-cache')
           .set('cookie', cookie)
           .send({
             account: uuid.v4(),
@@ -245,6 +252,7 @@ describe('controllers/user', () => {
         assert(token);
         request(server)
           .post(loginUrl)
+          .set('Cache-Control', 'no-cache')
           .set('cookie', cookie)
           .send({
             account,

@@ -2,7 +2,7 @@ const _ = require('lodash');
 const stringify = require('simple-stringify');
 
 exports.ajax = (ctx) => {
-  const token = ctx.get('X-Token');
+  const token = ctx.get('X-User-Token');
   _.forEach(ctx.request.body, (item) => {
     console.info(`browser-ajax ${token} ${stringify.json(item)}`);
   });
@@ -11,7 +11,7 @@ exports.ajax = (ctx) => {
 };
 
 exports.exception = (ctx) => {
-  const token = ctx.get('X-Token');
+  const token = ctx.get('X-User-Token');
   _.forEach(ctx.request.body, (item) => {
     console.error(`browser-exception ${token} ${stringify.json(item)}`);
   });

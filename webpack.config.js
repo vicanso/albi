@@ -7,7 +7,6 @@ module.exports = {
       'classnames',
       'lodash',
       'debug',
-      'node-uuid',
       'react',
       'react-dom',
       'react-enroute',

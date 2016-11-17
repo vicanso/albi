@@ -1,6 +1,5 @@
 import * as request from 'superagent';
 import * as _ from 'lodash';
-import * as uuid from 'node-uuid';
 
 import * as globals from './globals';
 import {
@@ -23,6 +22,17 @@ export function use(fn) {
   if (_.indexOf(plugins, fn) === -1) {
     plugins.push(fn);
   }
+}
+
+
+function randomToken(length = 8) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+  const charsCount = chars.length;
+  const arr = [];
+  for (let i = 0; i < length; i += 1) {
+    arr.push(chars[_.random(0, charsCount)]);
+  }
+  return arr.join('');
 }
 
 function sortQuery(query) {
@@ -173,7 +183,7 @@ if (appUrlPrefix) {
 use((req) => {
   req.set({
     'X-Requested-With': 'XMLHttpRequest',
-    'X-Request-Id': uuid.v4(),
+    'X-Request-Id': randomToken(),
     'X-Requested-At': Date.now(),
   });
   if (!req.get('Accept')) {

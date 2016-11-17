@@ -7,7 +7,7 @@ const influx = localRequire('helpers/influx');
 
 module.exports = (ctx, next) => next().then(_.noop, (err) => {
   const urlInfo = url.parse(ctx.url);
-  const token = ctx.get('X-Token') || 'unknown';
+  const token = ctx.get('X-User-Token') || 'unknown';
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   const code = err.code || -1;
   const data = {

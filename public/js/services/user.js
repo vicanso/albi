@@ -45,6 +45,7 @@ export function logout() {
 export function like(data, version = 3) {
   return http.post(USER_LIKE)
     .version(version)
+    .set('Cache-Control', 'no-cache')
     .send(data)
     .then(res => res.body);
 }

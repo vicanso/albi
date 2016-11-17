@@ -80,7 +80,7 @@ exports.routeStats = (ctx, next) => {
 exports.tracker = (category, params) => (ctx, next) => {
   const data = {
     category,
-    token: ctx.get('X-Token') || 'unknown',
+    token: ctx.get('X-User-Token') || 'unknown',
   };
   _.forEach(params, (param) => {
     const v = ctx.request.body[param] || ctx.params[param] || ctx.query[param];

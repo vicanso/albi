@@ -7,7 +7,7 @@ let userToken = '';
 // add user token for http request
 http.use((req) => {
   if (userToken) {
-    req.set('X-Token', userToken);
+    req.set('X-User-Token', userToken);
   }
 });
 

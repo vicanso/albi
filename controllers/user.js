@@ -1,9 +1,11 @@
-const uuid = require('node-uuid');
 const Joi = require('joi');
 const _ = require('lodash');
 
 const errors = localRequire('helpers/errors');
 const UserService = localRequire('services/user');
+const {
+  randomToken,
+} = localRequire('helpers/utils');
 
 const pickUserInfo = (data) => {
   const keys = 'account lastLoginedAt loginCount'.split(' ');
@@ -30,7 +32,7 @@ exports.login = (ctx) => {
   }
   if (ctx.method === 'GET') {
     const user = {
-      token: uuid.v4(),
+      token: randomToken(),
     };
     session.user = user;
     ctx.set('Cache-Control', 'no-store');
@@ -47,7 +49,7 @@ exports.login = (ctx) => {
   return UserService.get(account, password, token).then((doc) => {
     const user = pickUserInfo(doc);
     const ip = ctx.ip;
-    user.token = uuid.v4();
+    user.token = randomToken();
     user.loginCount += 1;
     /* eslint no-param-reassign:0 */
     ctx.session.user = user;
@@ -81,7 +83,7 @@ exports.register = (ctx) => {
   data.ip = ip;
   return UserService.add(data).then((doc) => {
     const user = pickUserInfo(doc);
-    user.token = uuid.v4();
+    user.token = randomToken();
     /* eslint no-param-reassign:0 */
     ctx.session.user = user;
     /* eslint no-param-reassign:0 */
