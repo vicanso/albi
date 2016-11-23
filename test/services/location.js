@@ -14,7 +14,8 @@ describe('services/location', () => {
     }).catch(done);
   });
 
-  it('get location by mobile', done => {
+  it('get location by mobile', function(done) {
+    this.timeout(10 * 1000);
     location.byMobile('13800138000').then(data => {
       assert.equal(data.province, '北京');
       assert.equal(data.city, '北京');
