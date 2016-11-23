@@ -1,7 +1,8 @@
-function beforeValidate(next) {
-  console.info(`${this.account} before validate`);
-  next();
-}
+const {
+  createValidateHook,
+  createUpdateHook,
+} = localRequire('helpers/hooks');
+
 
 function afterValidate(doc) {
   console.info(`${doc.account} after validate`);
@@ -30,6 +31,10 @@ module.exports = {
       type: String,
       required: true,
     },
+    updatedAt: {
+      type: String,
+      required: true,
+    },
     lastLoginedAt: {
       type: String,
       required: true,
@@ -50,7 +55,15 @@ module.exports = {
   ],
   pre: {
     validate: [
-      beforeValidate,
+      createValidateHook({
+        createdAt: 'date',
+        updatedAt: 'date',
+      }),
+    ],
+    findOneAndUpdate: [
+      createUpdateHook({
+        updatedAt: 'date',
+      }),
     ],
   },
   post: {

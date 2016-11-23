@@ -25,8 +25,7 @@ exports.add = (data) => {
       throw errors.get(105);
     }    
     const userData = _.clone(data);
-    const date = (new Date()).toISOString();
-    userData.createdAt = date;
+    const date = new Date().toISOString();
     userData.lastLoginedAt = date;
     userData.loginCount = 1;
     return (new User(userData)).save().then(doc => doc.toJSON());
@@ -52,7 +51,7 @@ exports.get = (account, password, token) => {
 
 exports.update = (id, data) => {
   const User = Models.get('User');
-  return User.findByIdAndUpdate(id, data).then((doc) => {
+  return User.findOneAndUpdate({_id: id}, data).then((doc) => {
     return doc.toJSON();
   });
 };
@@ -64,4 +63,3 @@ exports.addLoginRecord = (data) => {
     console.error(`add login record fail, account:${data.account}`);
   });
 };
-

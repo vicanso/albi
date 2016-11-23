@@ -3,6 +3,7 @@ const _ = require('lodash');
 const requireTree = require('require-tree');
 
 const config = localRequire('config');
+const hooks = localRequire('helpers/hooks');
 const Schema = mongoose.Schema;
 mongoose.Promise = require('bluebird');
 
@@ -19,6 +20,23 @@ const initModels = (client, modelPath) => {
       _.forEach(model[type], (fns, k) => {
         _.forEach(fns, fn => schema[type](k, fn));
       });
+    });
+
+    // add static hook functions
+    const statisticsHooks = hooks.getStatisticsHooks(name);
+    _.forEach(statisticsHooks, (hooksInfos, hookName) => {
+      const {
+        pre,
+        post,
+      } = hooksInfos;
+      if (_.isFunction(pre)) {
+        // pre hook
+        schema.pre(hookName, pre);
+      }
+      if (_.isFunction(post)) {
+        // post hook
+        schema.post(hookName, post);
+      }
     });
 
     client.model(name, schema);
