@@ -1,4 +1,4 @@
-const uuid = require('node-uuid');
+const uuid = require('uuid');
 const _ = require('lodash');
 
 const influx = localRequire('helpers/influx');
@@ -72,7 +72,7 @@ function fillData(opts, data) {
         result[key] = new Date().toISOString();
         break;
       case 'uuid':
-        result[key] = uuid.v4();
+        result[key] = uuid();
         break;
       default:
         return;

@@ -63,7 +63,6 @@
     "lodash": "^4.16.6",
     "moment": "^2.15.2",
     "mongoose": "^4.6.6",
-    "node-uuid": "^1.4.7",
     "performance-nodejs": "^1.0.2",
     "pug": "^2.0.0-beta6",
     "react": "^15.3.2",
