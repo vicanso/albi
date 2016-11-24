@@ -70,6 +70,22 @@ exports.login = (ctx) => {
   });
 };
 
+// refresh cookie max-age and session ttl
+exports.refreshSession = (ctx) => {
+  const {
+    ttl,
+    maxAge,
+  } = config.session;
+  return ctx.refreshSessionTTL(ttl).then(() => {
+    const cookies = ctx.cookies;
+    const name = config.app;
+    cookies.set(name, cookies.get(name), {
+      maxAge,
+    });
+    ctx.body = null;
+  });
+};
+
 exports.register = (ctx) => {
   const data = Joi.validateThrow(ctx.request.body, {
     account: Joi.string().min(4).required(),
