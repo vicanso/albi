@@ -3,6 +3,7 @@ const _ = require('lodash');
 
 const errors = localRequire('helpers/errors');
 const UserService = localRequire('services/user');
+const config = localRequire('config');
 const {
   randomToken,
 } = localRequire('helpers/utils');
