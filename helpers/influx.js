@@ -6,6 +6,16 @@ const utils = localRequire('helpers/utils');
 const debug = localRequire('helpers/debug');
 
 const client = config.influx ? new Influx(config.influx) : null;
+const maxQueueLength = 100;
+
+function flush() {
+  const count = client.writeQueueLength;
+  client.syncWrite()
+    .then(() => console.info(`influxdb write ${count} records sucess`))
+    .catch(err => console.error(`influxdb write fail, ${err.message}`));
+}
+
+const debounceFlush = _.debounce(flush, 30 * 1000);
 
 exports.client = client;
 
@@ -15,17 +25,22 @@ exports.write = (measurement, fields, ...args) => {
     debug('measurement:%s, fields:%j, args:%j', measurement, fields, args);
     return null;
   }
-  const reader = client.write(measurement)
+  if (client.writeQueueLength > maxQueueLength) {
+    flush();
+  } else {
+    debounceFlush();
+  }
+  const writer = client.write(measurement)
     .field(fields);
   const tags = utils.getParam(args, _.isObject);
   /* istanbul ignore else */
   if (tags) {
-    reader.tag(tags);
+    writer.tag(tags);
   }
   debug('influx measurement:%s, fields:%j, tags:%j', measurement, fields, tags);
   const syncNow = utils.getParam(args, _.isBoolean);
   if (!syncNow) {
-    reader.queue();
+    writer.queue();
   }
-  return reader;
+  return writer;
 };
