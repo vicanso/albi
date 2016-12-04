@@ -25,7 +25,7 @@ exports.write = (measurement, fields, ...args) => {
     debug('measurement:%s, fields:%j, args:%j', measurement, fields, args);
     return null;
   }
-  if (client.writeQueueLength > maxQueueLength) {
+  if (client.writeQueueLength >= maxQueueLength) {
     flush();
   } else {
     debounceFlush();

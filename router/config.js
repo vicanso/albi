@@ -1,7 +1,7 @@
 const middlewares = localRequire('middlewares');
+const tracker = middlewares.tracker;
 const {
   version,
-  tracker,
 } = middlewares.common;
 const level = middlewares.level;
 module.exports = [
