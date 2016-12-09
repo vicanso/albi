@@ -5,7 +5,7 @@ localRequire('helpers/joi');
 const Koa = require('koa');
 const request = require('supertest');
 const assert = require('assert');
-const uuid = require('uuid');
+const ulid = require('ulid');
 const mount = require('koa-mounting');
 const config = localRequire('config');
 const crypto = require('crypto');
@@ -14,9 +14,9 @@ describe('controllers/user', () => {
   const session = localRequire('middlewares/session');
   const userCtrls = localRequire('controllers/user');
   const app = new Koa();
-  const account = uuid.v4();
-  const password = uuid.v4();
-  const email = `${uuid.v4()}@gmail.com`;
+  const account = ulid();
+  const password = ulid();
+  const email = `${ulid()}@gmail.com`;
   const registerUrl = `${config.appUrlPrefix}/users/register`;
   const meUrl = `${config.appUrlPrefix}/users/me`;
   const logoutUrl = `${config.appUrlPrefix}/users/logout`;
@@ -226,7 +226,7 @@ describe('controllers/user', () => {
           .set('Cache-Control', 'no-cache')
           .set('cookie', cookie)
           .send({
-            account: uuid.v4(),
+            account: ulid(),
             password,
           })
           .end((err, res) => {
