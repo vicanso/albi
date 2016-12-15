@@ -9,7 +9,7 @@ module.exports = url => (ctx, next) => {
     throw errors.get('the server is not running now!');
   } else {
     /* eslint no-param-reassign:0 */
-    ctx.body = null;
+    ctx.body = 'pong';
   }
   return null;
 };
