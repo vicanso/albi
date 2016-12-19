@@ -3,6 +3,7 @@ const _ = require('lodash');
 
 const Models = localRequire('models');
 const errors = localRequire('helpers/errors');
+const config = localRequire('config');
 
 const isExists = (condition) => {
   const User = Models.get('User');

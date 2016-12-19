@@ -69,8 +69,7 @@ gulp.task('copy:others', ['del:assets', 'del:build'], () => gulp.src([
 })));
 
 gulp.task('copy:source', ['del:assets', 'del:build'], () => gulp.src([
-  'public/js/*',
-  'public/js/**/*.js',
+  'public/fonts/*',
 ]).pipe(copy(assetsPath, {
   prefix: 1,
 })));
@@ -151,6 +150,7 @@ gulp.task('default', [
   'del:assets',
   'del:build',
   'stylus',
+  'copy:source',
   'copy:others',
   'static:css',
   'static:webpack',

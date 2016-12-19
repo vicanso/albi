@@ -8,6 +8,9 @@ import {
   USER_LOGOUT,
 } from '../constants/urls';
 
+/* eslint no-undef:0 */
+const app = (window.CONFIG && window.CONFIG.app) || 'unknown';
+
 export function me() {
   return http.get(USER_ME)
     .set('Cache-Control', 'no-cache')
@@ -15,7 +18,7 @@ export function me() {
 }
 
 export function add(account, password, email) {
-  const code = crypto.sha256(`${account}-${password}`);
+  const code = crypto.sha256(`${account}-${password}-${app}`);
   return http.post(USER_REGISTER, {
     account,
     password: code,
@@ -28,7 +31,7 @@ export function login(account, password) {
     .set('Cache-Control', 'no-cache')
     .then((res) => {
       const token = res.body.token;
-      const code = crypto.sha256(crypto.sha256(`${account}-${password}`) + token);
+      const code = crypto.sha256(crypto.sha256(`${account}-${password}-${app}`) + token);
       return http.post(USER_LOGIN, {
         account,
         password: code,
