@@ -50,6 +50,9 @@ module.exports = (versions) => {
     if (config.env !== 'development') {
       importer.version = versions;
       importer.versionMode = 1;
+      if (staticOptions.host) {
+        importer.hosts = [staticOptions.host];
+      }
     }
 
     state.STATIC_URL_PREFIX = staticUrlPrefix;

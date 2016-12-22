@@ -28,6 +28,7 @@ exports.staticOptions = {
   headers: {
     Vary: 'Accept-Encoding',
   },
+  host: process.env.STATIC_HOST || '',
 };
 
 // view root path
