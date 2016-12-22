@@ -22,7 +22,7 @@ describe('config', () => {
         path: Joi.string().required(),
         maxAge: Joi.number().integer().required(),
         headers: Joi.object(),
-        host: Joi.string().optional(),
+        host: Joi.string().empty(''),
       }).required(),
       connectLimitOptions: Joi.object().keys({
         mid: Joi.number().integer().required(),
