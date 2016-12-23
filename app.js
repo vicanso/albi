@@ -1,11 +1,14 @@
 require('./helpers/local-require');
+
 localRequire('helpers/bluebird');
 localRequire('helpers/joi');
 localRequire('models');
+
+const utils = localRequire('helpers/utils');
 const config = localRequire('config');
+
 localRequire('helpers/server')(config.port);
 localRequire('tasks');
-const utils = localRequire('helpers/utils');
 
 process.on('unhandledRejection', (err) => {
   console.error(`unhandledRejection:${err.message}, stack:${err.stack}`);
