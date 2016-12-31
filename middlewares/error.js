@@ -9,20 +9,21 @@ module.exports = (ctx, next) => next().then(_.noop, (err) => {
   const urlInfo = url.parse(ctx.url);
   const token = ctx.get('X-User-Token') || 'unknown';
   ctx.set('Cache-Control', 'no-cache, max-age=0');
-  const code = err.code || -1;
+  const error = _.isError(err) ? err : new Error(err);
+  const code = error.code || -1;
   const data = {
     url: ctx.url,
     code,
     token,
-    message: err.message,
+    message: error.message,
     expected: false,
   };
-  _.forEach(err, (v, k) => {
+  _.forEach(error, (v, k) => {
     data[k] = v;
   });
   /* istanbul ignore else */
   if (config.env !== 'production') {
-    data.stack = err.stack;
+    data.stack = error.stack;
   }
   const logList = [];
   if (data.expected) {
@@ -42,7 +43,7 @@ module.exports = (ctx, next) => next().then(_.noop, (err) => {
   console.error(logList.join(' '));
 
   /* eslint no-param-reassign:0 */
-  ctx.status = err.status || 500;
+  ctx.status = error.status || 500;
   /* eslint no-param-reassign:0 */
   ctx.body = data;
 });
