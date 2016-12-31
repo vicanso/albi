@@ -6,6 +6,7 @@ const location = localRequire('services/location');
 
 describe('services/location', () => {
   it('get location by ip', done => {
+    this.timeout(10 * 1000);
     location.byIP('202.96.128.86').then(data => {
       assert.equal(data.country, '中国');
       assert.equal(data.province, '广东');
