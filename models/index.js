@@ -13,7 +13,7 @@ const initModels = (client, modelPath) => {
     const name = model.name || (key.charAt(0).toUpperCase() + key.substring(1));
     const schema = new Schema(model.schema, model.options);
     if (model.indexes) {
-      _.forEach(model.indexes, options => schema.index(options));
+      _.forEach(model.indexes, fields => schema.index(fields));
     }
     _.forEach(model.static, (fn, k) => schema.static(k, fn));
     _.forEach(['pre', 'post'], (type) => {

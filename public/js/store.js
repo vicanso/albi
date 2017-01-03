@@ -8,6 +8,5 @@ export default function create(preloadedState) {
   return createStore(
     rootReducer,
     preloadedState,
-    applyMiddleware(thunkMiddleware, createLogger())
-  );
+    applyMiddleware(thunkMiddleware, createLogger()));
 }

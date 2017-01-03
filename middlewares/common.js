@@ -65,7 +65,7 @@ exports.routeStats = (ctx, next) => {
     if (!layer) {
       return;
     }
-    influx.write('http-route', {
+    influx.write('httpRoute', {
       use,
     }, {
       method: method.toLowerCase(),

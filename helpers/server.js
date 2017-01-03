@@ -34,8 +34,7 @@ module.exports = (port) => {
   // htt connection limit
   const limitOptions = config.connectLimitOptions;
   app.use(localRequire('middlewares/limit')(_.omit(limitOptions, 'interval'),
-    limitOptions.interval
-  ));
+    limitOptions.interval));
   const staticOptions = config.staticOptions;
   // 开发环境中，实时编译stylus
   /* istanbul ignore if */
@@ -43,8 +42,7 @@ module.exports = (port) => {
     app.use(mount(
       staticOptions.urlPrefix,
       /* eslint global-require:0 */
-      require('koa-stylus-parser')(staticOptions.path)
-    ));
+      require('koa-stylus-parser')(staticOptions.path)));
   }
   const denyQuerystring = config.env !== 'development';
   // jspm static file
@@ -54,8 +52,7 @@ module.exports = (port) => {
       denyQuerystring,
       maxAge: staticOptions.maxAge,
       headers: staticOptions.headers,
-    })
-  ));
+    })));
   // static file
   app.use(mount(
     staticOptions.urlPrefix,
@@ -63,8 +60,7 @@ module.exports = (port) => {
       denyQuerystring,
       maxAge: staticOptions.maxAge,
       headers: staticOptions.headers,
-    })
-  ));
+    })));
 
   app.use(require('koa-methodoverride')());
   app.use(require('koa-bodyparser')());

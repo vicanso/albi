@@ -61,8 +61,7 @@ function initRender() {
     <Provider store={store()}>
       <App />
     </Provider>,
-    document.getElementById('rootContainer')
-  );
+    document.getElementById('rootContainer'));
 }
 
 

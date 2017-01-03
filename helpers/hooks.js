@@ -8,7 +8,6 @@ function writeStats(f, t) {
   const tags = t;
   const spdy = _.sortedIndex([30, 100, 300, 600, 1000], fields.use);
   tags.spdy = `${spdy}`;
-  fields.use = `${fields.use}i`;
   influx.write('mongoose', fields, tags);
 }
 
@@ -67,15 +66,10 @@ function fillData(opts, data) {
     if (data[key]) {
       return;
     }
-    switch (type) {
-      case 'date':
-        result[key] = new Date().toISOString();
-        break;
-      case 'ulid':
-        result[key] = ulid();
-        break;
-      default:
-        return;
+    if (type === 'date') {
+      result[key] = new Date().toISOString();
+    } else if (type === 'ulid') {
+      result[key] = ulid();
     }
   });
 }

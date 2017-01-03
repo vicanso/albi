@@ -4,6 +4,7 @@ const _ = require('lodash');
 const config = localRequire('config');
 const utils = localRequire('helpers/utils');
 const debug = localRequire('helpers/debug');
+const schemas = localRequire('influx-schemas');
 
 const client = config.influx ? new Influx(config.influx) : null;
 const maxQueueLength = 100;
@@ -16,6 +17,11 @@ function flush() {
 }
 
 const debounceFlush = _.debounce(flush, 30 * 1000);
+if (client) {
+  _.forEach(schemas, (schema, measurement) => {
+    client.schema(measurement, schema.fields, schema.options);
+  });
+}
 
 exports.client = client;
 
