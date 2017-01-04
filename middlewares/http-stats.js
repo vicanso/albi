@@ -17,5 +17,7 @@ module.exports = options => httpStats(options, (p, statsData, ctx) => {
   if (requestedAt) {
     fields.request = Date.now() - requestedAt - statsData.use;
   }
-  influx.write('http', fields, _.pick(statsData, tagKeys));
+  const tags = _.pick(statsData, tagKeys);
+  tags.method = ctx.method;
+  influx.write('http', fields, tags);
 });
