@@ -28,7 +28,9 @@ const normal = (ctx, next) => {
     const diff = process.hrtime(startAt);
     const time = (diff[0] * 1e3) + (diff[1] * 1e-6);
     const account = _.get(ctx, 'session.user.account', 'unknown');
-    console.info(`get session user:${account} use:${time.toFixed(2)}ms`);
+    if (time > 10) {
+      console.info(`get session user:${account} use:${time.toFixed(2)}ms`);
+    }
     return next();
   });
 };

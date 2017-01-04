@@ -1,4 +1,3 @@
-
 const Influx = require('influxdb-nodejs');
 const _ = require('lodash');
 
@@ -34,7 +33,6 @@ if (client) {
       debounceFlush();
     }
   });
-
 }
 
 exports.client = client;
