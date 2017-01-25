@@ -50,7 +50,6 @@ exports.stats = ctx => getVersion().then((version) => {
 
 /* istanbul ignore next */
 exports.restart = (ctx) => {
-  globals.set('status', 'pause');
   utils.checkToExit(3);
   console.info('application will restart soon');
   ctx.body = null;

@@ -1,6 +1,17 @@
 const _ = require('lodash');
 
 const globals = localRequire('helpers/globals');
+const {
+  client,
+} = localRequire('helpers/influx');
+
+// do something before exit
+function beforeExit() {
+  if (!client) {
+    return Promise.resolve();
+  }
+  return client.syncWrite();
+}
 
 exports.getParam = (arr, validate, defaultValue) => {
   const v = _.find(arr, validate);
@@ -12,19 +23,28 @@ exports.getParam = (arr, validate, defaultValue) => {
 
 exports.checkToExit = (times, checkInterval = 10 * 1000) => {
   let count = times;
+  globals.set('status', 'pause');
   const timer = setInterval(() => {
     /* istanbul ignore if */
     if (!count) {
       console.error('exit while there are still connections');
       clearInterval(timer);
-      process.exit(1);
+      beforeExit().then(() => {
+        process.exit(1);
+      }, () => {
+        process.exit(1);
+      });
       return;
     }
     /* istanbul ignore if */
     if (!globals.get('connectingTotal')) {
       console.info('exit without any connection');
       clearInterval(timer);
-      process.exit(0);
+      beforeExit().then(() => {
+        process.exit(0);
+      }, () => {
+        process.exit(0);
+      });
     } else {
       count -= 1;
     }
