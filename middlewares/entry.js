@@ -1,5 +1,6 @@
 const _ = require('lodash');
 
+const config = localRequire('config');
 const globals = localRequire('helpers/globals');
 
 module.exports = (appUrlPrefix, processName) => (ctx, next) => {
@@ -19,7 +20,7 @@ module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   const start = Date.now();
   const complete = () => {
     globals.set('connectingTotal', globals.get('connectingTotal') - 1);
-    ctx.set('X-Use', Date.now() - start);
+    ctx.set('Server-Timing', `${config.app}=${(Date.now() - start) / 1000}`);
   };
   return next().then(complete, (err) => {
     complete();
