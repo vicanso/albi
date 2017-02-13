@@ -62,6 +62,15 @@ const schemas = {
       stripUnknown: true,
     },
   },
+  session: {
+    fields: {
+      account: 'string',
+      use: 'interger',
+    },
+    options: {
+      stripUnknown: true,
+    },
+  },
 };
 
 module.exports = schemas;

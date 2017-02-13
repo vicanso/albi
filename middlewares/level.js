@@ -11,7 +11,5 @@ module.exports = level => (ctx, next) => {
       .replace('#{level}', level);
     throw err;
   }
-  console.dir(systemLevel);
-  console.dir(level);
   return next();
 };

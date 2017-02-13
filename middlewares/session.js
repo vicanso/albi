@@ -4,6 +4,7 @@ const _ = require('lodash');
 
 const errors = localRequire('helpers/errors');
 const config = localRequire('config');
+const influx = localRequire('helpers/influx');
 
 const sessionMiddleware = session({
   key: config.app,
@@ -20,17 +21,25 @@ const sessionMiddleware = session({
 });
 
 const normal = (ctx, next) => {
+  if (ctx.session) {
+    return next();
+  }
   if (ctx.get('Cache-Control') !== 'no-cache' && ctx.query.cache !== 'false') {
     throw errors.get(4);
   }
-  const startAt = process.hrtime();
+  const startedAt = Date.now();
+  const timing = ctx.state.timing;
+  const end = timing.start('session');
   return sessionMiddleware(ctx, () => {
-    const diff = process.hrtime(startAt);
-    const time = (diff[0] * 1e3) + (diff[1] * 1e-6);
+    const use = Date.now() - startedAt;
     const account = _.get(ctx, 'session.user.account', 'unknown');
-    if (time > 10) {
-      console.info(`get session user:${account} use:${time.toFixed(2)}ms`);
-    }
+    influx.write('session', {
+      account,
+      use,
+    }, {
+      spdy: _.sortedIndex([10, 30, 80, 200], use),
+    });
+    end();
     return next();
   });
 };

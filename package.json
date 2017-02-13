@@ -75,6 +75,7 @@
     "require-tree": "^1.1.1",
     "simple-stringify": "^1.1.1",
     "superagent": "^3.3.1",
+    "supertiming": "^1.0.1",
     "ulid": "^0.1.0",
     "url-join": "^1.1.0"
   },
