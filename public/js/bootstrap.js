@@ -7,6 +7,7 @@ import * as globals from './helpers/globals';
 import * as statsService from './services/stats';
 import store from './store';
 import App from './containers/app';
+import * as http from './helpers/http';
 
 
 function globarErrorCatch() {
@@ -69,4 +70,6 @@ _.defer(() => {
   globarErrorCatch();
   statistics();
   initRender();
+  // set global http request timeout
+  http.timeout(10 * 1000);
 });
