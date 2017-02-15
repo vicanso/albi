@@ -22,5 +22,7 @@ process.on('uncaughtException', (err) => {
   console.error(`uncaughtException:${err.message}, stack:${err.stack}`);
   gracefulExit();
 });
-process.on('SIGINT', gracefulExit);
-process.on('SIGQUIT', gracefulExit);
+if (config.env !== 'development') {
+  process.on('SIGINT', gracefulExit);
+  process.on('SIGQUIT', gracefulExit);
+}
