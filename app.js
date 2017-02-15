@@ -10,11 +10,17 @@ const config = localRequire('config');
 localRequire('helpers/server')(config.port);
 localRequire('tasks');
 
+function gracefulExit() {
+  console.info('the application will be restart by SIGINT');
+  utils.checkToExit(3);
+}
 process.on('unhandledRejection', (err) => {
   console.error(`unhandledRejection:${err.message}, stack:${err.stack}`);
-  utils.checkToExit(3);
+  gracefulExit();
 });
 process.on('uncaughtException', (err) => {
   console.error(`uncaughtException:${err.message}, stack:${err.stack}`);
-  utils.checkToExit(3);
+  gracefulExit();
 });
+process.on('SIGINT', gracefulExit);
+process.on('SIGQUIT', gracefulExit);
