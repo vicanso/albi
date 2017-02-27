@@ -6,7 +6,6 @@ const influx = localRequire('helpers/influx');
 function logUserTracker(data) {
   console.info(`user tracker ${stringify.json(data)}`);
   const tags = 'category result'.split(' ');
-  console.dir(_.omit(data, tags));
   influx.write('userTracker', _.omit(data, tags), _.pick(data, tags));
 }
 

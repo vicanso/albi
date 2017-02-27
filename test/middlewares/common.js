@@ -3,6 +3,7 @@ require('../../helpers/local-require');
 const Koa = require('koa');
 const request = require('supertest');
 const assert = require('assert');
+const Timing = require('supertiming');
 
 describe('middleware/common', () => {
   const commonMiddleware = localRequire('middlewares/common');
@@ -201,6 +202,10 @@ describe('middleware/common', () => {
   describe('route stats', () => {
     it('get stats', done => {
       const app = new Koa();
+      app.use((ctx, next) => {
+        ctx.state.timing = new Timing();
+        return next();
+      });
       app.use(commonMiddleware.routeStats);
       app.use(ctx => {
         ctx.matched = [

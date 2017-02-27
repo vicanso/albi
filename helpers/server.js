@@ -45,14 +45,6 @@ module.exports = (port) => {
       require('koa-stylus-parser')(staticOptions.path)));
   }
   const denyQuerystring = config.env !== 'development';
-  // jspm static file
-  app.use(mount(
-    `${staticOptions.urlPrefix}/jspm`,
-    staticServe(config.jspmPath, {
-      denyQuerystring,
-      maxAge: staticOptions.maxAge,
-      headers: staticOptions.headers,
-    })));
   // static file
   app.use(mount(
     staticOptions.urlPrefix,

@@ -9,6 +9,7 @@ const ulid = require('ulid');
 const mount = require('koa-mounting');
 const config = localRequire('config');
 const crypto = require('crypto');
+const Timing = require('supertiming');
 
 describe('controllers/user', () => {
   const session = localRequire('middlewares/session');
@@ -25,6 +26,7 @@ describe('controllers/user', () => {
   app.use(require('koa-bodyparser')());
 
   app.use((ctx, next) => {
+    ctx.state.timing = new Timing();
     if (ctx.url === registerUrl || ctx.url === logoutUrl || ctx.url === loginUrl) {
       return session.writable(ctx, next);
     }

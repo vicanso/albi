@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const Timing = require('supertiming');
 
-const config = localRequire('config');
 const globals = localRequire('helpers/globals');
 
 module.exports = (appUrlPrefix, processName) => (ctx, next) => {
@@ -24,7 +23,7 @@ module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   const complete = () => {
     globals.set('connectingTotal', globals.get('connectingTotal') - 1);
     timing.end('*');
-    ctx.set('Server-Timing', timing.toServerTiming());
+    ctx.set('Server-Timing', timing.toServerTiming(true));
   };
   return next().then(complete, (err) => {
     complete();

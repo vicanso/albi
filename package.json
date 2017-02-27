@@ -23,7 +23,7 @@
   "readmeFilename": "README.md",
   "scripts": {
     "eslint-es6": "node ./node_modules/.bin/eslint public/js/*.js public/js/*/*.js",
-    "eslint-node": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js models/*.js",
+    "eslint-node": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js models/*.js services/*.js",
     "eslint": "npm run eslint-node && npm run eslint-es6",
     "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/controllers/*.js test/helpers/*.js test/middlewares/*.js test/services/*.js --",
     "test": "npm run eslint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb MONGO=mongodb://127.0.0.1/albi REDIS=redis://127.0.0.1:6379 npm run coverage",
@@ -43,7 +43,7 @@
     "influxdb-nodejs": "^2.5.1",
     "joi": "^10.2.2",
     "jtfileimporter": "^1.0.0",
-    "koa": "^2.0.0-alpha.8",
+    "koa": "^2.0.1",
     "koa-bodyparser": "^3.2.0",
     "koa-connection-limit": "^2.0.5",
     "koa-convert": "^1.2.0",
@@ -75,7 +75,8 @@
     "require-tree": "^1.1.1",
     "simple-stringify": "^1.1.1",
     "superagent": "^3.4.2",
-    "supertiming": "^1.0.1",
+    "supertiming": "^1.0.2",
+    "timtam-logger": "^1.1.1",
     "ulid": "^0.1.0",
     "url-join": "^1.1.0"
   },
