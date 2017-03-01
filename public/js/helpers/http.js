@@ -109,7 +109,7 @@ function createDebouncePost(url, interval = 3000) {
   }, interval);
 
   return (data) => {
-    if (!data || !data.length) {
+    if (_.isEmpty(data)) {
       return;
     }
     if (_.isArray(data)) {
@@ -131,13 +131,22 @@ function stats() {
   const rejectUrls = ['/api/sys/', '/api/stats/'];
   debug('rejectUrls:%j', rejectUrls);
   const isReject = url => !!_.find(rejectUrls, item => url.indexOf(item) === 0);
+  const getProcessingTime = (serverTiming) => {
+    if (!serverTiming) {
+      return 0;
+    }
+    const result = serverTiming.match(/\S+=(\d+\.\d+);/);
+    if (!result || result.length < 2) {
+      return 0;
+    }
+    return result[1] * 1000;
+  };
   return (req) => {
     const url = req.url;
     const method = req.method;
     const key = `${method}:${url}`;
     requestCount += 1;
     const requestId = requestCount;
-    const start = Date.now();
     debug('request [%d] %s', requestId, key);
     if (!doingRequest[key]) {
       doingRequest[key] = 0;
@@ -152,6 +161,7 @@ function stats() {
         type: 'parallelRequest',
       });
     }
+    const start = Date.now();
     req.once('error', () => {
       doingRequest[key] -= 1;
     });
@@ -160,10 +170,14 @@ function stats() {
       if (isReject(url)) {
         return;
       }
+      const processing = getProcessingTime(res.get('Server-Timing'));
+      const cost = Date.now() - start;
       const data = {
         method,
         url,
-        use: Date.now() - start,
+        use: cost,
+        processing,
+        network: cost - processing,
         status: res.status,
         hit: parseInt(res.get('X-Hits') || 0, 10),
       };
