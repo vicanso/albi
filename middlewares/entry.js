@@ -19,10 +19,10 @@ module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   globals.set('connectingTotal', globals.get('connectingTotal') + 1);
   const timing = new Timing();
   ctx.state.timing = timing;
-  timing.start('Total');
+  timing.start(processName);
   const complete = () => {
     globals.set('connectingTotal', globals.get('connectingTotal') - 1);
-    timing.end('*');
+    timing.end();
     ctx.set('Server-Timing', timing.toServerTiming(true));
   };
   return next().then(complete, (err) => {
