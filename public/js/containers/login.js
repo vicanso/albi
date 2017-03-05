@@ -11,7 +11,7 @@ class Login extends FormView {
     super(props);
     this.state.fields = [
       {
-        label: 'Username or email address',
+        label: 'Username',
         id: 'account',
         autoFocus: true,
       },

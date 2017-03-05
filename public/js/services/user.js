@@ -18,7 +18,8 @@ export function me() {
 }
 
 export function add(account, password, email) {
-  const code = crypto.sha256(`${account}-${password}-${app}`);
+  const pwd = crypto.sha256(password);
+  const code = crypto.sha256(`${account}-${pwd}-${app}`);
   return http.post(USER_REGISTER, {
     account,
     password: code,
@@ -31,7 +32,8 @@ export function login(account, password) {
     .set('Cache-Control', 'no-cache')
     .then((res) => {
       const token = res.body.token;
-      const code = crypto.sha256(crypto.sha256(`${account}-${password}-${app}`) + token);
+      const pwd = crypto.sha256(password);
+      const code = crypto.sha256(crypto.sha256(`${account}-${pwd}-${app}`) + token);
       return http.post(USER_LOGIN, {
         account,
         password: code,
