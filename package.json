@@ -31,7 +31,7 @@
     "build": "NODE_ENV=production node ./node_modules/.bin/gulp",
     "watch": "node node_modules/.bin/webpack --progress --colors --watch",
     "start": "node app",
-    "dev": "MONGO=mongodb://127.0.0.1/albi nodemon app"
+    "dev": "nodemon app"
   },
   "license": "MIT",
   "dependencies": {
