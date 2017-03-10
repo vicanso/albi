@@ -17,7 +17,11 @@ function render(f, data, options) {
   if (!extname) {
     file += '.pug';
   }
-  return pug.renderFile(file, _.extend({}, options, data));
+  const isDevlopment = config.env === 'development';
+  return pug.renderFile(file, _.extend({
+    compileDebug: isDevlopment,
+    cache: !isDevlopment,
+  }, options, data));
 }
 
 
@@ -28,15 +32,20 @@ function render(f, data, options) {
  */
 function parse(file) {
   return (ctx, next) => next().then(() => {
-    const importer = ctx.state.importer;
+    const {
+      importer,
+      timing,
+    } = ctx.state;
+    const end = timing.start('template');
     /* eslint no-param-reassign:0 */
     ctx.state.TEMPLATE = file;
-    let html = render(file, ctx.state, config.templateOptions);
+    let html = render(file, ctx.state);
     if (importer) {
       // 替换css,js文件列表
       html = html.replace('<!--CSS_FILES_CONTAINER-->', importer.exportCss());
       html = html.replace('<!--JS_FILES_CONTAINER-->', importer.exportJs());
     }
+    end();
     /* eslint no-param-reassign:0 */
     ctx.body = html;
   });

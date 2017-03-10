@@ -29,7 +29,7 @@ localRequire('helpers/server')(config.port);
 localRequire('tasks');
 
 function gracefulExit() {
-  console.info('the application will be restart by SIGINT');
+  console.info('the application will be restart');
   utils.checkToExit(3);
 }
 process.on('unhandledRejection', (err) => {

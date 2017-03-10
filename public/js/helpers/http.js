@@ -208,7 +208,7 @@ use((req) => {
     'X-Requested-At': Date.now(),
   });
   if (!req.get('Accept')) {
-    req.set('Accept', `application/vnd.${globals.get('CONFIG.app')}.v1+json`);
+    req.set('Accept', `application/vnd.${APP_NAME}.v1+json`);
   }
   return req;
 });

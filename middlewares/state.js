@@ -32,7 +32,7 @@ function getImgUrl(staticUrlPrefix, versions) {
 }
 
 /**
- * [state description]
+ * [exports description]
  * @param  {[type]} versions [description]
  * @return {[type]}          [description]
  */

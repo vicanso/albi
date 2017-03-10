@@ -2,7 +2,6 @@ const Koa = require('koa');
 const koaLog = require('koa-log');
 const _ = require('lodash');
 const mount = require('koa-mounting');
-const koaConvert = require('koa-convert');
 const staticServe = require('koa-static-serve');
 
 const config = localRequire('config');
@@ -61,7 +60,7 @@ module.exports = (port) => {
 
   app.use(require('koa-rest-version')());
 
-  app.use(koaConvert(require('koa-fresh')()));
+  app.use(localRequire('middlewares/common').fresh);
 
   app.use(require('koa-etag')());
 

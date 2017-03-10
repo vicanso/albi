@@ -44,9 +44,9 @@ module.exports = {
       //  goes into the vendor chunk)
     }),
     new webpack.SourceMapDevToolPlugin({
-      test: /\.js$/,
-      exclude: /vendor.js/,
-      filename: '[name].map',
-    }),
+     test: /\.js$/,
+     exclude: /vendor.js/,
+     filename: '[name].[chunkhash].map',
+   }),
   ],
 };

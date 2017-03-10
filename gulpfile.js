@@ -9,28 +9,27 @@ const copy = require('gulp-copy');
 const path = require('path');
 const through = require('through2');
 const webpack = require('webpack');
-const crc32 = require('buffer-crc32');
+const crc32 = require('crc').crc32;
 const _ = require('lodash');
 const fs = require('fs');
 
 const webpackConfig = require('./webpack.config');
 
-webpackConfig.plugins.push(
-  new webpack.optimize.UglifyJsPlugin({
-    mangle: {
-      except: ['$super', '$', 'exports', 'require'],
-    },
-  }),
-);
-webpackConfig.output.filename = '[name].[hash].js';
-webpackConfig.output.sourceMapFilename = '[file].map';
+const uglify = new webpack.optimize.UglifyJsPlugin({
+  mangle: {
+    except: ['$super', '$', 'exports', 'require'],
+  },
+});
+
+webpackConfig.plugins.push(uglify);
+webpackConfig.output.filename = '[name].[chunkhash].js';
 
 const assetsPath = 'assets';
 // 保存静态文件的crc32版本号
 const crc32Versions = {};
 function version(opts) {
   function addVersion(file, encoding, cb) {
-    const v = crc32.unsigned(file.contents);
+    const v = crc32(file.contents);
     const extname = path.extname(file.path);
     let name = file.path.substring(file.base.length - 1);
     if (opts && opts.prefix) {

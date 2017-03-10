@@ -37,7 +37,12 @@ class MainHeader extends Component {
     }
     if (!user || !user.account) {
       return (
-        <div className="functions">
+        <div
+          className="functions"
+          style={{
+            marginRight: '120px',
+          }}
+        >
           <a
             className="pure-button"
             href={VIEW_LOGIN}

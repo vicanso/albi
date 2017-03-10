@@ -129,4 +129,3 @@ exports.like = (ctx) => {
     type,
   };
 };
-

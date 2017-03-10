@@ -8,7 +8,7 @@ class Dropdown extends Component {
       items,
       onSelect,
     } = this.props;
-    const fn = onSelect || _.noop;
+    const fn = onSelect;
     return _.map(items, (item, index) => {
       const type = item.type || 'item';
       const defaultItemCls = {};
@@ -61,6 +61,11 @@ class Dropdown extends Component {
     );
   }
 }
+
+Dropdown.defaultProps = {
+  cls: {},
+  onSelect: _.noop,
+};
 
 Dropdown.propTypes = {
   items: PropTypes.array.isRequired,

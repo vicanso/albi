@@ -4,12 +4,17 @@ const request = require('supertest');
 const Koa = require('koa');
 const util = require('util');
 const assert = require('assert');
+const Timing = require('supertiming');
 
 describe('middleware/template', () => {
   it('should compile a template successful', done => {
     const app = new Koa();
     const views = localRequire('views');
     const state = localRequire('middlewares/state');
+    app.use((ctx, next) => {
+      ctx.state.timing = new Timing();
+      return next();
+    })
     app.use(state({}));
     app.use(views.home);
 
