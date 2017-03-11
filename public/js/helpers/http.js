@@ -13,6 +13,19 @@ request.Request.prototype.version = function version(v) {
   this.set('Accept', `application/vnd.${APP_NAME}.v${v}+json`);
   return this;
 };
+request.Request.prototype.noCache = function noCache() {
+  const method = this.method;
+  // if get and head set Cache-Control:no-cache header
+  // the If-None-Match field will not be added
+  if (method === 'GET' || method === 'HEAD') {
+    this.query({
+      'cache-control': 'no-cache',
+    });
+  } else {
+    this.set('Cache-Control', 'no-cache');
+  }
+  return this;
+};
 
 // request timeout(ms)
 let requestTimeout = 0;

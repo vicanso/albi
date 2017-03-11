@@ -13,7 +13,7 @@ const app = (window.CONFIG && window.CONFIG.app) || 'unknown';
 
 export function me() {
   return http.get(USER_ME)
-    .set('Cache-Control', 'no-cache')
+    .noCache()
     .then(res => res.body);
 }
 
@@ -24,12 +24,12 @@ export function add(account, password, email) {
     account,
     password: code,
     email,
-  }).set('Cache-Control', 'no-cache').then(res => res.body);
+  }).noCache().then(res => res.body);
 }
 
 export function login(account, password) {
   return http.get(USER_LOGIN)
-    .set('Cache-Control', 'no-cache')
+    .noCache()
     .then((res) => {
       const token = res.body.token;
       const pwd = crypto.sha256(password);
@@ -37,20 +37,20 @@ export function login(account, password) {
       return http.post(USER_LOGIN, {
         account,
         password: code,
-      }).set('Cache-Control', 'no-cache');
+      }).noCache();
     }).then(res => res.body);
 }
 
 export function logout() {
   return http.del(USER_LOGOUT)
-    .set('Cache-Control', 'no-cache')
+    .noCache()
     .then(res => res.body || { account: '' });
 }
 
 export function like(data, version = 3) {
   return http.post(USER_LIKE)
     .version(version)
-    .set('Cache-Control', 'no-cache')
+    .noCache()
     .send(data)
     .then(res => res.body);
 }
