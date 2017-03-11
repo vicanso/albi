@@ -36,7 +36,6 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "classnames": "^2.2.5",
-    "crc": "^3.4.4",
     "debug": "^2.6.1",
     "etcd-register": "1.0.0",
     "http-errors": "^1.5.1",
