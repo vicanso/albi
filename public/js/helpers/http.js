@@ -55,22 +55,11 @@ function randomToken(length = 8) {
   return arr.join('');
 }
 
-function sortQuery(query) {
-  const keys = _.keys(query).sort();
-  const result = {};
-  _.forEach(keys, (k) => {
-    result[k] = query[k];
-  });
-  return result;
-}
-
 function defaultHandle(req, query) {
   if (requestTimeout) {
     req.timeout(requestTimeout);
   }
-  if (query) {
-    req.query(sortQuery(query));
-  }
+  req.sortQuery();
   _.forEach(plugins, plugin => req.use(plugin));
   return req;
 }
