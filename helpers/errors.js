@@ -1,3 +1,5 @@
+/** @module helpers/errors */
+
 const createError = require('http-errors');
 const _ = require('lodash');
 
@@ -14,7 +16,13 @@ function getErrorByCode(code, lang = 'en') {
   });
 }
 
-function getError(...args) {
+/**
+ * 生成自定义的Error对象，扩展了Error，增加 {expected: true, code: 错误码} 属性
+ * @param  {Number} code - 错误码，在`errors`中定义
+ * @param  {String} lang - 出错信息语言
+ * @return {Error} 返回自定义的错误对象
+ */
+exports.get = function get(...args) {
   const arg = args[0];
   if (_.isNumber(arg)) {
     return getErrorByCode(...args);
@@ -24,5 +32,3 @@ function getError(...args) {
   err.expected = true;
   return err;
 }
-
-exports.get = getError;
