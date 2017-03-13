@@ -28,6 +28,7 @@
     "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/controllers/*.js test/helpers/*.js test/middlewares/*.js --",
     "test": "npm run eslint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/mydb MONGO=mongodb://127.0.0.1/albi REDIS=redis://127.0.0.1:6379 npm run coverage",
     "build": "NODE_ENV=production node ./node_modules/.bin/gulp",
+    "docs": "jsdoc -c .jsdoc.json --readme ./README.md",
     "watch": "node node_modules/.bin/webpack --progress --colors --watch",
     "start": "node app",
     "dev": "nodemon app"
