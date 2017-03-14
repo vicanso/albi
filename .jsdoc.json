@@ -3,7 +3,7 @@
     "allowUnknownTags": false
   },
   "source": {
-    "include": ["./helpers"],
+    "include": ["./helpers", "./errors"],
     "includePattern": ".js$"
   },
   "plugins": [
