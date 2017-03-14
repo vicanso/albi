@@ -60,6 +60,9 @@ function defaultHandle(req, query) {
     req.timeout(requestTimeout);
   }
   req.sortQuery();
+  if (query) {
+    req.query(query);
+  }
   _.forEach(plugins, plugin => req.use(plugin));
   return req;
 }

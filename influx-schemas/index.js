@@ -1,3 +1,11 @@
+/**
+ * 此模块定义influxdb的schme，对于写入influxdb的数据，
+ * 虽然influxdb会根据第一次写入的字段决定数据类型，
+ * 不过使用的时候，最好还是把schme先定义好
+ * @see {@link https://github.com/vicanso/influxdb-nodejs}
+ * @module helpers/utils
+ */
+
 const schemas = {
   mongoose: {
     fields: {
@@ -28,6 +36,7 @@ const schemas = {
     fields: {
       code: 'integer',
       path: 'string',
+      message: 'string',
     },
     options: {
       stripUnknown: true,

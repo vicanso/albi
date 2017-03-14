@@ -20,8 +20,9 @@ describe('middleware/auth', () => {
 
     request(server)
       .post('/')
+      .set('Auth-Token', token)
       .send({
-        token: token,
+        name: 'abc',
       })
       .end((err, res) => {
         if (err) {
@@ -31,7 +32,7 @@ describe('middleware/auth', () => {
         request(server)
           .post('/')
           .send({
-            token: 'abc'
+            name: 'abc'
           })
           .end((err, res) => {
             if (err) {

@@ -10,12 +10,13 @@ module.exports = (ctx, next) => next().catch((err) => {
   const token = ctx.get('X-User-Token') || 'unknown';
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   const error = _.isError(err) ? err : new Error(err);
+  const message = error.message;
   const code = error.code || -1;
   const data = {
     url: ctx.url,
     code,
     token,
-    message: error.message,
+    message,
     expected: false,
   };
   _.forEach(error, (v, k) => {
@@ -34,6 +35,7 @@ module.exports = (ctx, next) => next().catch((err) => {
   influx.write('excetion', {
     code,
     path: urlInfo.pathname,
+    message,
   }, {
     type: data.expected ? 'E' : 'U',
   });
@@ -43,7 +45,7 @@ module.exports = (ctx, next) => next().catch((err) => {
   console.error(logList.join(' '));
 
   /* eslint no-param-reassign:0 */
-  ctx.status = error.status || 500;
+  ctx.status = error.status || err.statusCode || 500;
   /* eslint no-param-reassign:0 */
   ctx.body = data;
 });
