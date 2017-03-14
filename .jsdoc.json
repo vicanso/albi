@@ -3,7 +3,12 @@
     "allowUnknownTags": false
   },
   "source": {
-    "include": ["./helpers", "./errors", "./influx-schemas"],
+    "include": [
+      "./helpers",
+      "./errors",
+      "./influx-schemas",
+      "./controllers"
+    ],
     "includePattern": ".js$"
   },
   "plugins": [
