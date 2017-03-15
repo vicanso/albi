@@ -23,4 +23,8 @@ module.exports = {
     en: 'ID/Password is incorrect',
     status: 400,
   },
+  107: {
+    en: 'Should login first',
+    status: 403,
+  },
 };

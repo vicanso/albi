@@ -177,28 +177,6 @@ describe('middleware/common', () => {
     });
   });
 
-  describe('max-age', () => {
-    it('set max age', done => {
-      const app = new Koa();
-      app.use(commonMiddleware.cacheMaxAge(600));
-      app.use(ctx => {
-        ctx.body = null;
-      });
-      const server = app.listen();
-
-      request(server)
-        .get('/')
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          assert.equal(res.status, 204);
-          assert.equal(res.get('Cache-Control'), 'public, max-age=600');
-          done();
-        });
-    });
-  });
-
   describe('route stats', () => {
     it('get stats', done => {
       const app = new Koa();

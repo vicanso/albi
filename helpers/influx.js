@@ -45,7 +45,7 @@ if (client) {
 }
 
 /**
- * @property {Influxdb-nodejs} client Influxdb-nodejs的实例
+ * @prop {Influxdb-nodejs} client Influxdb-nodejs的实例
  */
 exports.client = client;
 
