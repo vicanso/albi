@@ -6,7 +6,9 @@ require('../../helpers/local-require');
 describe('errors', () => {
   it('get custom error', () => {
     const errors = localRequire('helpers/errors');
-    const err = errors.get('MY ERROR', 401);
+    const error = new Error('MY ERROR');
+    error.status = 401;
+    const err = errors.get(error);
     assert.equal(err.status, 401);
     assert.equal(err.message, 'MY ERROR');
     assert(err.expected);

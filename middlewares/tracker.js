@@ -12,7 +12,7 @@ function logUserTracker(data) {
 module.exports = (category, params) => (ctx, next) => {
   const data = {
     category,
-    token: ctx.get('X-User-Token') || 'unknown',
+    token: ctx.get('X-User-Token'),
     ip: ctx.ip,
   };
   _.forEach(params, (param) => {

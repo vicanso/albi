@@ -47,6 +47,9 @@ describe('controllers/user', () => {
       return userCtrls.logout(ctx);
     }
     if (ctx.url === loginUrl) {
+      if (ctx.method === 'GET') {
+        return userCtrls.loginToken(ctx);
+      }
       return userCtrls.login(ctx);
     }
     return next();
@@ -86,12 +89,13 @@ describe('controllers/user', () => {
       .send({
         account,
         password,
+        email,
       })
       .end((err, res) => {
         if (err) {
           return done(err);
         }
-        assert.equal(res.status, 400);
+        assert.equal(res.status, 403);
         done();
       });
   });

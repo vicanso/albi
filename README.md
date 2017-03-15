@@ -12,13 +12,18 @@ Web framework base on koa 2.x.
 
 - `level` 用于限制某此接口在系统`level`处于较低水平时，直接返回系统繁忙（http status 503）
 
+- `version` 指定该接口version版本
+
 - `session.read` 只读取`session`信息，不做任何的修改
+
+- `session` 正常的`session`处理，可以写数据到`session`
+
 
 ## HTTP状态码
 
 - 对于所有的请求，如果是参数校验出错，状态码为`400`
 
-- 对于需要登录的请求，如果是未登录状态，状态码为`403`
+- 对于需要登录的请求，如果是未登录状态，状态码为`401`
 
 - 对于`POST`请求，正常处理时，状态码为`201`
 

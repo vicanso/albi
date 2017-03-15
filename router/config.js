@@ -9,17 +9,18 @@ module.exports = [
   '[GET] [/api/sys/version] [m.noQuery & c.system.version]',
   '[POST] [/api/sys/pause] [m.auth.admin & c.system.pause]',
   '[POST] [/api/sys/resume] [m.auth.admin & c.system.resume]',
-  '[GET] [/api/sys/stats] [m.noQuery & c.system.stats]',
-  '[POST] [/api/sys/restart] [m.auth.admin & c.system.restart]',
-  '[POST] [/api/sys/level] [m.auth.admin & c.system.level]',
-  '[GET] [/api/sys/level] [c.system.level]',
+  '[GET] [/api/sys/status] [m.noQuery & c.system.status]',
+  '[POST] [/api/sys/exit] [m.auth.admin & c.system.exit]',
+  '[POST] [/api/sys/level] [m.auth.admin & c.system.setLevel]',
+  '[GET] [/api/sys/level] [m.noCache & c.system.level]',
   // page view
   '[GET] [/,/login,/register] [v.home & c.home]',
 
   // user
   '[GET] [/api/users/me] [m.noCache & m.session.read & c.user.me]',
   '[DELETE] [/api/users/logout] [m.session & c.user.logout]',
-  '[GET,POST] [/api/users/login] [m.session & c.user.login]',
+  '[GET] [/api/users/login] [m.session & c.user.loginToken]',
+  '[POST] [/api/users/login] [m.session & c.user.login]',
   '[POST] [/api/users/register] [m.session & c.user.register]',
   '[PUT] [/api/users/me] [m.session & c.user.refreshSession]',
   {

@@ -25,6 +25,6 @@ module.exports = {
   },
   107: {
     en: 'Should login first',
-    status: 403,
+    status: 401,
   },
 };

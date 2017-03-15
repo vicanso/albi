@@ -50,3 +50,10 @@ exports.readonly = (ctx, next) => normal(ctx, () => {
   Object.freeze(ctx.session);
   return next();
 });
+
+exports.login = (ctx, next) => normal(ctx, () => {
+  if (!_.get(ctx, 'session.user.account')) {
+    throw errors.get(107);
+  }
+  return next();
+});

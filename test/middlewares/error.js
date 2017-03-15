@@ -15,7 +15,9 @@ describe('middleware/error', () => {
     app.use(error);
 
     app.use(ctx => {
-      throw errors.get('error-message', 505, {
+      const err = new Error('error-message');
+      err.status = 505;
+      throw errors.get(err, {
         extra: {
           name: 'vicanso',
         },

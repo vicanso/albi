@@ -25,9 +25,10 @@ exports.deprecate = hint => (ctx, next) => {
 
 exports.noCache = () => (ctx, next) => {
   const method = ctx.method.toUpperCase();
-  ctx.set('Cache-Control', 'no-cache, max-age=0');
   if ((method !== 'GET' && method !== 'HEAD')
-    || ctx.get('Cache-Control') === 'no-cache') {
+    || ctx.get('Cache-Control') === 'no-cache'
+    || ctx.query['cache-control'] === 'no-cache') {
+    ctx.set('Cache-Control', 'no-cache, max-age=0');
     return next();
   }
   return noCacheQuery(ctx, next);
@@ -49,10 +50,6 @@ exports.version = (v, _t) => {
     return next();
   };
 };
-
-exports.cacheMaxAge = maxAge => (ctx, next) => next().then(() => {
-  ctx.set('Cache-Control', `public, max-age=${maxAge}`);
-});
 
 // the function is https://github.com/koajs/koa-fresh
 exports.fresh = (ctx, next) => next().then(() => {

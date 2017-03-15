@@ -27,7 +27,8 @@ function validateThrow(...args) {
   const result = Joi.validate(...args);
   const err = result.error;
   if (err) {
-    throw errors.get(err, 400, {
+    err.status = 400;
+    throw errors.get(err, {
       code: 99999,
     });
   }

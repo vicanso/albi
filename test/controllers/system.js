@@ -11,6 +11,7 @@ describe('controllers/system', () => {
   const systemCtrls = localRequire('controllers/system');
   it('version', done => {
     const app = new Koa();
+    app.use(localRequire('middlewares/entry')());
     app.use(systemCtrls.version);
     const server = app.listen();
     request(server)
@@ -57,9 +58,9 @@ describe('controllers/system', () => {
       });
   });
 
-  it('stats', done => {
+  it('status', done => {
     const app = new Koa();
-    app.use(systemCtrls.stats);
+    app.use(systemCtrls.status);
     const server = app.listen();
     request(server)
       .get('/')

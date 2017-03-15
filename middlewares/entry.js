@@ -5,13 +5,18 @@ const globals = localRequire('helpers/globals');
 
 module.exports = (appUrlPrefix, processName) => (ctx, next) => {
   const currentPath = ctx.path;
+  const tokenKey = 'X-User-Token';
+  if (!ctx.get(tokenKey)) {
+    ctx.req.headers[tokenKey.toLowerCase()] = 'unknown';
+  }
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
     /* eslint no-param-reassign:0 */
     ctx.orginalPath = currentPath;
     /* eslint no-param-reassign:0 */
     ctx.path = currentPath.substring(appUrlPrefix.length) || '/';
   }
-
+  ctx.setCache = ttl => ctx.set('Cache-Control', `public, max-age=${ttl}`);
+  console.dir(ctx.setCache);
   const processList = (ctx.get('Via') || '').split(',');
   processList.push(processName);
   ctx.set('Via', _.compact(processList).join(','));
