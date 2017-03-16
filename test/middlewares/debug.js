@@ -12,7 +12,7 @@ describe('middleware/debug', () => {
     app.use(debug());
 
     app.use(ctx => {
-      const params = ctx.debugParams;
+      const params = ctx.state.debugParams;
       assert(params.DEBUG);
       assert.equal(JSON.stringify(params.MOCK), '{"a":1}');
       assert.equal(ctx.url, '/');

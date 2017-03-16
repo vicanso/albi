@@ -29,16 +29,15 @@ function addToRouter(category, fns) {
   });
 }
 
-router.addDefault('common', middlewares.common.routeStats);
+router.addDefault('common', middlewares.common.routeStats());
 
 addToRouter('c', localRequire('controllers'));
 addToRouter('m.noQuery', middlewares.common.noQuery());
 addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
-addToRouter('m.session', middlewares.session.writable);
-addToRouter('m.session.read', middlewares.session.readonly);
-addToRouter('m.session.login', middlewares.session.login);
-// addToRouter('m.version', middlewares.common.version);
+addToRouter('m.session', middlewares.session.writable());
+addToRouter('m.session.read', middlewares.session.readonly());
+addToRouter('m.session.login', middlewares.session.login());
 
 addToRouter('v', views);
 

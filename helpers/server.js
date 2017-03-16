@@ -12,8 +12,8 @@ module.exports = (port) => {
   app.proxy = true;
   app.keys = ['cuttle-fish', 'tree.xie'];
   // error handler
-  app.use(localRequire('middlewares/error'));
-  app.use(localRequire('middlewares/entry')(config.appUrlPrefix, config.app));
+  app.use(localRequire('middlewares/error')());
+  app.use(localRequire('middlewares/entry')(config.app, config.appUrlPrefix));
   // health check
   app.use(localRequire('middlewares/ping')('/ping'));
 
@@ -60,7 +60,7 @@ module.exports = (port) => {
 
   app.use(require('koa-rest-version')());
 
-  app.use(localRequire('middlewares/common').fresh);
+  app.use(localRequire('middlewares/common').fresh());
 
   app.use(require('koa-etag')());
 

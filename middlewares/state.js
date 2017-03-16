@@ -6,12 +6,6 @@ const path = require('path');
 
 const config = localRequire('config');
 
-/**
- * [getImgUrl description]
- * @param  {[type]} staticUrlPrefix [description]
- * @param  {[type]} versions        [description]
- * @return {[type]}                 [description]
- */
 function getImgUrl(staticUrlPrefix, versions) {
   return function joinUrlPath(f) {
     let file = f;
@@ -31,11 +25,6 @@ function getImgUrl(staticUrlPrefix, versions) {
   };
 }
 
-/**
- * [exports description]
- * @param  {[type]} versions [description]
- * @return {[type]}          [description]
- */
 module.exports = (versions) => {
   const appUrlPrefix = config.appUrlPrefix;
   const staticOptions = config.staticOptions;
@@ -65,7 +54,7 @@ module.exports = (versions) => {
     state.IMG_URL = imgUrlFn;
     state.URL = anchorUrlFn;
     state.importer = importer;
-    state.DEBUG = _.get(ctx, 'debugParams.DEBUG', false);
+    state.DEBUG = _.get(ctx, 'state.debugParams.DEBUG', false);
     return next();
   };
 };

@@ -7,7 +7,8 @@
       "./helpers",
       "./errors",
       "./influx-schemas",
-      "./controllers"
+      "./controllers",
+      "./middlewares"
     ],
     "includePattern": ".js$"
   },

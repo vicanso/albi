@@ -4,13 +4,7 @@ const pug = require('pug');
 
 const config = localRequire('config');
 
-/**
- * [render description]
- * @param  {[type]} f    [description]
- * @param  {[type]} data    [description]
- * @param  {[type]} options [description]
- * @return {[type]}         [description]
- */
+
 function render(f, data, options) {
   let file = path.join(config.viewPath, f);
   const extname = path.extname(file);
@@ -25,11 +19,6 @@ function render(f, data, options) {
 }
 
 
-/**
- * [parse description]
- * @param  {[type]} file [description]
- * @return {[type]}      [description]
- */
 function parse(file) {
   return (ctx, next) => next().then(() => {
     const {
