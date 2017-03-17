@@ -1,3 +1,7 @@
+/**
+ * 此模块添加各类公共函数到`ctx.state`中，主要用于模板渲染之类
+ * @module middlewares/state
+ */
 const urlJoin = require('url-join');
 const Importer = require('jtfileimporter');
 const _ = require('lodash');
@@ -6,6 +10,12 @@ const path = require('path');
 
 const config = localRequire('config');
 
+/**
+ * 生成图片地址
+ * @param  {String} staticUrlPrefix 静态文件引用前缀
+ * @param  {Object} versions        引入路径与版本号的对照 {"/xx/xx.jpg": 124131}
+ * @return {Function}               地址转换函数
+ */
 function getImgUrl(staticUrlPrefix, versions) {
   return function joinUrlPath(f) {
     let file = f;
@@ -25,6 +35,11 @@ function getImgUrl(staticUrlPrefix, versions) {
   };
 }
 
+/**
+ * 对state生成各类增添属性的中间件
+ * @param  {Object} versions 静态文件版本号
+ * @return {Function} 返回中间件处理函数
+ */
 module.exports = (versions) => {
   const appUrlPrefix = config.appUrlPrefix;
   const staticOptions = config.staticOptions;

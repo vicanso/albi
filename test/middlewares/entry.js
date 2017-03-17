@@ -17,7 +17,7 @@ describe('middleware/entry', () => {
 
     const app = new Koa();
     const entry = localRequire('middlewares/entry');
-    app.use(entry('/albi', 'ALBI'));
+    app.use(entry('ALBI', '/albi'));
 
     app.use(ctx => {
       if (!~ctx.url.indexOf('error')) {

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>helpers/hooks.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers.html">controllers</a></li><li><a href="module-controllers_home.html">controllers/home</a></li><li><a href="module-controllers_stats.html">controllers/stats</a><ul class='methods'><li data-type='method'><a href="module-controllers_stats.html#.ajax">ajax</a></li><li data-type='method'><a href="module-controllers_stats.html#.exception">exception</a></li><li data-type='method'><a href="module-controllers_stats.html#.statistics">statistics</a></li></ul></li><li><a href="module-controllers_system.html">controllers/system</a><ul class='methods'><li data-type='method'><a href="module-controllers_system.html#.exit">exit</a></li><li data-type='method'><a href="module-controllers_system.html#.level">level</a></li><li data-type='method'><a href="module-controllers_system.html#.pause">pause</a></li><li data-type='method'><a href="module-controllers_system.html#.resume">resume</a></li><li data-type='method'><a href="module-controllers_system.html#.setLevel">setLevel</a></li><li data-type='method'><a href="module-controllers_system.html#.status">status</a></li><li data-type='method'><a href="module-controllers_system.html#.version">version</a></li><li data-type='method'><a href="module-controllers_system.html#~getVersion">getVersion</a></li></ul></li><li><a href="module-controllers_user.html">controllers/user</a><ul class='methods'><li data-type='method'><a href="module-controllers_user.html#.like">like</a></li><li data-type='method'><a href="module-controllers_user.html#.login">login</a></li><li data-type='method'><a href="module-controllers_user.html#.loginToken">loginToken</a></li><li data-type='method'><a href="module-controllers_user.html#.logout">logout</a></li><li data-type='method'><a href="module-controllers_user.html#.me">me</a></li><li data-type='method'><a href="module-controllers_user.html#.refreshSession">refreshSession</a></li><li data-type='method'><a href="module-controllers_user.html#.register">register</a></li><li data-type='method'><a href="module-controllers_user.html#~pickUserInfo">pickUserInfo</a></li></ul></li><li><a href="module-errors.html">errors</a></li><li><a href="module-helpers_bluebird.html">helpers/bluebird</a></li><li><a href="module-helpers_debug.html">helpers/debug</a></li><li><a href="module-helpers_errors.html">helpers/errors</a><ul class='methods'><li data-type='method'><a href="module-helpers_errors.html#.get">get</a></li></ul></li><li><a href="module-helpers_globals.html">helpers/globals</a><ul class='methods'><li data-type='method'><a href="module-helpers_globals.html#.get">get</a></li><li data-type='method'><a href="module-helpers_globals.html#.set">set</a></li></ul></li><li><a href="module-helpers_hooks.html">helpers/hooks</a><ul class='methods'><li data-type='method'><a href="module-helpers_hooks.html#.createUpdateHook">createUpdateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.createValidateHook">createValidateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.getStatisticsHooks">getStatisticsHooks</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createNormalStats">createNormalStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createSaveStats">createSaveStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~fillData">fillData</a></li></ul></li><li><a href="module-helpers_influx.html">helpers/influx</a><ul class='members'><li data-type='member'><a href="module-helpers_influx.html#.client">client</a></li></ul><ul class='methods'><li data-type='method'><a href="module-helpers_influx.html#.write">write</a></li><li data-type='method'><a href="module-helpers_influx.html#~flush">flush</a></li></ul></li><li><a href="module-helpers_joi.html">helpers/joi</a><ul class='methods'><li data-type='method'><a href="module-helpers_joi.html#~validateThrow">validateThrow</a></li></ul></li><li><a href="module-helpers_local-require.html">helpers/local-require</a><ul class='methods'><li data-type='method'><a href="module-helpers_local-require.html#~localRequire">localRequire</a></li></ul></li><li><a href="module-helpers_utils.html">helpers/utils</a><ul class='methods'><li data-type='method'><a href="module-helpers_utils.html#.checkToExit">checkToExit</a></li><li data-type='method'><a href="module-helpers_utils.html#.getParam">getParam</a></li><li data-type='method'><a href="module-helpers_utils.html#.randomToken">randomToken</a></li></ul></li><li><a href="module-influx-schemas.html">influx-schemas</a></li><li><a href="module-middlewares_auth.html">middlewares/auth</a><ul class='methods'><li data-type='method'><a href="module-middlewares_auth.html#.admin">admin</a></li></ul></li><li><a href="module-middlewares_common.html">middlewares/common</a><ul class='methods'><li data-type='method'><a href="module-middlewares_common.html#.deprecate">deprecate</a></li><li data-type='method'><a href="module-middlewares_common.html#.fresh">fresh</a></li><li data-type='method'><a href="module-middlewares_common.html#.noCache">noCache</a></li><li data-type='method'><a href="module-middlewares_common.html#.noQuery">noQuery</a></li><li data-type='method'><a href="module-middlewares_common.html#.routeStats">routeStats</a></li><li data-type='method'><a href="module-middlewares_common.html#.version">version</a></li></ul></li><li><a href="module-middlewares_debug.html">middlewares/debug</a></li><li><a href="module-middlewares_entry.html">middlewares/entry</a></li><li><a href="module-middlewares_error.html">middlewares/error</a></li><li><a href="module-middlewares_http-stats.html">middlewares/http-stats</a></li><li><a href="module-middlewares_limit.html">middlewares/limit</a></li><li><a href="module-middlewares_picker.html">middlewares/picker</a></li><li><a href="module-middlewares_ping.html">middlewares/ping</a></li><li><a href="module-middlewares_session.html">middlewares/session</a><ul class='methods'><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.readonly">readonly</a></li><li data-type='method'><a href="module-middlewares_session.html#.writable">writable</a></li><li data-type='method'><a href="module-middlewares_session.html#~normal">normal</a></li></ul></li><li><a href="module-middlewares_state.html">middlewares/state</a><ul class='methods'><li data-type='method'><a href="module-middlewares_state.html#~getImgUrl">getImgUrl</a></li></ul></li><li><a href="module-middlewares_template.html">middlewares/template</a><ul class='methods'><li data-type='method'><a href="module-middlewares_template.html#~parse">parse</a></li><li data-type='method'><a href="module-middlewares_template.html#~render">render</a></li></ul></li><li><a href="module-middlewares_tracker.html">middlewares/tracker</a><ul class='methods'><li data-type='method'><a href="module-middlewares_tracker.html#~logUserTracker">logUserTracker</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#globals">globals</a></li><li><a href="global.html#localRequire">localRequire</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">helpers/hooks.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * 此模块主要用于mongoose的hook，有统计性能、更新操作等
+ * @module helpers/hooks
+ */
+
+const ulid = require('ulid');
+const _ = require('lodash');
+
+const influx = localRequire('helpers/influx');
+
+function writeStats(f, t) {
+  const fields = f;
+  const tags = t;
+  const spdy = _.sortedIndex([30, 100, 300, 600, 1000], fields.use);
+  tags.spdy = `${spdy}`;
+  influx.write('mongoose', fields, tags);
+}
+
+/**
+ * 创建mongoose的save操作的统计hook函数，生成pre与post的hook函数，将统计数据写入到influxdb中，
+ * fields:{use: 耗时(ms) , id: ObjectID}，tags:{collection, op: 'save'}
+ * @param  {String} collection 在数据库中collection的名称
+ * @return {Object} 返回 {pre: function, post: function}
+ * @example
+ * const hooks = createSaveStats('user');
+ * cosnt schema = xxx; // mongoose schema;
+ * schema.pre('save', hooks.pre);
+ * schema.post('save', hooks.post);
+ */
+function createSaveStats(collection) {
+  return {
+    pre: function preSave(next) {
+      if (!this.startedAt) {
+        this.startedAt = Date.now();
+      }
+      next();
+    },
+    post: function postSave() {
+      /* eslint no-underscore-dangle:0 */
+      const id = this._id.toString();
+      const use = Date.now() - this.startedAt;
+      const tags = {
+        collection,
+        op: 'save',
+      };
+      const fields = {
+        use,
+        id,
+      };
+      writeStats(fields, tags);
+    },
+  };
+}
+
+/**
+ * 创建mongoose普通操作(findOne, findOneAndUpdate等等)的统计hook函数，生成pre与post的hook函数，将统计数据写入到influxdb中，
+ * fields: {use: 耗时(ms)} tags:{collection, op: '操作名称，如findOne,fineOneAndUpdate等'}
+ * @param  {String} collection 在数据库中collection的名称
+ * @return {Object} 返回 {pre: function, post: function}
+ * @example
+ * const hooks = createNormalStats('user');
+ * cosnt schema = xxx; // mongoose schema;
+ * schema.pre('find', hooks.pre);
+ * schema.post('find', hooks.post);
+ */
+function createNormalStats(collection) {
+  return {
+    pre: function pre(next) {
+      if (!this.startedAt) {
+        this.startedAt = Date.now();
+      }
+      next();
+    },
+    post: function post() {
+      const use = Date.now() - this.startedAt;
+      const tags = {
+        collection,
+        op: this.op,
+      };
+      const fields = {
+        use,
+      };
+      writeStats(fields, tags);
+    },
+  };
+}
+
+/**
+ * 自动填充数据，用于update或者validate(save)的中填充数据
+ * @param  {Object} opts 填充配置, {name: type}，name表示要填充的字段，type表示要填充的类型
+ * type暂只支持'date'与'ulid'两种类型，date为ISOString
+ * @param  {Object} data 要填充的数据，会修改该数据相应的字段
+ * @return {Object} 返回填充好的数据（和data是同一个对象）
+ * @example
+ * const opts = {
+ *   createdAt: 'date',
+ *   token: 'ulid',
+ * };
+ * const data = {
+ *   name: 'tree.xie',
+ * };
+ * fillData(opts, data);
+ * // {name: "tree.xie", createdAt: "2017-03-14T12:59:56.417Z", token: "01ARZ3NDEKTSV4RRFFQ69G5FAV"}
+ * console.info(data);
+ */
+function fillData(opts, data) {
+  const result = data;
+  _.forEach(opts, (type, key) => {
+    if (data[key]) {
+      return;
+    }
+    if (type === 'date') {
+      result[key] = new Date().toISOString();
+    } else if (type === 'ulid') {
+      result[key] = ulid();
+    }
+  });
+  return result;
+}
+
+/**
+ * 生成mongoose中update操作的hook，主要是配置填充相应字段（调用fillData），并__v字段做 +1 操作
+ * @param  {Object} opts 数据填充配置
+ * @return {Function} 返回hook函数
+ * @example
+ * const hooks = require('./helpers/hooks');
+ * const updateHook = hooks.createUpdateHook({
+ *   updatedAt: 'date',
+ * });
+ * cosnt schema = xxx; // mongoose schema;
+ * schema.pre('findOneAndUpdate', updateHook);
+ */
+exports.createUpdateHook = opts => function createUpdateHook(next) {
+  /* eslint no-underscore-dangle:0 */
+  const data = this._update;
+  fillData(opts, data);
+  if (data.$inc) {
+    data.$inc.__v = 1;
+  } else {
+    data.$inc = {
+      __v: 1,
+    };
+  }
+  next();
+};
+
+/**
+ * 生成mongoose中validate操作的hook，主要是配置填充相应字段（调用fillData）
+ * @param  {Object} opts 数据填充配置
+ * @return {Function} 返回hook函数
+ * @example
+ * const hooks = require('./helpers/hooks');
+ * const validateHook = hooks.createValidateHook({
+ *   createdAt: 'date',
+ *   updatedAt: 'date',
+ * });
+ * cosnt schema = xxx; // mongoose schema;
+ * schema.pre('validate', validateHook);
+ */
+exports.createValidateHook = opts => function createValidateHook(next) {
+  fillData(opts, this);
+  next();
+};
+
+/**
+ * 生成mongoose的统计函数hooks，包括：save, findOne, findOneAndUpdate, findOneAndRemove, count, find，
+ * 在初始化model时，添加hooks，便于监控mongodb的各类操作性能
+ * @param  {String} collection 数据库中collection的名称
+ * @return {Object} 返回包括各个函数的hook，{save: function, findOne: function, ...}
+ * @example
+ * cosnt schema = xxx; // mongoose schema;
+ * const hooks = require('./helpers/hooks');
+ * const statisticsHooks = hooks.getStatisticsHooks('user');
+ * _.forEach(statisticsHooks, (hooksInfos, hookName) => {
+ *   const {
+ *     pre,
+ *     post,
+ *   } = hooksInfos;
+ *   if (_.isFunction(pre)) {
+ *     // pre hook
+ *     schema.pre(hookName, pre);
+ *   }
+ *   if (_.isFunction(post)) {
+ *     // post hook
+ *     schema.post(hookName, post);
+ *   }
+ * });
+ */
+exports.getStatisticsHooks = (collection) => {
+  const saveHoook = createSaveStats(collection);
+  const normalHook = createNormalStats(collection);
+  return {
+    save: saveHoook,
+    findOne: normalHook,
+    findOneAndUpdate: normalHook,
+    findOneAndRemove: normalHook,
+    count: normalHook,
+    find: normalHook,
+  };
+};
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Mar 17 2017 21:51:33 GMT+0800 (CST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

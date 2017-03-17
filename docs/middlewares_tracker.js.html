@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>middlewares/tracker.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers.html">controllers</a></li><li><a href="module-controllers_home.html">controllers/home</a></li><li><a href="module-controllers_stats.html">controllers/stats</a><ul class='methods'><li data-type='method'><a href="module-controllers_stats.html#.ajax">ajax</a></li><li data-type='method'><a href="module-controllers_stats.html#.exception">exception</a></li><li data-type='method'><a href="module-controllers_stats.html#.statistics">statistics</a></li></ul></li><li><a href="module-controllers_system.html">controllers/system</a><ul class='methods'><li data-type='method'><a href="module-controllers_system.html#.exit">exit</a></li><li data-type='method'><a href="module-controllers_system.html#.level">level</a></li><li data-type='method'><a href="module-controllers_system.html#.pause">pause</a></li><li data-type='method'><a href="module-controllers_system.html#.resume">resume</a></li><li data-type='method'><a href="module-controllers_system.html#.setLevel">setLevel</a></li><li data-type='method'><a href="module-controllers_system.html#.status">status</a></li><li data-type='method'><a href="module-controllers_system.html#.version">version</a></li><li data-type='method'><a href="module-controllers_system.html#~getVersion">getVersion</a></li></ul></li><li><a href="module-controllers_user.html">controllers/user</a><ul class='methods'><li data-type='method'><a href="module-controllers_user.html#.like">like</a></li><li data-type='method'><a href="module-controllers_user.html#.login">login</a></li><li data-type='method'><a href="module-controllers_user.html#.loginToken">loginToken</a></li><li data-type='method'><a href="module-controllers_user.html#.logout">logout</a></li><li data-type='method'><a href="module-controllers_user.html#.me">me</a></li><li data-type='method'><a href="module-controllers_user.html#.refreshSession">refreshSession</a></li><li data-type='method'><a href="module-controllers_user.html#.register">register</a></li><li data-type='method'><a href="module-controllers_user.html#~pickUserInfo">pickUserInfo</a></li></ul></li><li><a href="module-errors.html">errors</a></li><li><a href="module-helpers_bluebird.html">helpers/bluebird</a></li><li><a href="module-helpers_debug.html">helpers/debug</a></li><li><a href="module-helpers_errors.html">helpers/errors</a><ul class='methods'><li data-type='method'><a href="module-helpers_errors.html#.get">get</a></li></ul></li><li><a href="module-helpers_globals.html">helpers/globals</a><ul class='methods'><li data-type='method'><a href="module-helpers_globals.html#.get">get</a></li><li data-type='method'><a href="module-helpers_globals.html#.set">set</a></li></ul></li><li><a href="module-helpers_hooks.html">helpers/hooks</a><ul class='methods'><li data-type='method'><a href="module-helpers_hooks.html#.createUpdateHook">createUpdateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.createValidateHook">createValidateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.getStatisticsHooks">getStatisticsHooks</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createNormalStats">createNormalStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createSaveStats">createSaveStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~fillData">fillData</a></li></ul></li><li><a href="module-helpers_influx.html">helpers/influx</a><ul class='members'><li data-type='member'><a href="module-helpers_influx.html#.client">client</a></li></ul><ul class='methods'><li data-type='method'><a href="module-helpers_influx.html#.write">write</a></li><li data-type='method'><a href="module-helpers_influx.html#~flush">flush</a></li></ul></li><li><a href="module-helpers_joi.html">helpers/joi</a><ul class='methods'><li data-type='method'><a href="module-helpers_joi.html#~validateThrow">validateThrow</a></li></ul></li><li><a href="module-helpers_local-require.html">helpers/local-require</a><ul class='methods'><li data-type='method'><a href="module-helpers_local-require.html#~localRequire">localRequire</a></li></ul></li><li><a href="module-helpers_utils.html">helpers/utils</a><ul class='methods'><li data-type='method'><a href="module-helpers_utils.html#.checkToExit">checkToExit</a></li><li data-type='method'><a href="module-helpers_utils.html#.getParam">getParam</a></li><li data-type='method'><a href="module-helpers_utils.html#.randomToken">randomToken</a></li></ul></li><li><a href="module-influx-schemas.html">influx-schemas</a></li><li><a href="module-middlewares_auth.html">middlewares/auth</a><ul class='methods'><li data-type='method'><a href="module-middlewares_auth.html#.admin">admin</a></li></ul></li><li><a href="module-middlewares_common.html">middlewares/common</a><ul class='methods'><li data-type='method'><a href="module-middlewares_common.html#.deprecate">deprecate</a></li><li data-type='method'><a href="module-middlewares_common.html#.fresh">fresh</a></li><li data-type='method'><a href="module-middlewares_common.html#.noCache">noCache</a></li><li data-type='method'><a href="module-middlewares_common.html#.noQuery">noQuery</a></li><li data-type='method'><a href="module-middlewares_common.html#.routeStats">routeStats</a></li><li data-type='method'><a href="module-middlewares_common.html#.version">version</a></li></ul></li><li><a href="module-middlewares_debug.html">middlewares/debug</a></li><li><a href="module-middlewares_entry.html">middlewares/entry</a></li><li><a href="module-middlewares_error.html">middlewares/error</a></li><li><a href="module-middlewares_http-stats.html">middlewares/http-stats</a></li><li><a href="module-middlewares_limit.html">middlewares/limit</a></li><li><a href="module-middlewares_picker.html">middlewares/picker</a></li><li><a href="module-middlewares_ping.html">middlewares/ping</a></li><li><a href="module-middlewares_session.html">middlewares/session</a><ul class='methods'><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.readonly">readonly</a></li><li data-type='method'><a href="module-middlewares_session.html#.writable">writable</a></li><li data-type='method'><a href="module-middlewares_session.html#~normal">normal</a></li></ul></li><li><a href="module-middlewares_state.html">middlewares/state</a><ul class='methods'><li data-type='method'><a href="module-middlewares_state.html#~getImgUrl">getImgUrl</a></li></ul></li><li><a href="module-middlewares_template.html">middlewares/template</a><ul class='methods'><li data-type='method'><a href="module-middlewares_template.html#~parse">parse</a></li><li data-type='method'><a href="module-middlewares_template.html#~render">render</a></li></ul></li><li><a href="module-middlewares_tracker.html">middlewares/tracker</a><ul class='methods'><li data-type='method'><a href="module-middlewares_tracker.html#~logUserTracker">logUserTracker</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#globals">globals</a></li><li><a href="global.html#localRequire">localRequire</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">middlewares/tracker.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * 用于跟踪用户行为的中间件，主要用于一些会修改数据的操作
+ * @module middlewares/tracker
+ */
+const _ = require('lodash');
+const stringify = require('simple-stringify');
+
+const influx = localRequire('helpers/influx');
+
+/**
+ * 记录用户的行为日志到influxdb中
+ * @param  {Object} data 用户行为日志数据
+ */
+function logUserTracker(data) {
+  console.info(`user tracker ${stringify.json(data)}`);
+  const tags = 'category result'.split(' ');
+  influx.write('userTracker', _.omit(data, tags), _.pick(data, tags));
+}
+
+/**
+ * 生成行为日志中间件，根据设置的参数列表获取用户提交的参数，
+ * 以后最后的结果，记录到influxdb中
+ * @param  {String} category 该用户行为分类，如：用户注册、用户收藏
+ * @param  {Array} params   参数列表, 如：["name", "code"]，
+ * 取参数的优先顺序是：ctx.request.body --> ctx.params --> ctx.query
+ * @return {Function} 返回中间件处理函数
+ */
+module.exports = (category, params) => (ctx, next) => {
+  const data = {
+    category,
+    token: ctx.get('X-User-Token'),
+    ip: ctx.ip,
+  };
+  _.forEach(params, (param) => {
+    _.forEach(['request.body', 'params', 'query'], (key) => {
+      const v = _.get(ctx, `${key}.${param}`);
+      if (_.isNil(data[param]) &amp;&amp; !_.isNil(v)) {
+        data[param] = v;
+      }
+    });
+  });
+  const start = Date.now();
+  const delayLog = (use, result) => {
+    data.result = result;
+    data.use = use;
+    logUserTracker(data);
+  };
+  return next().then(() => {
+    setImmediate(delayLog, Date.now() - start, 'success');
+  }, (err) => {
+    setImmediate(delayLog, Date.now() - start, 'fail');
+    throw err;
+  });
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Mar 17 2017 21:51:33 GMT+0800 (CST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

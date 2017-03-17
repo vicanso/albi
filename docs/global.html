@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Global - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers.html">controllers</a></li><li><a href="module-controllers_home.html">controllers/home</a></li><li><a href="module-controllers_stats.html">controllers/stats</a><ul class='methods'><li data-type='method'><a href="module-controllers_stats.html#.ajax">ajax</a></li><li data-type='method'><a href="module-controllers_stats.html#.exception">exception</a></li><li data-type='method'><a href="module-controllers_stats.html#.statistics">statistics</a></li></ul></li><li><a href="module-controllers_system.html">controllers/system</a><ul class='methods'><li data-type='method'><a href="module-controllers_system.html#.exit">exit</a></li><li data-type='method'><a href="module-controllers_system.html#.level">level</a></li><li data-type='method'><a href="module-controllers_system.html#.pause">pause</a></li><li data-type='method'><a href="module-controllers_system.html#.resume">resume</a></li><li data-type='method'><a href="module-controllers_system.html#.setLevel">setLevel</a></li><li data-type='method'><a href="module-controllers_system.html#.status">status</a></li><li data-type='method'><a href="module-controllers_system.html#.version">version</a></li><li data-type='method'><a href="module-controllers_system.html#~getVersion">getVersion</a></li></ul></li><li><a href="module-controllers_user.html">controllers/user</a><ul class='methods'><li data-type='method'><a href="module-controllers_user.html#.like">like</a></li><li data-type='method'><a href="module-controllers_user.html#.login">login</a></li><li data-type='method'><a href="module-controllers_user.html#.loginToken">loginToken</a></li><li data-type='method'><a href="module-controllers_user.html#.logout">logout</a></li><li data-type='method'><a href="module-controllers_user.html#.me">me</a></li><li data-type='method'><a href="module-controllers_user.html#.refreshSession">refreshSession</a></li><li data-type='method'><a href="module-controllers_user.html#.register">register</a></li><li data-type='method'><a href="module-controllers_user.html#~pickUserInfo">pickUserInfo</a></li></ul></li><li><a href="module-errors.html">errors</a></li><li><a href="module-helpers_bluebird.html">helpers/bluebird</a></li><li><a href="module-helpers_debug.html">helpers/debug</a></li><li><a href="module-helpers_errors.html">helpers/errors</a><ul class='methods'><li data-type='method'><a href="module-helpers_errors.html#.get">get</a></li></ul></li><li><a href="module-helpers_globals.html">helpers/globals</a><ul class='methods'><li data-type='method'><a href="module-helpers_globals.html#.get">get</a></li><li data-type='method'><a href="module-helpers_globals.html#.set">set</a></li></ul></li><li><a href="module-helpers_hooks.html">helpers/hooks</a><ul class='methods'><li data-type='method'><a href="module-helpers_hooks.html#.createUpdateHook">createUpdateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.createValidateHook">createValidateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.getStatisticsHooks">getStatisticsHooks</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createNormalStats">createNormalStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createSaveStats">createSaveStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~fillData">fillData</a></li></ul></li><li><a href="module-helpers_influx.html">helpers/influx</a><ul class='members'><li data-type='member'><a href="module-helpers_influx.html#.client">client</a></li></ul><ul class='methods'><li data-type='method'><a href="module-helpers_influx.html#.write">write</a></li><li data-type='method'><a href="module-helpers_influx.html#~flush">flush</a></li></ul></li><li><a href="module-helpers_joi.html">helpers/joi</a><ul class='methods'><li data-type='method'><a href="module-helpers_joi.html#~validateThrow">validateThrow</a></li></ul></li><li><a href="module-helpers_local-require.html">helpers/local-require</a><ul class='methods'><li data-type='method'><a href="module-helpers_local-require.html#~localRequire">localRequire</a></li></ul></li><li><a href="module-helpers_utils.html">helpers/utils</a><ul class='methods'><li data-type='method'><a href="module-helpers_utils.html#.checkToExit">checkToExit</a></li><li data-type='method'><a href="module-helpers_utils.html#.getParam">getParam</a></li><li data-type='method'><a href="module-helpers_utils.html#.randomToken">randomToken</a></li></ul></li><li><a href="module-influx-schemas.html">influx-schemas</a></li><li><a href="module-middlewares_auth.html">middlewares/auth</a><ul class='methods'><li data-type='method'><a href="module-middlewares_auth.html#.admin">admin</a></li></ul></li><li><a href="module-middlewares_common.html">middlewares/common</a><ul class='methods'><li data-type='method'><a href="module-middlewares_common.html#.deprecate">deprecate</a></li><li data-type='method'><a href="module-middlewares_common.html#.fresh">fresh</a></li><li data-type='method'><a href="module-middlewares_common.html#.noCache">noCache</a></li><li data-type='method'><a href="module-middlewares_common.html#.noQuery">noQuery</a></li><li data-type='method'><a href="module-middlewares_common.html#.routeStats">routeStats</a></li><li data-type='method'><a href="module-middlewares_common.html#.version">version</a></li></ul></li><li><a href="module-middlewares_debug.html">middlewares/debug</a></li><li><a href="module-middlewares_entry.html">middlewares/entry</a></li><li><a href="module-middlewares_error.html">middlewares/error</a></li><li><a href="module-middlewares_http-stats.html">middlewares/http-stats</a></li><li><a href="module-middlewares_limit.html">middlewares/limit</a></li><li><a href="module-middlewares_picker.html">middlewares/picker</a></li><li><a href="module-middlewares_ping.html">middlewares/ping</a></li><li><a href="module-middlewares_session.html">middlewares/session</a><ul class='methods'><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.readonly">readonly</a></li><li data-type='method'><a href="module-middlewares_session.html#.writable">writable</a></li><li data-type='method'><a href="module-middlewares_session.html#~normal">normal</a></li></ul></li><li><a href="module-middlewares_state.html">middlewares/state</a><ul class='methods'><li data-type='method'><a href="module-middlewares_state.html#~getImgUrl">getImgUrl</a></li></ul></li><li><a href="module-middlewares_template.html">middlewares/template</a><ul class='methods'><li data-type='method'><a href="module-middlewares_template.html#~parse">parse</a></li><li data-type='method'><a href="module-middlewares_template.html#~render">render</a></li></ul></li><li><a href="module-middlewares_tracker.html">middlewares/tracker</a><ul class='methods'><li data-type='method'><a href="module-middlewares_tracker.html#~logUserTracker">logUserTracker</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#globals">globals</a></li><li><a href="global.html#localRequire">localRequire</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Global</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="globals"><span class="type-signature">(constant) </span>globals<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_level.js.html">middlewares/level.js</a>, <a href="middlewares_level.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>用于生成根据当前系统运行级别而处理的中间件</p>
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="localRequire"><span class="type-signature"></span>localRequire<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_local-require.js.html">helpers/local-require.js</a>, <a href="helpers_local-require.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>基于项目的相对路径引入模块</p>
+</div>
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const influx = localRequire('helpers/influx');</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:controllers/home"><span class="type-signature"></span>module:controllers/home<span class="signature">(GET)</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_home.js.html">controllers/home.js</a>, <a href="controllers_home.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>/</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Route</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>/login</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Route</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>/register</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Route</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>home</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Template</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    <p>根据template，生成html，主要是网页是单页应用但是需要刷新时能加载到html</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>curl 'http://host/login'</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>GET</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Method</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回render的html</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/debug"><span class="type-signature"></span>module:middlewares/debug<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_debug.js.html">middlewares/debug.js</a>, <a href="middlewares_debug.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>从querystring中取<code>_debug</code>, <code>_mock</code>, <code>_status</code>生成debug params。
+<code>_mock</code> mock当前接口的返回值，如果设置了该参数，接口不做任何处理，以mock配置的值返回</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>request.query._debug</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>设置当前请求是否debug模式，如果设置了，设置<code>DEBUG</code>字段为true，后续怎么使用需要各接口支持</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>request.query._mock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>当前接口的返回值，如果设置了该参数，接口不做任何处理，以mock配置的值返回</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>request.query._status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>如果设置了<code>_mock</code>，并且设置了此参数，则设置该响应的HTTP Status为此参数的值</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/entry"><span class="type-signature"></span>module:middlewares/entry<span class="signature">(processName, appUrlPrefix<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_entry.js.html">middlewares/entry.js</a>, <a href="middlewares_entry.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>HTTP请求入口的中间件处理，包括：</p>
+<ol>
+<li>对所有url做去前缀处理（nginx之类的反向代理基本url前缀做转发，未对url做处理）</li>
+<li>如果<code>X-User-Token</code>未设置，设置为<code>unknown</code></li>
+<li>设置响应头的<code>Via</code>字段（从当前请求头中取<code>Via</code>再添加应用名字）</li>
+<li>全局设置响应头<code>Cache-Control:no-cache, max-age=0</code>，避免请求未设置缓存属性，可以覆盖</li>
+<li>connectingTotal + 1 ，在请求处理完时， connectingTotal - 1</li>
+<li>添加Timing对象至<code>ctx.state.timing</code>字段</li>
+<li>在请求处理完成时，根据Timing的记录生成<code>Server-Timing</code></li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>processName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>应用名字</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>appUrlPrefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>''</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>应用的前缀URL，如果设置该参数，所有请求都做删除请前缀部分</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/error"><span class="type-signature"></span>module:middlewares/error<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_error.js.html">middlewares/error.js</a>, <a href="middlewares_error.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>HTTP请求出错中间件处理，根据出错的Error对象，记录出错的url,code,userToken,
+出错信息以及是否主动抛出的异常，将相关数据输出到日志并记录到influxdb中。
+最后根据Error生成相应的数据返回给前端</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/http-stats"><span class="type-signature"></span>module:middlewares/http-stats<span class="signature">(options)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_http-stats.js.html">middlewares/http-stats.js</a>, <a href="middlewares_http-stats.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/vicanso/koa-http-stats">GitHub</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>对HTTP的响应时间、状态码等生成统计指标，返回的统计指标如下：
+{
+  connecting: Integer, // 正在处理请求数
+  total: Integer,  // 总处理的请求数
+  use: Integer, // 处理时间ms
+  bytes: Integer, // 响应数据字节
+  code: Integer, // 响应状态码
+  status: Integer, // 按状态码区分， 1xx -&gt; 1, 2xx -&gt; 2 ...
+  spdy: Integer, // 响应速度区间，按options中配置的time
+  size: Integer, // 响应数据大小区间
+  busy: Integer, // 系统繁忙级别，根据connecting的数量来判断所处区间
+  request: Integer, // 根据请求头的X-Requested-At获取请求所用时间（只是一个估计算）
+  method: String, // 请求类型
+  ip: String, // 用户IP
+}
+并将数据记录到influxdb中</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>各统计指标的分段配置，包括处理时间，字节，状态码等</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/limit"><span class="type-signature"></span>module:middlewares/limit<span class="signature">(options, interval)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_limit.js.html">middlewares/limit.js</a>, <a href="middlewares_limit.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/vicanso/koa-connection-limit">GitHub</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>设置不同的connectiong数量级别，不同的连接数对应不同的状态。
+使用koa-connection-limit，根据当前连接数，当状态变化时，触发回调函数。
+当系统状态达到<code>high</code>时，设置系统<code>status</code>为<code>pause</code>。当连接数降低，不再是<code>high</code>时，
+延时<code>interval</code>将系统重置为<code>running</code></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>{mid: Integer, high: Integer}</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interval</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>重置延时间隔</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/picker"><span class="type-signature"></span>module:middlewares/picker<span class="signature">(field)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_picker.js.html">middlewares/picker.js</a>, <a href="middlewares_picker.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>根据设置的field字段生成picker中间件</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>field</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>在querystring中哪个属性是标记筛选字段，在此使用的是_fields</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/ping"><span class="type-signature"></span>module:middlewares/ping<span class="signature">(url)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_ping.js.html">middlewares/ping.js</a>, <a href="middlewares_ping.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>根据应用状态对设置的ping请求做出响应，如果应用不是处于<code>running</code>状态，
+则对ping请求返回出错，可以达到让反向代理不再转发新的请求过来，但又不影响现有处理的目的</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>ping的url，一般使用/ping</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/state"><span class="type-signature"></span>module:middlewares/state<span class="signature">(versions)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_state.js.html">middlewares/state.js</a>, <a href="middlewares_state.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>对state生成各类增添属性的中间件</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>versions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>静态文件版本号</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="module:middlewares/tracker"><span class="type-signature"></span>module:middlewares/tracker<span class="signature">(category, params)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_tracker.js.html">middlewares/tracker.js</a>, <a href="middlewares_tracker.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>生成行为日志中间件，根据设置的参数列表获取用户提交的参数，
+以后最后的结果，记录到influxdb中</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>category</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>该用户行为分类，如：用户注册、用户收藏</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>参数列表, 如：[&quot;name&quot;, &quot;code&quot;]，
+取参数的优先顺序是：ctx.request.body --&gt; ctx.params --&gt; ctx.query</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Mar 17 2017 21:51:33 GMT+0800 (CST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

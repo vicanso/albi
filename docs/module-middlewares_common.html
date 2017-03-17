@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>middlewares/common - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers.html">controllers</a></li><li><a href="module-controllers_home.html">controllers/home</a></li><li><a href="module-controllers_stats.html">controllers/stats</a><ul class='methods'><li data-type='method'><a href="module-controllers_stats.html#.ajax">ajax</a></li><li data-type='method'><a href="module-controllers_stats.html#.exception">exception</a></li><li data-type='method'><a href="module-controllers_stats.html#.statistics">statistics</a></li></ul></li><li><a href="module-controllers_system.html">controllers/system</a><ul class='methods'><li data-type='method'><a href="module-controllers_system.html#.exit">exit</a></li><li data-type='method'><a href="module-controllers_system.html#.level">level</a></li><li data-type='method'><a href="module-controllers_system.html#.pause">pause</a></li><li data-type='method'><a href="module-controllers_system.html#.resume">resume</a></li><li data-type='method'><a href="module-controllers_system.html#.setLevel">setLevel</a></li><li data-type='method'><a href="module-controllers_system.html#.status">status</a></li><li data-type='method'><a href="module-controllers_system.html#.version">version</a></li><li data-type='method'><a href="module-controllers_system.html#~getVersion">getVersion</a></li></ul></li><li><a href="module-controllers_user.html">controllers/user</a><ul class='methods'><li data-type='method'><a href="module-controllers_user.html#.like">like</a></li><li data-type='method'><a href="module-controllers_user.html#.login">login</a></li><li data-type='method'><a href="module-controllers_user.html#.loginToken">loginToken</a></li><li data-type='method'><a href="module-controllers_user.html#.logout">logout</a></li><li data-type='method'><a href="module-controllers_user.html#.me">me</a></li><li data-type='method'><a href="module-controllers_user.html#.refreshSession">refreshSession</a></li><li data-type='method'><a href="module-controllers_user.html#.register">register</a></li><li data-type='method'><a href="module-controllers_user.html#~pickUserInfo">pickUserInfo</a></li></ul></li><li><a href="module-errors.html">errors</a></li><li><a href="module-helpers_bluebird.html">helpers/bluebird</a></li><li><a href="module-helpers_debug.html">helpers/debug</a></li><li><a href="module-helpers_errors.html">helpers/errors</a><ul class='methods'><li data-type='method'><a href="module-helpers_errors.html#.get">get</a></li></ul></li><li><a href="module-helpers_globals.html">helpers/globals</a><ul class='methods'><li data-type='method'><a href="module-helpers_globals.html#.get">get</a></li><li data-type='method'><a href="module-helpers_globals.html#.set">set</a></li></ul></li><li><a href="module-helpers_hooks.html">helpers/hooks</a><ul class='methods'><li data-type='method'><a href="module-helpers_hooks.html#.createUpdateHook">createUpdateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.createValidateHook">createValidateHook</a></li><li data-type='method'><a href="module-helpers_hooks.html#.getStatisticsHooks">getStatisticsHooks</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createNormalStats">createNormalStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~createSaveStats">createSaveStats</a></li><li data-type='method'><a href="module-helpers_hooks.html#~fillData">fillData</a></li></ul></li><li><a href="module-helpers_influx.html">helpers/influx</a><ul class='members'><li data-type='member'><a href="module-helpers_influx.html#.client">client</a></li></ul><ul class='methods'><li data-type='method'><a href="module-helpers_influx.html#.write">write</a></li><li data-type='method'><a href="module-helpers_influx.html#~flush">flush</a></li></ul></li><li><a href="module-helpers_joi.html">helpers/joi</a><ul class='methods'><li data-type='method'><a href="module-helpers_joi.html#~validateThrow">validateThrow</a></li></ul></li><li><a href="module-helpers_local-require.html">helpers/local-require</a><ul class='methods'><li data-type='method'><a href="module-helpers_local-require.html#~localRequire">localRequire</a></li></ul></li><li><a href="module-helpers_utils.html">helpers/utils</a><ul class='methods'><li data-type='method'><a href="module-helpers_utils.html#.checkToExit">checkToExit</a></li><li data-type='method'><a href="module-helpers_utils.html#.getParam">getParam</a></li><li data-type='method'><a href="module-helpers_utils.html#.randomToken">randomToken</a></li></ul></li><li><a href="module-influx-schemas.html">influx-schemas</a></li><li><a href="module-middlewares_auth.html">middlewares/auth</a><ul class='methods'><li data-type='method'><a href="module-middlewares_auth.html#.admin">admin</a></li></ul></li><li><a href="module-middlewares_common.html">middlewares/common</a><ul class='methods'><li data-type='method'><a href="module-middlewares_common.html#.deprecate">deprecate</a></li><li data-type='method'><a href="module-middlewares_common.html#.fresh">fresh</a></li><li data-type='method'><a href="module-middlewares_common.html#.noCache">noCache</a></li><li data-type='method'><a href="module-middlewares_common.html#.noQuery">noQuery</a></li><li data-type='method'><a href="module-middlewares_common.html#.routeStats">routeStats</a></li><li data-type='method'><a href="module-middlewares_common.html#.version">version</a></li></ul></li><li><a href="module-middlewares_debug.html">middlewares/debug</a></li><li><a href="module-middlewares_entry.html">middlewares/entry</a></li><li><a href="module-middlewares_error.html">middlewares/error</a></li><li><a href="module-middlewares_http-stats.html">middlewares/http-stats</a></li><li><a href="module-middlewares_limit.html">middlewares/limit</a></li><li><a href="module-middlewares_picker.html">middlewares/picker</a></li><li><a href="module-middlewares_ping.html">middlewares/ping</a></li><li><a href="module-middlewares_session.html">middlewares/session</a><ul class='methods'><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.login">login</a></li><li data-type='method'><a href="module-middlewares_session.html#.readonly">readonly</a></li><li data-type='method'><a href="module-middlewares_session.html#.writable">writable</a></li><li data-type='method'><a href="module-middlewares_session.html#~normal">normal</a></li></ul></li><li><a href="module-middlewares_state.html">middlewares/state</a><ul class='methods'><li data-type='method'><a href="module-middlewares_state.html#~getImgUrl">getImgUrl</a></li></ul></li><li><a href="module-middlewares_template.html">middlewares/template</a><ul class='methods'><li data-type='method'><a href="module-middlewares_template.html#~parse">parse</a></li><li data-type='method'><a href="module-middlewares_template.html#~render">render</a></li></ul></li><li><a href="module-middlewares_tracker.html">middlewares/tracker</a><ul class='methods'><li data-type='method'><a href="module-middlewares_tracker.html#~logUserTracker">logUserTracker</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#globals">globals</a></li><li><a href="global.html#localRequire">localRequire</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">middlewares/common</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>一些公共的与业务无关的中间件</p></div>
+        
+
+        
+            
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_common.js.html">middlewares/common.js</a>, <a href="middlewares_common.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".deprecate"><span class="type-signature">(static) </span>deprecate<span class="signature">(hint)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_common.js.html">middlewares/common.js</a>, <a href="middlewares_common.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>用于生成deprecate的提示信息，会在响应的Header中添加<code>Warning</code>头，
+前端在请求这类url中，根据返回的Header，在开发环境中，增加提示。
+每次该请求被调用到，都会写一条warn日志，并且记录到influxdb中</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>hint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Strimg</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>提示文案</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".fresh"><span class="type-signature">(static) </span>fresh<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_common.js.html">middlewares/common.js</a>, <a href="middlewares_common.js.html#line93">line 93</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/koajs/koa-fresh">GitHub</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>根据请求的Header，判断是否数据未变化，是则以304返回，该函数直接修改自koa-fresh</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".noCache"><span class="type-signature">(static) </span>noCache<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_common.js.html">middlewares/common.js</a>, <a href="middlewares_common.js.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/vicanso/articles/blob/master/varnish-suggestion.md">GitHub</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>用于校验请求是否设置了no-cache的相关属性，主要为了便于在varnish中更高效的判断该请求是不可缓存的
+如果非GET或HEAD请求，不做任何校验，默认符合。
+否则判断Header中的<code>Cache-Control</code>是否设置为<code>no-cache</code>或者querystring中是否有设置<code>cache-control=no-cache</code>。
+注：如果使用Header的配置方式，会导致请求头中<code>if-none-match</code>等缓存相关的字段缺失，尽量使用querystring的方式</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".noQuery"><span class="type-signature">(static) </span>noQuery<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_common.js.html">middlewares/common.js</a>, <a href="middlewares_common.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>对于url中的querystring检验，如果有querystring则校验不通过，返回出错。
+主要是一些接口是不需要querystring的，如果增加了，对接口处理没影响，
+但是会导致varnish缓存的增多，特别有可能前端调用接口时把时间戳加上，完全利用不到<code>varnish</code></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".routeStats"><span class="type-signature">(static) </span>routeStats<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_common.js.html">middlewares/common.js</a>, <a href="middlewares_common.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>路径的相关统计，用于全局增加到路径的处理函数中，记录<code>method</code>, <code>paht</code>, <code>spdy</code> 与 <code>use</code>。
+spdy字段根据use的时间来生成所处时间段，方便对路由处理性能分组展示</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".version"><span class="type-signature">(static) </span>version<span class="signature">(v, t<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="middlewares_common.js.html">middlewares/common.js</a>, <a href="middlewares_common.js.html#line71">line 71</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/vicanso/koa-rest-version">GitHub</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>用于校验请求版本号是否符合配置定义，依赖于koa-rest-version来生成版本与数据类型</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>v</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>版本号，支持单个和多个版本号的定义。
+如果是多个版本号同时并存，使用[v1, v2]，如果只是单一版本，则直接v1</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>t</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>"json"</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>如: 'json' 或者 ['json', 'xml']</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>返回中间件处理函数</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Mar 17 2017 21:51:33 GMT+0800 (CST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

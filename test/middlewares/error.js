@@ -12,7 +12,7 @@ describe('middleware/error', () => {
     const app = new Koa();
     const error = localRequire('middlewares/error');
     const errors = localRequire('helpers/errors');
-    app.use(error);
+    app.use(error());
 
     app.use(ctx => {
       const err = new Error('error-message');
@@ -49,7 +49,7 @@ describe('middleware/error', () => {
   it('should response unexpected error success', done => {
     const app = new Koa();
     const error = localRequire('middlewares/error');
-    app.use(error);
+    app.use(error());
 
     app.use(ctx => {
       i.j = 0;

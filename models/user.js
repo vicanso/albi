@@ -3,7 +3,6 @@ const {
   createUpdateHook,
 } = localRequire('helpers/hooks');
 
-
 function afterValidate(doc) {
   console.info(`${doc.account} after validate`);
 }
@@ -13,6 +12,7 @@ function get(conditions) {
 }
 
 module.exports = {
+  // model的schema定义
   schema: {
     account: {
       type: String,
@@ -48,11 +48,13 @@ module.exports = {
       required: true,
     },
   },
+  // model的index配置
   indexes: [
     {
       account: 1,
     },
   ],
+  // mongoose pre hook
   pre: {
     validate: [
       createValidateHook({
@@ -66,11 +68,13 @@ module.exports = {
       }),
     ],
   },
+  // mongoose post hook
   post: {
     validate: [
       afterValidate,
     ],
   },
+  // mongoose static function
   static: {
     get,
   },

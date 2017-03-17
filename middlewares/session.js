@@ -87,7 +87,7 @@ exports.login = () => (ctx, next) => normal(ctx, () => {
  * 只读session中间件，并判断用户是否已经登录
  * @return {Function} 返回中间件处理函数
  */
-exports.login = () => (ctx, next) => normal(ctx, () => {
+exports.loginReadonly = () => (ctx, next) => normal(ctx, () => {
   if (!_.get(ctx, 'session.user.account')) {
     throw errors.get(107);
   }

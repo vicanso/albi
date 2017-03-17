@@ -1,3 +1,17 @@
+/**
+ * 路由定义，通过配置的方式实现各路径的流程，路由配置主要有两种方式：
+ * 1.字符串形式：'[Method] [RoutePath] [function & function]
+ * 2.Object形式：{
+ *  methods: ['Method'],
+ *  urls: ['RoutePath'],
+ *  handlers: [
+ *    function,
+ *    function,
+ *  ]
+ * }
+ * @module router
+ */
+
 const middlewares = localRequire('middlewares');
 const tracker = middlewares.tracker;
 const {

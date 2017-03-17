@@ -184,7 +184,7 @@ describe('middleware/common', () => {
         ctx.state.timing = new Timing();
         return next();
       });
-      app.use(commonMiddleware.routeStats);
+      app.use(commonMiddleware.routeStats());
       app.use(ctx => {
         ctx.matched = [
           {
