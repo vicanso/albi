@@ -2,6 +2,28 @@
 
 Web framework base on koa 2.x.
 
+## 模块分类
+
+- `controllers` 主要是实现路由的相关处理函数，对于参数的校验，`services`的调用方，通过不同的`service`获取路由的响应结果
+
+- `services` 各业务相关的实现变，该组件主要实现与数据库的相关操作，以及其它依赖服务的调用实现等。
+
+- `helpers` 各类公共的组件，主要是与业务无关的各类功能实现
+
+- `middlewares` 各类常用的中间件，包括`session`, `limit`, `error`等
+
+- `models` `mongodb`的`model`相关定义
+
+- `router` 路由的调用链定义
+
+- `errors` 各种出错的定义
+
+- `tasks` 各类定时执行的任务
+
+- `views` 模板目录
+
+- `influx-schemas` influxdb的schema定义
+
 ## 常用Middlware
 
 - `noQuery` 要求url中无query参数，主要用于可缓存的请求，为了避免添加参数导致`varnish`缓存失效，因此如果无参数的可缓存路由处理，尽量添加此middleware
