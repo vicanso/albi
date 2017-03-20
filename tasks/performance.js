@@ -1,3 +1,8 @@
+/**
+ * 此模块定时将系统性能指标写入到influxdb中
+ * @module tasks/performance
+ */
+
 const _ = require('lodash');
 const performance = require('performance-nodejs');
 
@@ -32,6 +37,11 @@ performance((data) => {
   }
 }, 500);
 
+/**
+ * 创建定时收集应用程序相关性能指标的timer
+ * @param  {Integer} interval 定时间隔，单位ms
+ * @return {Timer}
+ */
 module.exports = interval => setInterval(() => {
   const {
     lag,

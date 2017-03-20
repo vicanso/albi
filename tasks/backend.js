@@ -5,6 +5,10 @@ const stringify = require('simple-stringify');
 
 const config = localRequire('config');
 
+/**
+ * 获取本机IP地址
+ * @return {[type]} [description]
+ */
 const getIPAddress = () => {
   if (config.IP) {
     return config.IP;
