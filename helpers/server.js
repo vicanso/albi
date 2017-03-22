@@ -14,6 +14,12 @@ module.exports = (port) => {
   // error handler
   app.use(localRequire('middlewares/error')());
   app.use(localRequire('middlewares/entry')(config.app, config.appUrlPrefix));
+  // timeout
+  app.use(localRequire('middlewares/timeout')({
+    timeout: 3000,
+    // 如果query中设置了disableTimeout，则跳过timeout处理
+    pass: ctx => _.has(ctx.query, 'disableTimeout'),
+  }));
   // health check
   app.use(localRequire('middlewares/ping')('/ping'));
 
