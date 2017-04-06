@@ -25,27 +25,20 @@ const isExists = (condition) => {
  * @param {Object} data 用户相关信息
  * @return {Promise(User)}
  */
-exports.add = (data) => {
+exports.add = async (data) => {
   const User = Models.get('User');
-  return isExists({
-    account: data.account,
-  }).then((exists) => {
-    if (exists) {
-      throw errors.get(104);
-    }
-    return isExists({
-      email: data.email,
-    });
-  }).then((exists) => {
-    if (exists) {
-      throw errors.get(105);
-    }
-    const userData = _.clone(data);
-    const date = new Date().toISOString();
-    userData.lastLoginedAt = date;
-    userData.loginCount = 1;
-    return (new User(userData)).save().then(doc => doc.toJSON());
-  });
+  if (await isExists({ account: data.account })) {
+    throw errors.get(104);
+  }
+  if (await isExists({ email: data.email })) {
+    throw errors.get(105);
+  }
+  const userData = _.clone(data);
+  const date = new Date().toISOString();
+  userData.lastLoginedAt = date;
+  userData.loginCount = 1;
+  const doc = await (new User(userData)).save();
+  return doc.toJSON();
 };
 
 /**
@@ -55,21 +48,20 @@ exports.add = (data) => {
  * @param  {String} token    用户登录时生成的随机token
  * @return {Promise(User)}
  */
-exports.get = (account, password, token) => {
+exports.get = async (account, password, token) => {
   const User = Models.get('User');
-  return User.findOne({
+  const incorrectError = errors.get(106);
+  const doc = await User.findOne({
     account,
-  }).then((doc) => {
-    const incorrectError = errors.get(106);
-    if (!doc) {
-      throw incorrectError;
-    }
-    const hash = crypto.createHash('sha256');
-    if (hash.update(doc.password + token).digest('hex') !== password) {
-      throw incorrectError;
-    }
-    return doc.toJSON();
   });
+  if (!doc) {
+    throw incorrectError;
+  }
+  const hash = crypto.createHash('sha256');
+  if (hash.update(doc.password + token).digest('hex') !== password) {
+    throw incorrectError;
+  }
+  return doc.toJSON();
 };
 
 /**
@@ -78,9 +70,10 @@ exports.get = (account, password, token) => {
  * @param  {Object} data 需要更新的用户信息
  * @return {Promise(User)}
  */
-exports.update = (id, data) => {
+exports.update = async (id, data) => {
   const User = Models.get('User');
-  return User.findOneAndUpdate({ _id: id }, data).then(doc => doc.toJSON());
+  const doc = await User.findOneAndUpdate({ _id: id }, data);
+  return doc.toJSON();
 };
 
 /**
@@ -89,11 +82,15 @@ exports.update = (id, data) => {
  * 在日志中记录用户的token，通过从登录记录中查到token再确认是哪个账号，
  * 也为了避免日志输出敏感数据
  */
-exports.addLoginRecord = (data) => {
+exports.addLoginRecord = async (data) => {
   const Login = Models.get('Login');
   /* eslint no-param-reassign:0 */
   data.createdAt = (new Date()).toISOString();
-  return (new Login(data)).save().catch((err) => {
+  try {
+    const doc = await (new Login(data)).save();
+    return doc;
+  } catch (err) {
     console.error(`add login record fail, account:${data.account} err:${err.message}`);
-  });
+  }
+  return null;
 };

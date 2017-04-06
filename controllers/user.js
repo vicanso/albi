@@ -86,7 +86,7 @@ exports.loginToken = (ctx) => {
  * @prop {Route} /api/users/login
  * @return {Object} 返回`pickUserInfo`的数据
  */
-exports.login = (ctx) => {
+exports.login = async (ctx) => {
   const session = ctx.session;
   if (_.get(session, 'user.account')) {
     throw errors.get(101);
@@ -96,27 +96,26 @@ exports.login = (ctx) => {
     throw errors.get(102);
   }
   const { account, password } = ctx.request.body;
-  return userService.get(account, password, token).then((doc) => {
-    const user = pickUserInfo(doc);
-    const ip = ctx.ip;
-    user.token = randomToken();
-    user.loginCount += 1;
-    /* eslint no-param-reassign:0 */
-    ctx.session.user = user;
-    /* eslint no-param-reassign:0 */
-    ctx.body = user;
-    /* eslint no-underscore-dangle:0 */
-    userService.update(doc._id, {
-      lastLoginedAt: (new Date()).toISOString(),
-      loginCount: user.loginCount,
-      ip,
-    });
-    userService.addLoginRecord({
-      account: user.account,
-      token: user.token,
-      userAgent: ctx.get('User-Agent'),
-      ip,
-    });
+  const doc = await userService.get(account, password, token);
+  const user = pickUserInfo(doc);
+  const ip = ctx.ip;
+  user.token = randomToken();
+  user.loginCount += 1;
+  /* eslint no-param-reassign:0 */
+  ctx.session.user = user;
+  /* eslint no-param-reassign:0 */
+  ctx.body = user;
+  /* eslint no-underscore-dangle:0 */
+  userService.update(doc._id, {
+    lastLoginedAt: (new Date()).toISOString(),
+    loginCount: user.loginCount,
+    ip,
+  });
+  userService.addLoginRecord({
+    account: user.account,
+    token: user.token,
+    userAgent: ctx.get('User-Agent'),
+    ip,
   });
 };
 
@@ -127,19 +126,18 @@ exports.login = (ctx) => {
  * @prop {Route} /api/users/me
  * @return {Object} 刷新成功则返回null
  */
-exports.refreshSession = (ctx) => {
+exports.refreshSession = async (ctx) => {
   const {
     ttl,
     maxAge,
   } = config.session;
-  return ctx.refreshSessionTTL(ttl).then(() => {
-    const cookies = ctx.cookies;
-    const name = config.app;
-    cookies.set(name, cookies.get(name), {
-      maxAge,
-    });
-    ctx.body = null;
+  await ctx.refreshSessionTTL(ttl);
+  const cookies = ctx.cookies;
+  const name = config.app;
+  cookies.set(name, cookies.get(name), {
+    maxAge,
   });
+  ctx.body = null;
 };
 
 /**
@@ -152,7 +150,7 @@ exports.refreshSession = (ctx) => {
  * @prop {Route} /api/users/register
  * @return {Object} 从用户信息中返回pickUserInfo函数获取的值
  */
-exports.register = (ctx) => {
+exports.register = async (ctx) => {
   const data = Joi.validateThrow(ctx.request.body, {
     account: Joi.string().min(4).required(),
     password: Joi.string().required(),
@@ -163,19 +161,18 @@ exports.register = (ctx) => {
   }
   const ip = ctx.ip;
   data.ip = ip;
-  return userService.add(data).then((doc) => {
-    doc.token = randomToken();
-    const user = pickUserInfo(doc);
-    /* eslint no-param-reassign:0 */
-    ctx.session.user = user;
-    /* eslint no-param-reassign:0 */
-    ctx.body = user;
-    userService.addLoginRecord({
-      account: user.account,
-      token: user.token,
-      userAgent: ctx.get('User-Agent'),
-      ip,
-    });
+  const doc = await userService.add(data);
+  doc.token = randomToken();
+  const user = pickUserInfo(doc);
+  /* eslint no-param-reassign:0 */
+  ctx.session.user = user;
+  /* eslint no-param-reassign:0 */
+  ctx.body = user;
+  userService.addLoginRecord({
+    account: user.account,
+    token: user.token,
+    userAgent: ctx.get('User-Agent'),
+    ip,
   });
 };
 

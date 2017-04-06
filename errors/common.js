@@ -15,4 +15,12 @@ module.exports = {
     en: 'Request should be set no-cache',
     status: 406,
   },
+  5: {
+    en: 'version is invalid, it should be version:#{version}',
+    status: 406,
+  },
+  6: {
+    en: 'type is invalid, it should be type:#{type}',
+    status: 406,
+  },
 };

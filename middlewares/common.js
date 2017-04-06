@@ -75,11 +75,17 @@ exports.version = (v, t) => {
   return (ctx, next) => {
     const version = _.get(ctx, 'versionConfig.version', 1);
     if (_.indexOf(versions, version) === -1) {
-      throw errors.get(`version is invalid, it should be version:[${versions.join(',')}]`, 406);
+      const err = errors.get(5);
+      err.message = err.message
+        .replace('#{version}', versions.join(','));
+      throw err;
     }
     const type = _.get(ctx, 'versionConfig.type', 'json');
     if (_.indexOf(typeList, type) === -1) {
-      throw errors.get(`type is invalid, it should be type:[${typeList.join(',')}]`, 406);
+      const err = errors.get(6);
+      err.message = err.message
+        .replace('#{type}', typeList.join(','));
+      throw err;
     }
     return next();
   };

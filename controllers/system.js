@@ -20,14 +20,13 @@ const utils = localRequire('helpers/utils');
  * 正常情况下两者一致，但是如果更新了版本，但是没有重启就会不一致
  * @return {Object} 返回版本号信息 {code: 读取文件的版本号, exec: 内部中加载的版本号}
  */
-function getVersion() {
-  return fs.readFileAsync(path.join(__dirname, '../package.json')).then((buf) => {
-    const pkg = JSON.parse(buf);
-    return {
-      code: pkg.version,
-      exec: config.version,
-    };
-  });
+async function getVersion() {
+  const buf = await fs.readFileAsync(path.join(__dirname, '../package.json'));
+  const pkg = JSON.parse(buf);
+  return {
+    code: pkg.version,
+    exec: config.version,
+  };
 }
 
 /**
@@ -37,11 +36,12 @@ function getVersion() {
  * @prop {Route} /api/sys/version
  * @return {Object} {code: 读取文件的版本号, exec: 内部中加载的版本号}
  */
-exports.version = ctx => getVersion().then((data) => {
+exports.version = async (ctx) => {
+  const version = await getVersion();
   ctx.setCache(600);
   /* eslint no-param-reassign:0 */
-  ctx.body = data;
-});
+  ctx.body = version;
+};
 
 /**
  * 设置系统状态为`pause`，此时系统对于`/ping`的响应会返回出错，
@@ -85,7 +85,8 @@ exports.resume = (ctx) => {
  * startedAt: ISOString,
  * }
  */
-exports.status = ctx => getVersion().then((version) => {
+exports.status = async (ctx) => {
+  const version = await getVersion();
   const uptime = moment(Date.now() - (Math.ceil(process.uptime()) * 1000));
   ctx.body = {
     connectingTotal: globals.get('connectingTotal'),
@@ -94,7 +95,7 @@ exports.status = ctx => getVersion().then((version) => {
     uptime: uptime.fromNow(),
     startedAt: uptime.toISOString(),
   };
-});
+};
 
 /**
  * 使用`uitls.checkToExit(3)，此函数只是退出当前应用，如果有守护进程之类可用于graceful reload`

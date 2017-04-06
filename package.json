@@ -1,7 +1,7 @@
 {
   "name": "albi",
   "description": "backend framework base on koa",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "author": "Tree Xie <vicansocanbico@gmail.com>",
   "repository": {
     "type": "git",
@@ -18,10 +18,11 @@
     "albi"
   ],
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=7.6.0"
   },
   "readmeFilename": "README.md",
   "scripts": {
+    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "eslint-es6": "node ./node_modules/.bin/eslint public/js/*.js public/js/*/*.js",
     "eslint-node": "node ./node_modules/.bin/eslint *.js helpers/*.js middlewares/*.js router/*.js controllers/*.js models/*.js services/*.js",
     "eslint": "npm run eslint-node && npm run eslint-es6",
@@ -96,7 +97,7 @@
     "gulp-copy": "1.0.0",
     "gulp-cssmin": "^0.1.7",
     "gulp-stylus": "^2.6.0",
-    "istanbul": "^0.4.5",
+    "istanbul": "^1.1.0-alpha.1",
     "jsdoc": "^3.4.3",
     "mocha": "^3.2.0",
     "nib": "^1.1.2",

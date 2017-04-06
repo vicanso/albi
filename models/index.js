@@ -73,22 +73,23 @@ const initClient = (uri, options) => {
     },
   }, options);
   const client = mongoose.createConnection(uri, opts);
+  const maskUri = uri.replace(/\/\/\S+:\S+@/, '//***:***@');
   client.on('connected', () => {
-    console.info(`${uri} connected`);
+    console.info(`${maskUri} connected`);
   });
   client.on('disconnected', () => {
     /* istanbul ignore next */
-    console.error(`${uri} disconnected`);
+    console.error(`${maskUri} disconnected`);
   });
   client.on('reconnected', _.debounce(() => {
     /* istanbul ignore next */
-    console.error(`${uri} reconnected`);
+    console.error(`${maskUri} reconnected`);
   }, 3000));
   client.on('connecting', () => {
     /* istanbul ignore next */
-    console.error(`${uri} connecting`);
+    console.error(`${maskUri} connecting`);
   });
-  client.on('error', err => console.error(`${uri} error, %s`, err));
+  client.on('error', err => console.error(`${maskUri} error, %s`, err));
   initModels(client, __dirname);
   return client;
 };
