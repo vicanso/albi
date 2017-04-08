@@ -21,7 +21,14 @@ const uglify = new webpack.optimize.UglifyJsPlugin({
   },
 });
 
+const definePlugin = new webpack.DefinePlugin({
+  'process.env': {
+    NODE_ENV: JSON.stringify('production'),
+  },
+});
+
 webpackConfig.plugins.push(uglify);
+webpackConfig.plugins.push(definePlugin);
 webpackConfig.output.filename = '[name].[chunkhash].js';
 
 const assetsPath = 'assets';
