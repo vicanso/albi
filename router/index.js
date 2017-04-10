@@ -41,5 +41,9 @@ addToRouter('m.session.login', middlewares.session.login());
 
 addToRouter('v', views);
 
+addToRouter('level', middlewares.level);
+addToRouter('version', middlewares.common.version);
+addToRouter('tracker', middlewares.tracker);
+
 
 module.exports = getRouter(localRequire('router/config'));

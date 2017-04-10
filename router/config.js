@@ -12,12 +12,6 @@
  * @module router
  */
 
-const middlewares = localRequire('middlewares');
-const tracker = middlewares.tracker;
-const {
-  version,
-} = middlewares.common;
-const level = middlewares.level;
 module.exports = [
   // system start
   '[GET] [/api/sys/version] [m.noQuery & c.system.version]',
@@ -37,17 +31,7 @@ module.exports = [
   '[POST] [/api/users/login] [m.session & c.user.login]',
   '[POST] [/api/users/register] [m.session & c.user.register]',
   '[PUT] [/api/users/me] [m.session & c.user.refreshSession]',
-  {
-    methods: ['POST'],
-    urls: ['/api/users/like'],
-    handlers: [
-      level(5),
-      tracker('user-like', ['code']),
-      version([2, 3]),
-      'm.session.read',
-      'c.user.like',
-    ],
-  },
+  '[POST] [/api/users/like] [level(5) & version([2, 3]) & tracker("user-like", ["code"]) & m.session.read & c.user.like]',
 
   // stats
   '[POST] [/api/stats/ajax] [c.stats.ajax]',

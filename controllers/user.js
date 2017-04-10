@@ -191,7 +191,7 @@ exports.like = (ctx) => {
     type,
   } = ctx.versionConfig;
   if (version < 3) {
-    ctx.set('Warning', 'Version 2 is deprecated.');
+    ctx.set('Warning', 'Version less than 3 is deprecated.');
   }
   /* eslint no-param-reassign:0 */
   ctx.body = {
