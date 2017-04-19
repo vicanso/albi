@@ -5,6 +5,7 @@ const debug = localRequire('helpers/debug');
 const middlewares = localRequire('middlewares');
 const config = localRequire('config');
 const views = localRequire('views');
+const routes = localRequire('routes');
 
 
 function getRouter(descList) {
@@ -46,4 +47,4 @@ addToRouter('version', middlewares.common.version);
 addToRouter('tracker', middlewares.tracker);
 
 
-module.exports = getRouter(localRequire('router/config'));
+module.exports = getRouter(routes);
