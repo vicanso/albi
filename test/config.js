@@ -34,7 +34,6 @@ describe('config', () => {
       IP: Joi.string().ip(),
       session: Joi.object().keys({
         key: Joi.string().required(),
-        ttl: Joi.number().integer().required(),
         maxAge: Joi.number().integer().required(),
       }),
       mongoUri: Joi.string(),

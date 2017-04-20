@@ -11,6 +11,7 @@ module.exports = (port) => {
   // trust proxy
   app.proxy = true;
   app.keys = ['cuttle-fish', 'tree.xie'];
+  localRequire('middlewares/session').init(app);
   // error handler
   app.use(localRequire('middlewares/error')());
   app.use(localRequire('middlewares/entry')(config.app, config.appUrlPrefix));

@@ -24,15 +24,12 @@ describe('controllers/user', () => {
   const loginUrl = `${config.appUrlPrefix}/users/login`;
   app.keys = ['vicanso', 'jenny'];
   app.use(require('koa-bodyparser')());
+  session.init(app);
   const writableSession = session.writable();
-  const readonlySession = session.readonly();
   app.use((ctx, next) => {
     ctx.state.timing = new Timing();
-    if (ctx.url === registerUrl || ctx.url === logoutUrl || ctx.url === loginUrl) {
+    if (ctx.url === registerUrl || ctx.url === logoutUrl || ctx.url === loginUrl || ctx.url === meUrl) {
       return writableSession(ctx, next);
-    }
-    if (ctx.url === meUrl) {
-      return readonlySession(ctx, next);
     }
     return next();
   });

@@ -37,7 +37,6 @@ addToRouter('m.noQuery', middlewares.common.noQuery());
 addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin(config.adminToken));
 addToRouter('m.session', middlewares.session.writable());
-addToRouter('m.session.read', middlewares.session.readonly());
 addToRouter('m.session.login', middlewares.session.login());
 
 addToRouter('v', views);

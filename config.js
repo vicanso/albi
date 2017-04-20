@@ -48,7 +48,6 @@ exports.connectLimitOptions = {
 // cookie name
 exports.session = {
   key: pkg.name,
-  ttl: 48 * 3600 * 1000,
   maxAge: 24 * 3600 * 1000,
 };
 // admin token (jenny)

@@ -2,27 +2,28 @@
  * 此模块主要生成各类session相关的中间件
  * @module middlewares/session
  */
-const session = require('koa-simple-session');
-const RedisStore = require('koa-simple-redis');
 const _ = require('lodash');
+const session = require('koa-session');
 
-const errors = localRequire('helpers/errors');
 const config = localRequire('config');
+const errors = localRequire('helpers/errors');
 const influx = localRequire('helpers/influx');
+const {
+  sessionStore,
+} = localRequire('services/redis');
 
-const sessionMiddleware = session({
-  key: config.app,
-  prefix: `${config.app}-session:`,
-  ttl: config.session.ttl,
-  errorHandler: err => console.error(err),
-  store: new RedisStore({
-    url: config.redisUri,
+let sessionMiddleware = null;
+exports.init = (app) => {
+  if (sessionMiddleware) {
+    return;
+  }
+  sessionMiddleware = session(app, {
+    store: sessionStore,
     key: config.session.key,
-  }),
-  cookie: {
     maxAge: config.session.maxAge,
-  },
-});
+  });
+};
+
 
 /**
  * session中间件，由于用到session的接口都是基于用户的，因此都是不能在`varnish`中做缓存，
@@ -64,15 +65,6 @@ const normal = (ctx, next) => {
 exports.writable = () => normal;
 
 /**
- * 只读session中间件
- * @return {Function} 返回中间件处理函数
- */
-exports.readonly = () => (ctx, next) => normal(ctx, () => {
-  Object.freeze(ctx.session);
-  return next();
-});
-
-/**
  * 可读写session中间件，并判断用户是否已经登录
  * @return {Function} 返回中间件处理函数
  */
@@ -80,17 +72,5 @@ exports.login = () => (ctx, next) => normal(ctx, () => {
   if (!_.get(ctx, 'session.user.account')) {
     throw errors.get(107);
   }
-  return next();
-});
-
-/**
- * 只读session中间件，并判断用户是否已经登录
- * @return {Function} 返回中间件处理函数
- */
-exports.loginReadonly = () => (ctx, next) => normal(ctx, () => {
-  if (!_.get(ctx, 'session.user.account')) {
-    throw errors.get(107);
-  }
-  Object.freeze(ctx.session);
   return next();
 });
