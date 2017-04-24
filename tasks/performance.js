@@ -31,6 +31,10 @@ performance((data) => {
   if (data.lag > performanceData.lag) {
     performanceData.lag = data.lag;
   }
+  if (data.cpuUsage) {
+    performanceData.cpuUsedPercent = data.cpuUsage.usedPercent;
+  }
+
   const connectingTotal = globals.get('connectingTotal');
   if (connectingTotal > performanceData.connectingTotal) {
     performanceData.connectingTotal = connectingTotal;
@@ -48,6 +52,7 @@ module.exports = interval => setInterval(() => {
     total_physical_size,
     connectingTotal,
     total_heap_size_executable,
+    cpuUsedPercent,
   } = performanceData;
   const lagIndex = _.sortedIndex([10, 70], lag);
   const physical = parseInt(total_physical_size / MB, 10);
@@ -58,6 +63,7 @@ module.exports = interval => setInterval(() => {
     physical,
     exec: parseInt(total_heap_size_executable / MB, 10),
     connectingTotal,
+    cpuUsedPercent,
   }, {
     status: ['free', 'normal', 'busy'][lagIndex],
     memory: ['low', 'mid', 'high', 'higher'][memoryIndex],

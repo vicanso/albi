@@ -3,7 +3,7 @@
  * @module middlewares/session
  */
 const _ = require('lodash');
-const session = require('koa-session');
+const koaSession = require('koa-session');
 
 const config = localRequire('config');
 const errors = localRequire('helpers/errors');
@@ -17,10 +17,17 @@ exports.init = (app) => {
   if (sessionMiddleware) {
     return;
   }
-  sessionMiddleware = session(app, {
+  sessionMiddleware = koaSession(app, {
     store: sessionStore,
     key: config.session.key,
     maxAge: config.session.maxAge,
+    beforeSave: (ctx, session) => {
+      // session中不要添加 createdAt 与 updatedAt 字段
+      if (!session.createdAt) {
+        session.createdAt = new Date().toISOString();
+      }
+      session.updatedAt = new Date().toISOString();
+    },
   });
 };
 
@@ -51,7 +58,7 @@ const normal = (ctx, next) => {
       account,
       use,
     }, {
-      spdy: _.sortedIndex([10, 30, 80, 200], use),
+      spdy: _.sortedIndex([10, 30, 80, 200, 500], use),
     });
     end();
     return next();

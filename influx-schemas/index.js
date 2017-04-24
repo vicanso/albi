@@ -16,6 +16,11 @@ const schemas = {
       use: 'integer',
       id: 'string',
     },
+    tags: {
+      collection: '*',
+      op: '*',
+      spdy: '012345'.split(''),
+    },
     options: {
       stripUnknown: true,
     },
@@ -32,6 +37,11 @@ const schemas = {
     fields: {
       use: 'integer',
     },
+    tags: {
+      method: '*',
+      path: '*',
+      spdy: '012345'.split(''),
+    },
     options: {
       stripUnknown: true,
     },
@@ -41,6 +51,9 @@ const schemas = {
       code: 'integer',
       path: 'string',
       message: 'string',
+    },
+    tags: {
+      type: ['E', 'U'],
     },
     options: {
       stripUnknown: true,
@@ -54,14 +67,31 @@ const schemas = {
       bytes: 'integer',
       code: 'integer',
       ip: 'string',
+      url: 'string',
+      request: 'integer',
+    },
+    // 根据koa-http-stats配置的指定
+    tags: {
+      status: '12345'.split(''),
+      spdy: '012345'.split(''),
+      size: '012345'.split(''),
+      busy: '01234'.split(''),
+      method: '*',
     },
     options: {
       stripUnknown: true,
     },
   },
+  // user tracker中记录不同业务字段很多不确定，因此不做stripUnknown
   userTracker: {
     fields: {
       use: 'integer',
+      ip: 'string',
+      token: 'string',
+    },
+    tags: {
+      category: '*',
+      result: ['success', 'fail'],
     },
   },
   performance: {
@@ -70,6 +100,12 @@ const schemas = {
       physical: 'integer',
       exec: 'integer',
       connectingTotal: 'integer',
+      cpuUsedPercent: 'interger',
+    },
+    tags: {
+      status: ['free', 'normal', 'busy'],
+      memory: ['low', 'mid', 'high', 'higher'],
+      connecting: ['fewer', 'few', 'medium', 'many'],
     },
     options: {
       stripUnknown: true,
@@ -79,6 +115,9 @@ const schemas = {
     fields: {
       account: 'string',
       use: 'interger',
+    },
+    tags: {
+      spdy: '012345'.split(''),
     },
     options: {
       stripUnknown: true,

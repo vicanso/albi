@@ -31,16 +31,16 @@ function flush() {
 const debounceFlush = _.debounce(flush, 30 * 1000);
 if (client) {
   _.forEach(schemas, (schema, measurement) => {
-    client.schema(measurement, schema.fields, schema.options);
+    client.schema(measurement, schema.fields, schema.tags, schema.options);
   });
   client.timeout = 3000;
   client.on('writeQueue', () => {
     // sync write queue if the length is 100
     if (client.writeQueueLength === maxQueueLength) {
       flush();
-    } else {
-      debounceFlush();
+      return;
     }
+    debounceFlush();
   });
 }
 
