@@ -1,3 +1,10 @@
+const mongoose = require('mongoose');
+
+const {
+  String,
+  Number,
+} = mongoose.Schema.Types;
+
 const {
   createValidateHook,
   createUpdateHook,
