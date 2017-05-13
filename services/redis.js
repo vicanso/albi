@@ -1,4 +1,5 @@
 const Redis = require('ioredis');
+const _ = require('lodash');
 
 const config = localRequire('config');
 const client = new Redis(config.redisUri);
