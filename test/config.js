@@ -38,6 +38,7 @@ describe('config', () => {
       }),
       mongoUri: Joi.string(),
       redisUri: Joi.string(),
+      udpLog: Joi.string(),
     });
     done(data.error);
   });

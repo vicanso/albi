@@ -1,12 +1,27 @@
-const request = require('superagent');
 const _ = require('lodash');
 
+const errors = localRequire('helpers/errors');
+const request = localRequire('helpers/request');
+
 exports.byIP = (ip) => {
-  const url = `http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=${ip}`;
-  const keys = 'country province city'.split(' ');
+  const url = 'http://ip.taobao.com/service/getIpInfo.php';
   return request.get(url)
-    .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36')
-    .then(res => _.pick(res.body, keys));
+    .set('Accept', 'application/json')
+    .query({
+      ip,
+    })
+    .then((res) => {
+      try {
+        const info = JSON.parse(res.text);
+        if (info.code !== 0) {
+          throw errors.get(7);
+        }
+        return _.pick(info.data, ['country', 'region', 'city', 'isp']);
+      } catch (err) {
+        console.error(`parse ip info fail, ${err.message}`);
+        throw errors.get(7);
+      }
+    });
 };
 
 exports.byMobile = (mobile) => {
