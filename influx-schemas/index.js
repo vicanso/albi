@@ -46,7 +46,7 @@ const schemas = {
       stripUnknown: true,
     },
   },
-  excetion: {
+  exception: {
     fields: {
       code: 'integer',
       path: 'string',
