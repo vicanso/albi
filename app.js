@@ -42,7 +42,7 @@ process.on('uncaughtException', (err) => {
 });
 
 if (config.env !== 'development') {
-  process.on('SIGINT', gracefulExit);
+  process.on('SIGTERM', gracefulExit);
   process.on('SIGQUIT', gracefulExit);
 }
 

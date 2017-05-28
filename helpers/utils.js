@@ -41,14 +41,14 @@ exports.getParam = (arr, validate, defaultValue) => {
  * 将系统status设置为pasue之后，检测当前系统正在连接的请求数，如果为0，则退出。
  * 如果在多次检测还不为0，则强制退出
  * @param  {Integer} times 检测次数
- * @param  {Integer} [checkInterval = 10000] 每次检测的间隔
+ * @param  {Integer} [checkInterval = 3000] 每次检测的间隔
  * @return {Timer} 返回setInterval的Timer对象
  * @example
  * const utils = require('./helpers/utils');
  * // 每隔2秒检测一次是否还有连接请求，如果无，则退出
  * utils.checkToExit(5, 2000);
  */
-exports.checkToExit = (times, checkInterval = 10 * 1000) => {
+exports.checkToExit = (times, checkInterval = 3 * 1000) => {
   let count = times;
   globals.set('status', 'pause');
   const timer = setInterval(() => {
