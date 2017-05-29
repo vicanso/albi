@@ -48,7 +48,7 @@ function defaultHandle(req) {
   httpStats(req);
 }
 
-_.forEach(['get', 'post', 'put', 'del'], (method) => {
+_.forEach(['get', 'post', 'put', 'del', 'delete', 'patch'], (method) => {
   exports[method] = (...args) => {
     const req = request[method](...args);
     defaultHandle(req);
