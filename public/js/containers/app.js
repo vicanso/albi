@@ -16,6 +16,7 @@ import APIView from './api-view';
 
 import * as navigationAction from '../actions/navigation';
 import * as userAction from '../actions/user';
+import * as http from '../helpers/http';
 
 class App extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class App extends Component {
     });
     this.state = {
       isFetchingUserInfo: true,
+      showTimingView: false,
     };
     dispatch(userAction.me()).then(() => {
       this.setState({
@@ -74,6 +76,46 @@ class App extends Component {
       />
     );
   }
+  renderTimingView() {
+    const {
+      showTimingView,
+    } = this.state;
+    if (!showTimingView) {
+      return (
+        <button
+          style={{
+            position: 'fixed',
+            left: 0,
+            bottom: 0,
+          }}
+          onClick={() => {
+            this.setState({
+              showTimingView: true,
+            });
+          }}
+        >Timing</button>
+      );
+    }
+    return (
+      <div
+        className="timing-wrapper"
+      >
+        <button
+          onClick={() => {
+            this.setState({
+              showTimingView: false,
+            });
+          }}
+        >X</button>
+        <div
+          /* eslint react/no-danger:0 */
+          dangerouslySetInnerHTML={{
+            __html: http.getTimingView(),
+          }}
+        />
+      </div>
+    );
+  }
   render() {
     const {
       isFetchingUserInfo,
@@ -83,7 +125,9 @@ class App extends Component {
       navigation,
       dispatch,
     } = this.props;
-    const handleLink = this.handleLink;
+    const {
+      handleLink,
+    } = this;
     return (
       <div>
         <MainHeader
@@ -106,6 +150,7 @@ class App extends Component {
             component={() => this.renderAPIView()}
           />
         </Router>
+        {this.renderTimingView()}
       </div>
     );
   }

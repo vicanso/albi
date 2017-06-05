@@ -1,5 +1,6 @@
 import * as request from 'superagent';
 import * as _ from 'lodash';
+import HTTPTiming from 'http-timing';
 
 import * as globals from './globals';
 import {
@@ -7,6 +8,10 @@ import {
   STATS_EXCEPTION,
 } from '../constants/urls';
 import debug from './debug';
+
+const httpTiming = new HTTPTiming({
+  max: 3 * 1000,
+});
 
 const APP_NAME = globals.get('CONFIG.app');
 request.Request.prototype.version = function version(v) {
@@ -104,6 +109,10 @@ export function patch(url, data, query) {
   return req;
 }
 
+export function getTimingView() {
+  return httpTiming.toHTML();
+}
+
 function createDebouncePost(url, interval = 3000) {
   const dataList = [];
   const debouncePost = _.debounce(() => {
@@ -140,13 +149,16 @@ function stats() {
     if (!serverTiming) {
       return 0;
     }
-    const result = serverTiming.match(/\S+=(\d+\.\d+);/);
+    const result = serverTiming.match(/\S+?=(\d+\.\d+);/);
     if (!result || result.length < 2) {
       return 0;
     }
-    return result[1] * 1000;
+    return _.round(result[1]);
   };
   return (req) => {
+    if (isReject(req.url)) {
+      return;
+    }
     const url = req.url;
     const method = req.method;
     const key = `${method}:${url}`;
@@ -166,28 +178,37 @@ function stats() {
         type: 'parallelRequest',
       });
     }
-    const start = Date.now();
-    req.once('error', () => {
-      doingRequest[key] -= 1;
-    });
-    req.once('response', (res) => {
-      doingRequest[key] -= 1;
-      if (isReject(url)) {
-        return;
+    const options = {};
+    let setTiming = null;
+    const finished = _.once((res) => {
+      if (res) {
+        const serverTiming = res.get('Server-Timing');
+        const processing = getProcessingTime(serverTiming);
+        const cost = Date.now() - options.startedAt;
+        _.extend(options, {
+          use: cost,
+          processing,
+          network: cost - processing,
+          status: res.status,
+          hit: parseInt(res.get('X-Hits') || 0, 10),
+        });
+        setTiming(_.extend({
+          serverTiming,
+        }, _.pick(options, ['status', 'use'])));
+        delete options.startedAt;
+        statsAjax(options);
       }
-      const processing = getProcessingTime(res.get('Server-Timing'));
-      const cost = Date.now() - start;
-      const data = {
-        method,
-        url,
-        use: cost,
-        processing,
-        network: cost - processing,
-        status: res.status,
-        hit: parseInt(res.get('X-Hits') || 0, 10),
-      };
-      statsAjax(data);
     });
+    req.once('request', () => {
+      options.url = req.url;
+      options.method = req.method;
+      options.startedAt = Date.now();
+      options.status = -1;
+      setTiming = httpTiming.add(_.pick(options, ['method', 'url']));
+    });
+
+    req.once('error', finished);
+    req.once('response', res => finished(res));
   };
 }
 
