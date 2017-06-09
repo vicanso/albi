@@ -1,5 +1,8 @@
 const Logger = require('timtam-logger');
 const stringify = require('simple-stringify');
+const als = require('async-local-storage');
+
+als.enable();
 
 require('./helpers/local-require');
 
@@ -12,6 +15,7 @@ function initLogger() {
     app: config.app,
   });
   logger.before(config.name);
+  logger.before(() => als.get('id') || '-');
   logger.wrap(console);
   logger.add(config.logger);
 }

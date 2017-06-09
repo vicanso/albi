@@ -8,6 +8,8 @@ const Timing = require('supertiming');
 const ms = require('ms');
 
 const globals = localRequire('helpers/globals');
+const utils = localRequire('helpers/utils');
+const als = require('async-local-storage');
 
 /**
  * HTTP请求入口的中间件处理，包括：
@@ -25,9 +27,7 @@ const globals = localRequire('helpers/globals');
 module.exports = (processName, appUrlPrefix) => (ctx, next) => {
   const currentPath = ctx.path;
   const tokenKey = 'X-User-Token';
-  if (!ctx.get(tokenKey)) {
-    ctx.req.headers[tokenKey.toLowerCase()] = 'unknown';
-  }
+  als.set('id', ctx.get(tokenKey) || utils.randomToken(8));
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
     /* eslint no-param-reassign:0 */
     ctx.orginalPath = currentPath;
