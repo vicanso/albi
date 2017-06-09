@@ -3,7 +3,7 @@
  * @module helpers/hooks
  */
 
-const ulid = require('ulid');
+const shortid = require('shortid');
 const _ = require('lodash');
 
 const influx = localRequire('helpers/influx');
@@ -88,13 +88,13 @@ function createNormalStats(collection) {
 /**
  * 自动填充数据，用于update或者validate(save)的中填充数据
  * @param  {Object} opts 填充配置, {name: type}，name表示要填充的字段，type表示要填充的类型
- * type暂只支持'date'与'ulid'两种类型，date为ISOString
+ * type暂只支持'date'与'shortid'两种类型，date为ISOString
  * @param  {Object} data 要填充的数据，会修改该数据相应的字段
  * @return {Object} 返回填充好的数据（和data是同一个对象）
  * @example
  * const opts = {
  *   createdAt: 'date',
- *   token: 'ulid',
+ *   token: 'shortid',
  * };
  * const data = {
  *   name: 'tree.xie',
@@ -111,8 +111,8 @@ function fillData(opts, data) {
     }
     if (type === 'date') {
       result[key] = new Date().toISOString();
-    } else if (type === 'ulid') {
-      result[key] = ulid();
+    } else if (type === 'shortid') {
+      result[key] = shortid();
     }
   });
   return result;

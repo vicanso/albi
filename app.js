@@ -1,4 +1,4 @@
-const logger = require('timtam-logger');
+const Logger = require('timtam-logger');
 const stringify = require('simple-stringify');
 
 require('./helpers/local-require');
@@ -8,15 +8,15 @@ const config = localRequire('config');
 const utils = localRequire('helpers/utils');
 
 function initLogger() {
-  logger.set({
+  const logger = new Logger({
     app: config.app,
-    prefix: config.name,
   });
+  logger.before(config.name);
   logger.wrap(console);
-  logger.add(config.udpLog);
+  logger.add(config.logger);
 }
 
-if (config.udpLog) {
+if (config.logger) {
   initLogger();
 }
 
