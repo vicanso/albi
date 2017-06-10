@@ -6,6 +6,7 @@
  */
 const crypto = require('crypto');
 const _ = require('lodash');
+const als = require('async-local-storage');
 
 const Models = localRequire('models');
 const errors = localRequire('helpers/errors');
@@ -37,7 +38,9 @@ exports.add = async (data) => {
   const date = new Date().toISOString();
   userData.lastLoginedAt = date;
   userData.loginCount = 1;
+  const end = als.get('timing').start('addUser');
   const doc = await (new User(userData)).save();
+  end();
   return doc.toJSON();
 };
 
@@ -51,9 +54,11 @@ exports.add = async (data) => {
 exports.get = async (account, password, token) => {
   const User = Models.get('User');
   const incorrectError = errors.get(106);
+  const end = als.get('timing').start('getUser');
   const doc = await User.findOne({
     account,
   });
+  end();
   if (!doc) {
     throw incorrectError;
   }

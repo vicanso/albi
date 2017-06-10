@@ -63,7 +63,7 @@
     "koa-stylus-parser": "^2.0.2",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "mongoose": "^4.10.4",
+    "mongoose": "^4.10.5",
     "ms": "^1.0.0",
     "performance-nodejs": "^1.1.0",
     "pug": "^2.0.0-rc.2",
