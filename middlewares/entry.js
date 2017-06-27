@@ -4,12 +4,10 @@
  */
 
 const _ = require('lodash');
-const Timing = require('supertiming');
 const ms = require('ms');
+const als = require('async-local-storage');
 
 const globals = localRequire('helpers/globals');
-const utils = localRequire('helpers/utils');
-const als = require('async-local-storage');
 
 /**
  * HTTP请求入口的中间件处理，包括：
@@ -24,13 +22,10 @@ const als = require('async-local-storage');
  * @return {Function} 返回中间件处理函数
  */
 module.exports = (processName, appUrlPrefix) => (ctx, next) => {
+  const timing = als.get('timing');
+  const id = als.get('id');
+
   const currentPath = ctx.path;
-  const timing = new Timing({
-    precision: 'ns',
-  });
-  const id = ctx.get('X-Request-Id') || utils.randomToken(8);
-  als.set('timing', timing);
-  als.set('id', id);
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
     /* eslint no-param-reassign:0 */
     ctx.orginalPath = currentPath;

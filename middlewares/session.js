@@ -4,6 +4,7 @@
  */
 const _ = require('lodash');
 const koaSession = require('koa-session');
+const als = require('async-local-storage');
 
 const config = localRequire('config');
 const errors = localRequire('helpers/errors');
@@ -56,6 +57,7 @@ const normal = (ctx, next) => {
   return sessionMiddleware(ctx, () => {
     const use = Date.now() - startedAt;
     const account = _.get(ctx, 'session.user.account', 'unknown');
+    als.set('account', account);
     influx.write('session', {
       account,
       use,

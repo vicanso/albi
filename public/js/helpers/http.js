@@ -1,6 +1,7 @@
 import * as request from 'superagent';
 import * as _ from 'lodash';
 import HTTPTiming from 'http-timing';
+import shortid from 'shortid';
 
 import * as globals from './globals';
 import {
@@ -50,15 +51,6 @@ export function use(fn) {
   }
 }
 
-function randomToken(length = 8) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
-  const charsCount = chars.length;
-  const arr = [];
-  for (let i = 0; i < length; i += 1) {
-    arr.push(chars[_.random(0, charsCount)]);
-  }
-  return arr.join('');
-}
 
 function defaultHandle(req, query) {
   if (requestTimeout) {
@@ -230,7 +222,7 @@ if (appUrlPrefix) {
 use((req) => {
   req.set({
     'X-Requested-With': 'XMLHttpRequest',
-    'X-Request-Id': randomToken(),
+    'X-Request-Id': shortid(),
     'X-Requested-At': Date.now(),
   });
   if (!req.get('Accept')) {

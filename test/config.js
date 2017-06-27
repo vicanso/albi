@@ -16,7 +16,6 @@ describe('config', () => {
       viewPath: Joi.string().required(),
       trackCookie: Joi.string().required(),
       httpLogFormat: Joi.string().required(),
-      jspmPath: Joi.string().required(),
       staticOptions: Joi.object().keys({
         urlPrefix: Joi.string().required(),
         path: Joi.string().required(),

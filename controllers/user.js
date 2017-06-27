@@ -4,6 +4,7 @@
  */
 const Joi = require('joi');
 const _ = require('lodash');
+const shortid = require('shortid');
 
 const errors = localRequire('helpers/errors');
 const userService = localRequire('services/user');
@@ -41,6 +42,13 @@ const pickUserInfo = (userInfos) => {
 exports.me = (ctx) => {
   /* eslint no-param-reassign:0 */
   ctx.body = pickUserInfo(ctx.session.user || {});
+  if (!ctx.cookies.get(config.trackCookie)) {
+    ctx.cookies.set(config.trackCookie, shortid(), {
+      maxAge: 365 * 24 * 3600 * 1000,
+      signed: false,
+    });
+  }
+  console.info('get user session');
 };
 
 /**

@@ -14,6 +14,7 @@ module.exports = {
       'redux',
       'redux-logger',
       'redux-thunk',
+      'shortid',
       'superagent',
     ],
     app: './public/js/bootstrap.js',

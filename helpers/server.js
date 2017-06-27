@@ -3,6 +3,9 @@ const koaLog = require('koa-log');
 const _ = require('lodash');
 const mount = require('koa-mounting');
 const staticServe = require('koa-static-serve');
+const als = require('async-local-storage');
+const Timing = require('supertiming');
+const shortid = require('shortid');
 
 const config = localRequire('config');
 
@@ -12,6 +15,15 @@ module.exports = (port) => {
   app.proxy = true;
   app.keys = ['cuttle-fish', 'tree.xie'];
   localRequire('middlewares/session').init(app);
+  app.use((ctx, next) => {
+    const timing = new Timing({
+      precision: 'ns',
+    });
+    const id = ctx.get('X-Request-Id') || shortid();
+    als.set('timing', timing);
+    als.set('id', id);
+    return next();
+  });
   // error handler
   app.use(localRequire('middlewares/error')());
   app.use(localRequire('middlewares/entry')(config.app, config.appUrlPrefix));

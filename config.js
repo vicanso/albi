@@ -33,8 +33,6 @@ exports.staticOptions = {
 
 // view root path
 exports.viewPath = path.join(__dirname, 'views');
-// jspm file path
-exports.jspmPath = path.join(__dirname, 'jspm');
 // user track cookie
 exports.trackCookie = '_jt';
 /* eslint max-len:0 */
@@ -48,7 +46,7 @@ exports.connectLimitOptions = {
 // cookie name
 exports.session = {
   key: pkg.name,
-  maxAge: 24 * 3600 * 1000,
+  maxAge: 7 * 24 * 3600 * 1000,
 };
 // admin token (jenny)
 exports.adminToken = '6a3f4389a53c889b623e67f385f28ab8e84e5029';
@@ -64,4 +62,3 @@ exports.mongoUri = process.env.MONGO || 'mongodb://127.0.0.1/aslant';
 exports.redisUri = process.env.REDIS || 'redis://127.0.0.1/';
 
 exports.logger = process.env.LOG;
-

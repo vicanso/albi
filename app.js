@@ -15,6 +15,7 @@ function initLogger() {
     app: config.app,
   });
   logger.before(config.name);
+  logger.before(() => als.get('account'));
   logger.before(() => als.get('id'));
   logger.wrap(console);
   logger.add(config.logger);
