@@ -1,0 +1,43 @@
+{
+  "name": "albi",
+  "description": "backend framework base on koa",
+  "version": "6.0.0",
+  "author": "Tree Xie <vicansocanbico@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vicanso/albi"
+  },
+  "bugs": {
+    "url": "https://github.com/vicanso/albi/issues",
+    "email": "vicansocanbico@gmail.com"
+  },
+  "main": "./app",
+  "keywords": [
+    "koa",
+    "framework",
+    "albi"
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "readmeFilename": "README.md",
+  "scripts": {
+    "dev": "nodemon app",
+    "eslint": "npm run eslint-node",
+    "eslint-node": "node ./node_modules/.bin/eslint *.js",
+    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
+    "start": "node app",
+    "test": "npm run eslint"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^5.0.1",
+    "eslint-plugin-react": "^7.0.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.2"
+  }
+}
