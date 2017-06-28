@@ -1,3 +1,0 @@
-# ping
-
-health check handler
