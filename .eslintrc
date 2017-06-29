@@ -4,6 +4,8 @@
     "no-console": 0
   },
   "globals": {
+    "describe": true,
+    "it": true,
     "localRequire": true
   }
 }

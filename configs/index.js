@@ -1,6 +1,6 @@
 const path = require('path');
 
-const pkg = require('./package');
+const pkg = localRequire('package');
 
 // the env of the applcation
 const env = process.env.NODE_ENV || 'development';
