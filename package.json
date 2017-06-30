@@ -25,7 +25,7 @@
     "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/helpers/*.js --",
     "dev": "nodemon app",
     "eslint": "npm run eslint-node",
-    "eslint-node": "node ./node_modules/.bin/eslint *.js test/*.js configs/*.js helpers/*.js",
+    "eslint-node": "node ./node_modules/.bin/eslint *.js test/*.js configs/*.js helpers/*.js errors/*.js",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "start": "node app",
     "test": "npm run eslint && NODE_ENV=test npm run coverage"
@@ -34,8 +34,12 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "debug": "^2.6.8",
+    "http-errors": "^1.6.1",
     "joi": "^10.6.0",
-    "ramda": "^0.24.1"
+    "ramda": "^0.24.1",
+    "require-tree": "^1.1.1",
+    "simple-stringify": "^1.1.1",
+    "superagent": "^3.5.2"
   },
   "devDependencies": {
     "eslint": "^3.19.0",

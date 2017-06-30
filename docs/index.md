@@ -1,7 +1,8 @@
 # albi
 
-- [程序配置](./index.md) 程序相关的应用配置信息
+- [configs](./setting.md) 程序相关的应用配置信息
 
+- [helpers](./helpers.md) 一些基础的工具库
 
 ## localRrequire
 

@@ -1,5 +1,6 @@
 const path = require('path');
 const Joi = require('joi');
+const stringify = require('simple-stringify');
 
 /**
  * 用于引入项目中的模块，使用相对于项目根目录的相对路径
@@ -50,3 +51,9 @@ Joi.validateThrow = validateThrow;
 global.localRequire = localRequire;
 
 global.Promise = require('bluebird');
+
+// set stringify mask
+stringify.isSecret = (key) => {
+  const reg = /password/gi;
+  return reg.test(key);
+};
