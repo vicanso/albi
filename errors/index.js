@@ -9,6 +9,6 @@
  */
 
 const requireTree = require('require-tree');
-const R = require('ramda');
+const _ = require('lodash');
 
-module.exports = R.mergeAll(R.values(requireTree('.')));
+module.exports = _.extend(..._.values(requireTree('.')));

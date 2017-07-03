@@ -1,6 +1,6 @@
 const request = require('superagent');
 const stringify = require('simple-stringify');
-const R = require('ramda');
+const _ = require('lodash');
 
 exports.timeout = 5 * 1000;
 
@@ -11,7 +11,7 @@ exports.timeout = 5 * 1000;
  */
 function httpStats(req) {
   const stats = {};
-  const finished = R.once(() => {
+  const finished = _.once(() => {
     // get the use time of request
     stats.use = Date.now() - stats.startedAt;
     delete stats.startedAt;
@@ -33,9 +33,9 @@ function httpStats(req) {
     });
     const backendServer = req.backendServer;
     if (backendServer) {
-      Object.assign(stats, R.pick(['ip', 'port'], backendServer));
+      Object.assign(stats, _.pick(backendServer, ['ip', 'port']));
     }
-    if (sendData && !R.isEmpty(sendData)) {
+    if (sendData && !_.isEmpty(sendData)) {
       stats.data = stringify.json(sendData);
     }
   });

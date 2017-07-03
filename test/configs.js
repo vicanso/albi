@@ -11,6 +11,10 @@ describe('configs', () => {
       app: Joi.string(),
       viewPath: Joi.string(),
       httpLogFormat: Joi.string(),
+      influx: Joi.string().optional(),
+      logger: Joi.string().optional(),
+      mongodbUri: Joi.string(),
+      redisUri: Joi.string(),
     }, {
       convert: false,
     });

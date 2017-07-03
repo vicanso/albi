@@ -27,4 +27,8 @@ module.exports = {
     en: 'get location by ip fail',
     status: 500,
   },
+  8: {
+    en: 'the server is not running now',
+    status: 500,
+  },
 };

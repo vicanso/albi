@@ -1,6 +1,9 @@
 const path = require('path');
 const Joi = require('joi');
 const stringify = require('simple-stringify');
+const als = require('async-local-storage');
+const Logger = require('timtam-logger');
+
 
 /**
  * 用于引入项目中的模块，使用相对于项目根目录的相对路径
@@ -57,3 +60,18 @@ stringify.isSecret = (key) => {
   const reg = /password/gi;
   return reg.test(key);
 };
+
+als.enable();
+
+const configs = localRequire('configs');
+
+if (configs.logger) {
+  const logger = new Logger({
+    app: configs.app,
+  });
+  logger.before(configs.name);
+  logger.before(() => als.get('account'));
+  logger.before(() => als.get('id'));
+  logger.wrap(console);
+  logger.add(configs.logger);
+}
