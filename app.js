@@ -4,10 +4,14 @@ const configs = localRequire('configs');
 const globals = localRequire('helpers/globals');
 const mongodb = localRequire('helpers/mongodb');
 const setting = localRequire('configs/setting');
+const createServer = localRequire('helpers/server');
 
 function gracefulExit() {
   console.info('the application will be restart');
   globals.pause();
+  setTimeout(() => {
+    process.exit(0);
+  }, 10 * 1000).unref();
 }
 
 async function updateApplicationSetting() {
@@ -38,3 +42,4 @@ setInterval(() => {
   updateApplicationSetting();
 }, 60 * 1000);
 updateApplicationSetting();
+createServer(configs.port);

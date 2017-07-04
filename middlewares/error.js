@@ -19,11 +19,10 @@ module.exports = () => (ctx, next) => next().catch((err) => {
   const urlInfo = url.parse(ctx.url);
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   const error = _.isError(err) ? err : new Error(err);
-  const message = error.message;
-  let code = parseInt(error.code, 10);
-  if (_.isNaN(code)) {
-    code = -1;
-  }
+  const {
+    code,
+    message,
+   } = error;
   const data = {
     url: ctx.url,
     code,

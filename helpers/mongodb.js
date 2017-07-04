@@ -23,7 +23,6 @@ function initModels(client, modelPath) {
   const models = requireTree(modelPath);
   _.forEach(models, (model, key) => {
     const name = model.name || (key.charAt(0).toUpperCase() + key.substring(1));
-    console.dir(name);
     const schema = new Schema(model.schema, model.options);
     if (model.indexes) {
       _.forEach(model.indexes, fields => schema.index(fields));

@@ -132,6 +132,7 @@ exports.routeStats = () => (ctx, next) => {
     }
     influx.write('httpRoute', {
       use,
+      url: ctx.url,
     }, {
       method: method.toLowerCase(),
       path: layer.path,

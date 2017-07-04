@@ -14,12 +14,12 @@ const errors = localRequire('helpers/errors');
  */
 module.exports = url => (ctx, next) => {
   if (ctx.url !== url) {
-    next();
-    return;
+    return next();
   }
   if (!globals.isRunning()) {
     throw errors.get(8);
   }
   /* eslint no-param-reassign:0 */
   ctx.body = 'pong';
+  return Promise.resolve();
 };

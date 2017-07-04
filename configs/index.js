@@ -2,6 +2,8 @@ const path = require('path');
 
 const pkg = localRequire('package');
 
+exports.port = process.env.PORT || 5018;
+
 // the env of the applcation
 const env = process.env.NODE_ENV || 'development';
 
@@ -33,4 +35,21 @@ exports.redisUri = process.env.REDIS || 'redis://127.0.0.1/';
 exports.session = {
   key: pkg.name,
   maxAge: 7 * 24 * 3600 * 1000,
+};
+
+// http connection limit options
+exports.connectLimitOptions = {
+  mid: 100,
+  high: 500,
+  interval: 5000,
+};
+
+exports.staticOptions = {
+  urlPrefix: '/static',
+  path: env === 'development' ? path.join(__dirname, 'public') : path.join(__dirname, 'assets'),
+  maxAge: env === 'development' ? 0 : 365 * 24 * 3600,
+  headers: {
+    Vary: 'Accept-Encoding',
+  },
+  host: process.env.STATIC_HOST || '',
 };

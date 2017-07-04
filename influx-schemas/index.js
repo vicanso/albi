@@ -46,9 +46,10 @@ const schemas = {
   httpRoute: {
     fields: {
       use: 'i',
+      url: 's',
     },
     tags: {
-      method: 'GET POST PUT DELETE',
+      method: '*',
       path: '*',
       spdy: '012345'.split(''),
     },
@@ -58,7 +59,7 @@ const schemas = {
   },
   exception: {
     fields: {
-      code: 'i',
+      code: 's',
       path: 's',
       message: 's',
     },
