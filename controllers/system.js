@@ -13,7 +13,7 @@ const fs = BlueBird.promisifyAll(require('fs'));
 
 const configs = localRequire('configs');
 const globals = localRequire('helpers/globals');
-const utils = localRequire('helpers/utils');
+const setting = localRequire('configs/setting');
 
 /**
  * 获取系统当前运行的版本package.json与读取文件package.json的版本号，
@@ -38,8 +38,8 @@ async function getVersion() {
  * @prop {Route} /api/sys/pause
  * @return {Object} 如果成功，返回null
  */
-exports.pause = (ctx) => {
-  globals.set('status', 'pause');
+exports.pause = function pause(ctx) {
+  globals.pause();
   console.info('pause application');
   ctx.body = null;
 };
@@ -52,8 +52,8 @@ exports.pause = (ctx) => {
  * @prop {Route} /api/sys/resume
  * @return {Object} 如果成功，返回null
  */
-exports.resume = (ctx) => {
-  globals.set('status', 'running');
+exports.resume = function resume(ctx) {
+  globals.start();
   console.info('resume application');
   ctx.body = null;
 };
@@ -71,7 +71,7 @@ exports.resume = (ctx) => {
  * startedAt: ISOString,
  * }
  */
-exports.status = async (ctx) => {
+exports.status = async function status(ctx) {
   const version = await getVersion();
   const uptime = moment(Date.now() - (Math.ceil(process.uptime()) * 1000));
   ctx.setCache('10s');
@@ -92,7 +92,7 @@ exports.status = async (ctx) => {
  * @prop {Route} /api/sys/exit
  * @return {Object} 如果成功，返回null
  */
-exports.exit = (ctx) => {
+exports.exit = function exit(ctx) {
   console.info('application will exit soon');
   globals.pause();
   setTimeout(() => {
@@ -109,10 +109,10 @@ exports.exit = (ctx) => {
  * @prop {Route} /api/sys/level
  * @return {Object} 如果成功，返回null
  */
-exports.setLevel = (ctx) => {
+exports.setLevel = async function setLevel(ctx) {
   const level = _.get(ctx, 'request.body.level');
   if (level) {
-    globals.set('level', level);
+    await setting.set('level', level);
   }
   ctx.body = null;
 };
@@ -124,9 +124,9 @@ exports.setLevel = (ctx) => {
  * @prop {Route} /api/sys/level
  * @return {Object} {level: Integer}
  */
-exports.level = (ctx) => {
+exports.level = function getLevel(ctx) {
   ctx.setCache('10s');
   ctx.body = {
-    level: globals.getLevel(),
+    level: setting.get('level'),
   };
 };

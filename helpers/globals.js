@@ -19,16 +19,6 @@ exports.pause = () => map.set('status', 'pause');
 exports.start = () => map.set('status', 'running');
 
 /**
- * Set the level of system
- */
-exports.setLevel = level => map.set('level', level);
-
-/**
- * Get the level of system
- */
-exports.getLevel = () => map.get('level') || 100;
-
-/**
  * Get connecting count
  */
 exports.getConnectingCount = () => map.get('connectingCount') || 0;

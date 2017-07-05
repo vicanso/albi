@@ -2,9 +2,9 @@ require('./init');
 
 const configs = localRequire('configs');
 const globals = localRequire('helpers/globals');
-const mongodb = localRequire('helpers/mongodb');
-const setting = localRequire('configs/setting');
 const createServer = localRequire('helpers/server');
+
+localRequire('tasks');
 
 function gracefulExit() {
   console.info('the application will be restart');
@@ -12,16 +12,6 @@ function gracefulExit() {
   setTimeout(() => {
     process.exit(0);
   }, 10 * 1000).unref();
-}
-
-async function updateApplicationSetting() {
-  const Application = mongodb.get('Application');
-  const doc = await Application.findOne({
-    category: 'setting',
-  });
-  if (doc) {
-    setting.reset(doc.toJSON());
-  }
 }
 
 process.on('unhandledRejection', (err) => {
@@ -38,8 +28,4 @@ if (configs.env !== 'development') {
   process.on('SIGQUIT', gracefulExit);
 }
 
-setInterval(() => {
-  updateApplicationSetting();
-}, 60 * 1000);
-updateApplicationSetting();
 createServer(configs.port);

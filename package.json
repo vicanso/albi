@@ -22,10 +22,10 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/helpers/*.js --",
+    "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/*/*.js --",
     "dev": "nodemon app",
     "eslint": "npm run eslint-node",
-    "eslint-node": "node ./node_modules/.bin/eslint *.js test/*.js configs/*.js helpers/*.js errors/*.js schedules/*.js middlewares/*.js influx-schemas/*.js",
+    "eslint-node": "node ./node_modules/.bin/eslint *.js test/*.js test/*/*.js configs/*.js helpers/*.js errors/*.js schedules/*.js middlewares/*.js influx-schemas/*.js models/*.js routes/*.js controllers/*.js",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "start": "node app",
     "test": "npm run eslint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/albi npm run coverage"
@@ -69,7 +69,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-react": "^7.0.1",
-    "istanbul": "^0.4.5",
+    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.4.2"
   }
 }

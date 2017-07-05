@@ -13,8 +13,25 @@ describe('configs', () => {
       httpLogFormat: Joi.string(),
       influx: Joi.string().optional(),
       logger: Joi.string().optional(),
-      mongodbUri: Joi.string(),
+      mongoUri: Joi.string(),
       redisUri: Joi.string(),
+      port: Joi.number().integer(),
+      session: Joi.object().keys({
+        key: Joi.string(),
+        maxAge: Joi.number().integer(),
+      }),
+      connectLimitOptions: Joi.object().keys({
+        mid: Joi.number().integer(),
+        high: Joi.number().integer(),
+        interval: Joi.number().integer(),
+      }),
+      staticOptions: {
+        urlPrefix: Joi.string(),
+        path: Joi.string(),
+        maxAge: Joi.number().integer(),
+        headers: Joi.object(),
+        host: Joi.string().empty(''),
+      },
     }, {
       convert: false,
     });

@@ -3,6 +3,10 @@
  * @module helpers/utils
  */
 
+const request = require('superagent');
+
+const configs = localRequire('configs');
+
 /**
  * 从参数列表中获取第一个符合条件的参数返回，如果都不符合，则使用默认值返回
  * @param  {Array} arr 参数列表
@@ -22,4 +26,15 @@ function getParam(arr, validate, defaultValue) {
   return v;
 }
 
+/**
+ * 请求当前应用
+ * @param {String} method http request method
+ * @param {String} url http request url
+ */
+function selfRequest(method, url) {
+  const requestUrl = `http://127.0.0.1:${configs.port}${url}`;
+  return request[method](requestUrl);
+}
+
 exports.getParam = getParam;
+exports.selfRequest = selfRequest;

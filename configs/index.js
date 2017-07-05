@@ -2,7 +2,7 @@ const path = require('path');
 
 const pkg = localRequire('package');
 
-exports.port = process.env.PORT || 5018;
+exports.port = parseInt(process.env.PORT, 10) || 5018;
 
 // the env of the applcation
 const env = process.env.NODE_ENV || 'development';
@@ -20,10 +20,10 @@ exports.viewPath = path.join(__dirname, 'views');
 exports.httpLogFormat = ':request-id :method :url :status :length :response-time ms ":referrer"';
 
 // http://user:pass@127.0.0.1:8086/mydatabase
-exports.influx = process.env.INFLUX || '';
+exports.influx = process.env.INFLUX;
 
 // logger setting "console", "udp://127.0.0.1:5001"
-exports.logger = process.env.LOG || '';
+exports.logger = process.env.LOG;
 
 // mongodb connection uri
 exports.mongoUri = process.env.MONGO || 'mongodb://127.0.0.1/albi';

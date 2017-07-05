@@ -1,8 +1,8 @@
 /**
  * 用于生成根据当前系统运行级别而处理的中间件
  */
-const globals = localRequire('helpers/globals');
 const errors = localRequire('helpers/errors');
+const setting = localRequire('configs/setting');
 
 /**
  * 对于某些非重要接口，可以设置不同的系统级别以上才做响应，如果系统运行级别低于设置级别，则直接返回出错。
@@ -11,7 +11,7 @@ const errors = localRequire('helpers/errors');
  * @return {Function} 返回中间件处理函数
  */
 module.exports = level => (ctx, next) => {
-  const systemLevel = globals.getLevel();
+  const systemLevel = setting.get('level');
   if (systemLevel < level) {
     const err = errors.get(3);
     err.message = err.message
