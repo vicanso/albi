@@ -4,7 +4,7 @@ const mongodb = localRequire('helpers/mongodb');
 
 const applicationSetting = {
   adminToken: 'my-token',
-  level: 100,
+  level: 5,
 };
 
 /**

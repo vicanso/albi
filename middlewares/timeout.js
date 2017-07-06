@@ -12,9 +12,9 @@ const _ = require('lodash');
  * options.pass：判断该请求是否需要跳过timeout，返回true则跳过
  * @return {Function} 返回中间件处理函数
  */
-module.exports = (options = {}) => (ctx, next) => {
+module.exports = (options = {}) => function timeout(ctx, next) {
   const pass = options.pass || _.noop;
-  const timeout = options.timeout || 5000;
+  const ms = options.timeout || 5000;
   if (pass(ctx)) {
     return next();
   }
@@ -26,7 +26,7 @@ module.exports = (options = {}) => (ctx, next) => {
         const err = new Error('Request Timeout');
         err.status = 408;
         reject(err);
-      }, timeout);
+      }, ms);
     }),
     new Promise((resolve, reject) => next().then(() => {
       clearTimeout(timer);

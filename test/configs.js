@@ -32,6 +32,7 @@ describe('configs', () => {
         headers: Joi.object(),
         host: Joi.string().empty(''),
       },
+      trackCookie: Joi.string(),
     }, {
       convert: false,
     });

@@ -19,6 +19,9 @@ module.exports = () => (ctx, next) => next().catch((err) => {
   const urlInfo = url.parse(ctx.url);
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   const error = _.isError(err) ? err : new Error(err);
+  if (!err.code) {
+    error.code = 'unknown';
+  }
   const {
     code,
     message,

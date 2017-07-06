@@ -9,29 +9,23 @@ const {
 const setting = localRequire('configs/setting');
 
 describe('controllers/system', () => {
-  const randomLevel = _.random(500);
-  it('set system level', (done) => {
-    selfRequest('put', '/api/sys/level')
-      .send({
-        level: randomLevel,
-      })
-      .set('Auth-Token', setting.get('adminToken')).then((res) => {
-        assert.equal(res.status, 204);
-        done();
-      })
-      .catch(done);
-  });
+  const randomLevel = _.random(5);
+  it('set system level', () => selfRequest('put', '/api/sys/level')
+    .send({
+      level: randomLevel,
+    })
+    .set('Auth-Token', setting.get('adminToken')).then((res) => {
+      assert.equal(res.status, 204);
+    }));
 
-  it('get system level', (done) => {
-    selfRequest('get', '/api/sys/level').then((res) => {
+  it('get system level', () => selfRequest('get', '/api/sys/level')
+    .then((res) => {
       assert.equal(res.status, 200);
       assert.equal(res.body.level, randomLevel);
-      done();
-    }).catch(done);
-  });
+    }));
 
-  it('get system status', (done) => {
-    selfRequest('get', '/api/sys/status').then((res) => {
+  it('get system status', () => selfRequest('get', '/api/sys/status')
+    .then((res) => {
       const result = Joi.validate(res.body, {
         connectingTotal: Joi.number().integer(),
         status: Joi.string(),
@@ -39,13 +33,11 @@ describe('controllers/system', () => {
         uptime: Joi.string(),
         startedAt: Joi.string(),
       });
-      done(result.error);
-    }).catch(done);
-  });
+      assert(!result.error);
+    }));
 
-  it('resume/pause the application', (done) => {
-    selfRequest('put', '/api/sys/resume')
-     .set('Auth-Token', setting.get('adminToken'))
+  it('resume/pause the application', () => selfRequest('put', '/api/sys/resume')
+    .set('Auth-Token', setting.get('adminToken'))
     .then((res) => {
       assert.equal(res.status, 204);
       return selfRequest('get', '/api/sys/status');
@@ -58,8 +50,5 @@ describe('controllers/system', () => {
     .then(() => selfRequest('get', '/api/sys/status'))
     .then((res) => {
       assert.equal(res.body.status, 'pause');
-      done();
-    })
-    .catch(done);
-  });
+    }));
 });

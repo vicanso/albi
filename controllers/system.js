@@ -14,6 +14,9 @@ const fs = BlueBird.promisifyAll(require('fs'));
 const configs = localRequire('configs');
 const globals = localRequire('helpers/globals');
 const setting = localRequire('configs/setting');
+const {
+  delay,
+} = localRequire('helpers/utils');
 
 /**
  * 获取系统当前运行的版本package.json与读取文件package.json的版本号，
@@ -32,7 +35,7 @@ async function getVersion() {
 /**
  * 设置系统状态为`pause`，此时系统对于`/ping`的响应会返回出错，
  * 主要用于可以让前置的反向代理不再往当前系统转发请求，用于graceful shutdown之类
- * @param {Method} POST
+ * @param {Method} PUT
  * @param {Header} Auth-Token 认证TOEKN
  * @prop {Middleware} auth.admin 验证token是否admin
  * @prop {Route} /api/sys/pause
@@ -46,7 +49,7 @@ exports.pause = function pause(ctx) {
 
 /**
  * 重置系统状态为`running`，此时系统对于`/ping`的响应会正常返回
- * @param {Method} POST
+ * @param {Method} PUT
  * @param {Header} Auth-Token 认证TOEKN
  * @prop {Middleware} auth.admin 验证token是否admin
  * @prop {Route} /api/sys/resume
@@ -85,8 +88,8 @@ exports.status = async function status(ctx) {
 };
 
 /**
- * 使用`uitls.checkToExit(3)，此函数只是退出当前应用，如果有守护进程之类可用于graceful reload`
- * @param {Method} POST
+ * 此函数只是退出当前应用，如果有守护进程之类可用于graceful reload`
+ * @param {Method} PUT
  * @param {Header} Auth-Token 认证TOEKN
  * @prop {Middleware} auth.admin
  * @prop {Route} /api/sys/exit
@@ -103,7 +106,7 @@ exports.exit = function exit(ctx) {
 
 /**
  * 设置当前系统的`level`级别，部分路由的处理会设置低于某个`level`时，直接返回出错
- * @param {Method} POST
+ * @param {Method} PUT
  * @param {Header} Auth-Token 认证TOEKN
  * @prop {Middleware} auth.admin
  * @prop {Route} /api/sys/level
@@ -120,7 +123,6 @@ exports.setLevel = async function setLevel(ctx) {
 /**
  * 获取当前系统的`level`级别
  * @param {Method} GET
- * @prop {Middleware} noCache
  * @prop {Route} /api/sys/level
  * @return {Object} {level: Integer}
  */
@@ -129,4 +131,21 @@ exports.level = function getLevel(ctx) {
   ctx.body = {
     level: setting.get('level'),
   };
+};
+
+/**
+ * MOCK 请求，用于测试使用
+ * @param {Method} POST
+ * @prop {Route} /api/sys/mock
+ * @return {Object} {...}
+ */
+exports.mock = async function mock(ctx) {
+  const data = ctx.request.body;
+  if (data.delay) {
+    await delay(data.delay);
+  }
+  if (data.status) {
+    ctx.status = data.status;
+  }
+  ctx.body = data.response;
 };

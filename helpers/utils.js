@@ -36,5 +36,15 @@ function selfRequest(method, url) {
   return request[method](requestUrl);
 }
 
+
+/**
+ * 延时执行(Promise)
+ * @param {Integer} ms 延时的ms
+ */
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 exports.getParam = getParam;
 exports.selfRequest = selfRequest;
+exports.delay = delay;

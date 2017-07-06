@@ -48,7 +48,8 @@ const normal = (ctx, next) => {
   if (ctx.session) {
     return next();
   }
-  if (ctx.get('Cache-Control') !== 'no-cache' && ctx.query['cache-control'] !== 'no-cache') {
+  const method = ctx.method;
+  if ((method === 'GET' || method === 'HEAD') && ctx.get('Cache-Control') !== 'no-cache' && ctx.query['cache-control'] !== 'no-cache') {
     throw errors.get(4);
   }
   const startedAt = Date.now();

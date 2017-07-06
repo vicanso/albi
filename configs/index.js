@@ -53,3 +53,6 @@ exports.staticOptions = {
   },
   host: process.env.STATIC_HOST || '',
 };
+
+// user track cookie
+exports.trackCookie = '_jt';

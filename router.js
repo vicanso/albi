@@ -40,7 +40,7 @@ addToRouter('m.session.login', middlewares.session.login());
 
 addToRouter('level', middlewares.level);
 addToRouter('version', middlewares.common.version);
-// addToRouter('tracker', middlewares.tracker);
+addToRouter('tracker', middlewares.tracker);
 
 
 module.exports = getRouter(routes);

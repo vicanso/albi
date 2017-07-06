@@ -105,6 +105,22 @@ const schemas = {
       stripUnknown: true,
     },
   },
+  userTracker: {
+    fields: {
+      ip: 's',
+      account: 's',
+      params: 's',
+      use: 'i',
+      message: 's',
+    },
+    tags: {
+      category: '*',
+      result: ['success', 'fail'],
+    },
+    options: {
+      stripUnknown: true,
+    },
+  },
 };
 
 module.exports = schemas;
