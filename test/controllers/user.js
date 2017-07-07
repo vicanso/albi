@@ -47,6 +47,12 @@ describe('controllers/use', () => {
     .then((res) => {
       assert.equal(res.status, 200);
       assert.equal(res.body.account, account);
+      return selfRequest('get', '/api/users/me')
+        .set('Cookie', currentCookies)
+        .set('Cache-Control', 'no-cache');
+    })
+    .then((res) => {
+      assert.equal(res.body.account, account);
     }));
 
   it('refresh', () => selfRequest('put', '/api/users/me')
@@ -60,5 +66,11 @@ describe('controllers/use', () => {
     .then((res) => {
       assert.equal(res.status, 200);
       assert(res.body.count);
+    }));
+
+  it('logout', () => selfRequest('delete', '/api/users/logout')
+    .set('Cookie', currentCookies)
+    .then((res) => {
+      assert.equal(res.status, 204);
     }));
 });

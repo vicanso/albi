@@ -1,11 +1,11 @@
 module.exports = [
-  '[GET] [/api/users/me] [m.noCache & m.session & c.user.me]',
+  '[GET] [/api/users/me] [m.session & c.user.me]',
   '[PUT] [/api/users/me] [m.session & c.user.refreshSession]',
   [
-    '[POST]',
-    '[/api/users/like]',
+    'POST',
+    '/api/users/like',
     [
-      'level(5)',
+      'level(3)',
       'version([2, 3])',
       'm.session.login',
       'tracker("user-like")',

@@ -5,6 +5,7 @@ const _ = require('lodash');
 localRequire('app');
 const {
   selfRequest,
+  delay,
 } = localRequire('helpers/utils');
 const setting = localRequire('configs/setting');
 
@@ -16,12 +17,18 @@ describe('controllers/system', () => {
     })
     .set('Auth-Token', setting.get('adminToken')).then((res) => {
       assert.equal(res.status, 204);
+      return delay(300);
     }));
 
   it('get system level', () => selfRequest('get', '/api/sys/level')
     .then((res) => {
       assert.equal(res.status, 200);
       assert.equal(res.body.level, randomLevel);
+      return selfRequest('put', '/api/sys/level')
+        .send({
+          level: 5,
+        })
+        .set('Auth-Token', setting.get('adminToken'));
     }));
 
   it('get system status', () => selfRequest('get', '/api/sys/status')
@@ -51,4 +58,28 @@ describe('controllers/system', () => {
     .then((res) => {
       assert.equal(res.body.status, 'pause');
     }));
+
+  it('timeout', function timeout() {
+    this.timeout(10 * 1000);
+    return selfRequest('post', '/api/sys/mock')
+      .send({
+        delay: 5000,
+      }).catch((err) => {
+        assert.equal(err.status, 408);
+      });
+  });
+
+  it('timeout disable', function timeoutDisable() {
+    this.timeout(10 * 1000);
+    return selfRequest('post', '/api/sys/mock?disableTimeout')
+      .send({
+        delay: 5000,
+        status: 201,
+        response: {
+          result: 'success',
+        },
+      }).then((res) => {
+        assert.equal(res.status, 201);
+      });
+  });
 });

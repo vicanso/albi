@@ -32,8 +32,7 @@ const pickUserInfo = (userInfos) => {
 /**
  * 从session获取当前登录用户的信息
  * @param {Method} GET
- * @prop {Middlware} noCache
- * @prop {Middlware} session.read
+ * @prop {Middlware} session
  * @prop {Route} /api/users/me
  * @return {Object} 用户信息，如果未登录，只有date字段，如果已登录返回`pickUserInfo`的数据
  */
@@ -51,7 +50,7 @@ exports.me = function getUserInfo(ctx) {
 /**
  * 退出用户登录状态，并删除session信息
  * @param {Method} DELETE
- * @prop {Middlware} session
+ * @prop {Middlware} session.login
  * @prop {Route} /api/users/logout
  * @return {Object} 成功则返回null
  */
@@ -83,7 +82,7 @@ exports.loginToken = function getLoginToken(ctx) {
 };
 
 /**
- * 如果是POST，则是用户登录，并将用户信息记录到session中
+ * 用户登录，并将用户信息记录到session中
  * @param {Method} POST
  * @param {String} request.body.account 用户账号
  * @param {String} request.body.password 用户密码
@@ -131,16 +130,8 @@ exports.login = async function login(ctx) {
  * @prop {Route} /api/users/me
  * @return {Object} 刷新成功则返回null
  */
-exports.refreshSession = async function refreshSession(ctx) {
-  const {
-    maxAge,
-  } = configs.session;
+exports.refreshSession = function refreshSession(ctx) {
   ctx.session.updatedAt = new Date().toISOString();
-  const cookies = ctx.cookies;
-  const name = configs.app;
-  cookies.set(name, cookies.get(name), {
-    maxAge,
-  });
   ctx.body = null;
 };
 
@@ -185,9 +176,9 @@ exports.register = async function register(ctx) {
  * 用户Like
  * @param {Method} POST
  * @param {String} request.body.code 用户Like的编码
- * @prop {Middleware} level(5)
+ * @prop {Middleware} level(3)
  * @prop {Middleware} version([2, 3])
- * @prop {Middleware} session.read
+ * @prop {Middleware} session.login
  * @return {Object} 返回用户Like的信息
  */
 exports.like = function like(ctx) {

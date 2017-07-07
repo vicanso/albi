@@ -1,6 +1,6 @@
 /**
  * 此模块定时将系统性能指标写入到influxdb中
- * @module tasks/performance
+ * @module schedules/performance
  */
 
 const performance = require('performance-nodejs');

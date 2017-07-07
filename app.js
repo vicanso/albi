@@ -3,6 +3,7 @@ require('./init');
 const configs = localRequire('configs');
 const globals = localRequire('helpers/globals');
 const createServer = localRequire('helpers/server');
+const performance = localRequire('schedules/performance');
 
 localRequire('tasks');
 
@@ -29,3 +30,4 @@ if (configs.env !== 'development') {
 }
 
 createServer(configs.port);
+performance(2000);
