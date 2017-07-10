@@ -1,15 +1,24 @@
+const mongoose = require('mongoose');
+
 require('./init');
 
 const configs = localRequire('configs');
 const globals = localRequire('helpers/globals');
 const createServer = localRequire('helpers/server');
 const performance = localRequire('schedules/performance');
+const influx = localRequire('helpers/influx');
 
 localRequire('tasks');
 
 function gracefulExit() {
   console.info('the application will be restart');
   globals.pause();
+  setTimeout(() => {
+    if (influx.client) {
+      influx.client.syncWrite();
+    }
+    mongoose.disconnect();
+  }, 3000).unref();
   setTimeout(() => {
     process.exit(0);
   }, 10 * 1000).unref();

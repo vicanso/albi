@@ -74,6 +74,7 @@ function initClient(uri, options) {
 
 const client = initClient(configs.mongoUri);
 
+
 /**
  * 获取mongodb model
  * @param  {String} name collection的名称

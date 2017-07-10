@@ -8,26 +8,28 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const als = require('async-local-storage');
 
-const mongodb = localRequire('helpers/mongodb');
+const mongo = localRequire('helpers/mongo');
 const errors = localRequire('helpers/errors');
+const location = localRequire('helpers/location');
+const influx = localRequire('helpers/influx');
 
 /**
  * 检测当前条件的用户是否已存在
  * @param  {Object}  condition 查询条件
  * @return {Promise(Boolean)}
  */
-const isExists = (condition) => {
-  const User = mongodb.get('User');
+function isExists(condition) {
+  const User = mongo.get('User');
   return User.findOne(condition).exec().then(doc => !_.isNil(doc));
-};
+}
 
 /**
  * 增加用户，如果成功，返回Promise对象
  * @param {Object} data 用户相关信息
  * @return {Promise(User)}
  */
-exports.add = async (data) => {
-  const User = mongodb.get('User');
+exports.add = async function addUser(data) {
+  const User = mongo.get('User');
   if (await isExists({ account: data.account })) {
     throw errors.get(104);
   }
@@ -51,8 +53,8 @@ exports.add = async (data) => {
  * @param  {String} token    用户登录时生成的随机token
  * @return {Promise(User)}
  */
-exports.get = async (account, password, token) => {
-  const User = mongodb.get('User');
+exports.get = async function getUser(account, password, token) {
+  const User = mongo.get('User');
   const incorrectError = errors.get(106);
   const end = als.get('timing').start('getUser');
   const doc = await User.findOne({
@@ -75,8 +77,8 @@ exports.get = async (account, password, token) => {
  * @param  {Object} data 需要更新的用户信息
  * @return {Promise(User)}
  */
-exports.update = async (id, data) => {
-  const User = mongodb.get('User');
+exports.update = async function updateUserInfo(id, data) {
+  const User = mongo.get('User');
   const doc = await User.findOneAndUpdate({ _id: id }, data);
   return doc.toJSON();
 };
@@ -87,10 +89,22 @@ exports.update = async (id, data) => {
  * 在日志中记录用户的token，通过从登录记录中查到token再确认是哪个账号，
  * 也为了避免日志输出敏感数据
  */
-exports.addLoginRecord = async (data) => {
-  const Login = mongodb.get('Login');
+exports.addLoginRecord = async function addLoginRecord(data) {
+  const Login = mongo.get('Login');
   /* eslint no-param-reassign:0 */
   data.createdAt = (new Date()).toISOString();
+  const reg = /\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/;
+  const result = reg.exec(data.ip);
+  const ip = _.get(result, '[0]');
+  if (ip) {
+    try {
+      const locationInfo = await location.byIP(ip);
+      influx.write('userLogin', _.pick(data, ['ip', 'account']), locationInfo);
+      _.extend(data, locationInfo);
+    } catch (err) {
+      console.error(`get location of ${ip} fail, ${err.message}`);
+    }
+  }
   try {
     const doc = await (new Login(data)).save();
     return doc;

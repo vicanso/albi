@@ -27,6 +27,10 @@ module.exports = {
       type: String,
       required: true,
     },
+    country: String,
+    region: String,
+    city: String,
+    isp: String,
   },
   indexes: [
     {

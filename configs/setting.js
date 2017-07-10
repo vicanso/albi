@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const mongodb = localRequire('helpers/mongodb');
+const mongo = localRequire('helpers/mongo');
 
 const applicationSetting = {
   adminToken: 'my-token',
@@ -12,8 +12,11 @@ const applicationSetting = {
  */
 exports.get = key => _.get(applicationSetting, key);
 
-exports.set = async function set(key, value) {
-  const Application = mongodb.get('Application');
+/**
+ * Set the value for the application setting
+ */
+exports.set = async function setValue(key, value) {
+  const Application = mongo.get('Application');
   await Application.findOneAndUpdate({
     category: 'setting',
   }, {
@@ -30,7 +33,7 @@ exports.set = async function set(key, value) {
  * Update the application setting
  */
 exports.update = async function update() {
-  const Application = mongodb.get('Application');
+  const Application = mongo.get('Application');
   const doc = await Application.findOne({
     category: 'setting',
   });

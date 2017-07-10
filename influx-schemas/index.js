@@ -121,6 +121,21 @@ const schemas = {
       stripUnknown: true,
     },
   },
+  userLogin: {
+    fields: {
+      account: 's',
+      ip: 's',
+    },
+    tags: {
+      country: '*',
+      region: '*',
+      city: '*',
+      isp: '*',
+    },
+    options: {
+      stripUnknown: true,
+    },
+  },
 };
 
 module.exports = schemas;

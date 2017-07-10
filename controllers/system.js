@@ -96,11 +96,7 @@ exports.status = async function status(ctx) {
  * @return {Object} 如果成功，返回null
  */
 exports.exit = function exit(ctx) {
-  console.info('application will exit soon');
-  globals.pause();
-  setTimeout(() => {
-    process.exit(0);
-  }, 10 * 1000).unref();
+  process.emit('SIGQUIT');
   ctx.body = null;
 };
 
