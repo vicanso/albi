@@ -9,9 +9,13 @@ const requireTree = require('require-tree');
 const bluebird = require('bluebird');
 
 const configs = localRequire('configs');
+const statsPlugin = localRequire('plugins/mongo-stats');
+const updatePlugin = localRequire('plugins/mongo-update');
+const savePlugin = localRequire('plugins/mongo-save');
 const Schema = mongoose.Schema;
 mongoose.Promise = bluebird;
 
+// mongoose.plugin(localRequire('plugins/mongo-stats'));
 
 /**
  * 初始化models，根据配置的model path，读取所有配置的model，初始化。
@@ -21,9 +25,13 @@ mongoose.Promise = bluebird;
  */
 function initModels(client, modelPath) {
   const models = requireTree(modelPath);
+
   _.forEach(models, (model, key) => {
     const name = model.name || (key.charAt(0).toUpperCase() + key.substring(1));
     const schema = new Schema(model.schema, model.options);
+    statsPlugin(schema, name);
+    updatePlugin(schema);
+    savePlugin(schema);
     if (model.indexes) {
       _.forEach(model.indexes, fields => schema.index(fields));
     }

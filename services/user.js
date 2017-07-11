@@ -20,7 +20,7 @@ const influx = localRequire('helpers/influx');
  */
 function isExists(condition) {
   const User = mongo.get('User');
-  return User.findOne(condition).exec().then(doc => !_.isNil(doc));
+  return User.findOne(condition).lean().then(doc => !_.isNil(doc));
 }
 
 /**
@@ -59,7 +59,7 @@ exports.get = async function getUser(account, password, token) {
   const end = als.get('timing').start('getUser');
   const doc = await User.findOne({
     account,
-  });
+  }).lean();
   end();
   if (!doc) {
     throw incorrectError;
@@ -68,7 +68,7 @@ exports.get = async function getUser(account, password, token) {
   if (hash.update(doc.password + token).digest('hex') !== password) {
     throw incorrectError;
   }
-  return doc.toJSON();
+  return doc;
 };
 
 /**
@@ -79,8 +79,8 @@ exports.get = async function getUser(account, password, token) {
  */
 exports.update = async function updateUserInfo(id, data) {
   const User = mongo.get('User');
-  const doc = await User.findOneAndUpdate({ _id: id }, data);
-  return doc.toJSON();
+  const doc = await User.findOneAndUpdate({ _id: id }, data).lean();
+  return doc;
 };
 
 /**

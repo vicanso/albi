@@ -136,6 +136,27 @@ const schemas = {
       stripUnknown: true,
     },
   },
+  mongo: {
+    fields: {
+      use: 'i',
+      conditions: 's',
+      options: 's',
+      fields: 's',
+      length: 'i',
+      update: 's',
+    },
+    tags: {
+      spdy: '01234'.split(''),
+      model: '*',
+      op: [
+        'find',
+        'findOne',
+        'findOneAndUpdate',
+        'findOneAndRemove',
+        'save',
+      ],
+    },
+  },
 };
 
 module.exports = schemas;

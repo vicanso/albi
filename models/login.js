@@ -18,11 +18,6 @@ module.exports = {
       type: String,
       required: true,
     },
-    createdAt: {
-      type: String,
-      default: () => (new Date()).toISOString(),
-      required: true,
-    },
     ip: {
       type: String,
       required: true,
