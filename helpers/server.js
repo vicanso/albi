@@ -80,6 +80,9 @@ function createServer(port) {
   app.use(localRequire('middlewares/common').fresh());
 
   app.use(etag());
+
+  app.use(localRequire('middlewares/state')(localRequire('versions')));
+
   app.use(localRequire('router').routes());
 
   app.on('error', _.noop);

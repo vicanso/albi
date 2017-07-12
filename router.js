@@ -4,6 +4,7 @@ const router = require('koa-router-parser');
 const debug = localRequire('helpers/debug');
 const middlewares = localRequire('middlewares');
 const routes = localRequire('routes');
+const views = localRequire('views');
 
 
 function getRouter(descList) {
@@ -37,10 +38,10 @@ addToRouter('m.auth.admin', middlewares.auth.admin());
 addToRouter('m.session', middlewares.session.writable());
 addToRouter('m.session.login', middlewares.session.login());
 
+addToRouter('v', views);
 
 addToRouter('level', middlewares.level);
 addToRouter('version', middlewares.common.version);
 addToRouter('tracker', middlewares.tracker);
-
 
 module.exports = getRouter(routes);

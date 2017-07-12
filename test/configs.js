@@ -33,6 +33,7 @@ describe('configs', () => {
         host: Joi.string().empty(''),
       },
       trackCookie: Joi.string(),
+      appUrlPrefix: Joi.string(),
     }, {
       convert: false,
     });

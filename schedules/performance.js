@@ -33,6 +33,21 @@ module.exports = (interval) => {
       connecting: ['fewer', 'few', 'medium', 'many'][connectingIndex],
     };
 
-    influx.write('performance', data, tags);
+    const fields = [
+      'heapTotalHeapSize',
+      'memoryUsageRss',
+      'memoryUsageHeapTotal',
+      'cpuUsageUsedPercent',
+      'cpuUsageUserUsedPercent',
+      'cpuUsageSystemUsedPercent',
+      'connectingCount',
+      'heapSpaceNewSpaceUsedSize',
+      'heapSpaceOldSpaceUsedSize',
+      'heapSpaceCodeSpaceUsedSize',
+      'heapSpaceMapSpaceUsedSize',
+      'heapSpaceLargeObjectSpaceUsedSize',
+    ];
+
+    influx.write('performance', _.pick(data, fields), tags);
   }, interval, 'MB');
 };

@@ -6,6 +6,7 @@
 
 const Influx = require('influxdb-nodejs');
 const _ = require('lodash');
+const stringify = require('simple-stringify');
 
 const configs = localRequire('configs');
 const utils = localRequire('helpers/utils');
@@ -42,11 +43,18 @@ if (client) {
   client.timeout = 3000;
   client.on('writeQueue', () => {
     // sync write queue if the length is 100
-    if (client.writeQueueLength === maxQueueLength) {
+    if (client.writeQueueLength >= maxQueueLength) {
       flush();
     } else {
       debounceFlush();
     }
+  });
+
+  client.on('invalid-fields', (data) => {
+    console.error(`influx invalid fields:${stringify.json(data, 3)}`);
+  });
+  client.on('invalid-tags', (data) => {
+    console.error(`influx invalid tags:${stringify.json(data, 3)}`);
   });
 }
 

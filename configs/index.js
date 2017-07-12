@@ -7,6 +7,8 @@ exports.port = parseInt(process.env.PORT, 10) || 5018;
 // the env of the applcation
 const env = process.env.NODE_ENV || 'development';
 
+const appPath = path.join(__dirname, '..');
+
 exports.env = env;
 
 // the application version
@@ -14,7 +16,7 @@ exports.version = pkg.version;
 
 exports.app = pkg.name;
 
-exports.viewPath = path.join(__dirname, 'views');
+exports.viewPath = path.join(appPath, 'views');
 
 // http log format type
 exports.httpLogFormat = ':request-id :method :url :status :length :response-time ms ":referrer"';
@@ -46,7 +48,7 @@ exports.connectLimitOptions = {
 
 exports.staticOptions = {
   urlPrefix: '/static',
-  path: env === 'development' ? path.join(__dirname, 'public') : path.join(__dirname, 'assets'),
+  path: env === 'development' ? path.join(appPath, 'public') : path.join(appPath, 'assets'),
   maxAge: env === 'development' ? 0 : 365 * 24 * 3600,
   headers: {
     Vary: 'Accept-Encoding',
@@ -56,3 +58,6 @@ exports.staticOptions = {
 
 // user track cookie
 exports.trackCookie = '_jt';
+
+// app url prefix for all request
+exports.appUrlPrefix = env === 'development' ? '' : `/${pkg.name}`;
