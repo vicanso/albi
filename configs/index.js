@@ -48,7 +48,7 @@ exports.connectLimitOptions = {
 
 exports.staticOptions = {
   urlPrefix: '/static',
-  path: env === 'development' ? path.join(appPath, 'public') : path.join(appPath, 'assets'),
+  path: path.join(appPath, 'assets'),
   maxAge: env === 'development' ? 0 : 365 * 24 * 3600,
   headers: {
     Vary: 'Accept-Encoding',

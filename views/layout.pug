@@ -12,7 +12,7 @@ html(lang='zh-CN')
     title #{title}
     include ./inlinejs
     //CSS_FILES_CONTAINER
-    - importer.import('/css/font-awesome.min.css', '/css/pure.min.css', '/css/global.css')
+  - importer.import('/bundle/vendor.js', '/bundle/utils.js')
   body
     block bodyContainer
 
@@ -26,4 +26,3 @@ html(lang='zh-CN')
   //JS_FILES_CONTAINER
   script.
     TIMING.end('js')
-  - importer.import('/bundle/vendor.js', '/bundle/app.js')
