@@ -33,7 +33,7 @@ request.Request.prototype.noCache = function noCache() {
 };
 
 // request timeout(ms)
-let requestTimeout = 0;
+let requestTimeout = 5 * 1000;
 
 export function timeout(ms) {
   if (_.isNumber(ms)) {
