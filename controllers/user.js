@@ -24,7 +24,12 @@ const configs = localRequire('configs');
  */
 const pickUserInfo = (userInfos) => {
   const keys = 'account lastLoginedAt loginCount token'.split(' ');
+  let anonymous = true;
+  if (userInfos.account) {
+    anonymous = false;
+  }
   return _.extend({
+    anonymous,
     date: new Date().toISOString(),
   }, _.pick(userInfos, keys));
 };

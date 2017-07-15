@@ -16,11 +16,11 @@ const plugins = [
   }),
   new CleanWebpackPlugin([assetsPath]),
   new webpack.optimize.CommonsChunkPlugin({
-    name: ['vendor', 'utils', 'base-css'].reverse(),
+    name: ['vendor', 'react-base', 'material', 'utils', 'base-css'].reverse(),
   }),
   new webpack.SourceMapDevToolPlugin({
     test: /\.js$/,
-    exclude: /vendor.js/,
+    exclude: /(vendor|react-base).js/,
     filename: `[name]${filehash}.map`,
   }),
 ];
@@ -40,32 +40,53 @@ function getJsFile(file) {
 
 module.exports = {
   entry: {
+    // 基础工具类
     vendor: [
       'debug',
       'http-timing',
       'lodash',
+      'query-string',
       'shortid',
       'superagent',
     ],
+    // react 相关的一些模块
+    'react-base': [
+      'prop-types',
+      'react',
+      'react-dom',
+      'redux-logger',
+      'react-redux',
+      'redux-thunk',
+    ],
+    material: [
+      'material-ui',
+      'material-ui-icons',
+    ],
+    // 自己扩展的一些工具类库
     utils: [
       getJsFile('helpers/crypto.js'),
       getJsFile('helpers/debug.js'),
       getJsFile('helpers/globals.js'),
       getJsFile('helpers/request.js'),
     ],
+    // 基础css类库
     'base-css': [
       getJsFile('base-css.js'),
     ],
-    app: getJsFile('bootstrap.js'),
+    app: getJsFile('views/app.js'),
+    admin: getJsFile('views/admin.jsx'),
   },
   output: {
     filename: `[name]${filehash}.js`,
     path: path.resolve(assetsPath, 'bundle'),
   },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.js[x]$/,
         loader: 'babel-loader',
         query: {
           presets: ['es2015', 'react'],

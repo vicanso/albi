@@ -7,7 +7,7 @@ const app = globals.get('CONFIG.app', 'unknown');
 /**
  * Get the user info
  * @export
- * @returns 
+ * @returns
  */
 export function me() {
   return request.get('/api/users/me')
@@ -19,9 +19,9 @@ export function me() {
  * Register account
  * @export
  * @param {String} account
- * @param {String} password 
- * @param {String} email 
- * @returns 
+ * @param {String} password
+ * @param {String} email
+ * @returns
  */
 export function register(account, password, email) {
   const pwd = crypto.sha256(password);

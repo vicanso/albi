@@ -1,9 +1,8 @@
 import * as _ from 'lodash';
 
-import * as globals from './helpers/globals';
-import * as statsService from './services/stats';
+import * as globals from '../helpers/globals';
+import * as statsService from '../services/stats';
 
-import '../css/app.sss';
 
 function globarErrorCatch() {
   globals.set('onerror', (msg, url, line, row, err) => {
@@ -33,10 +32,8 @@ function statistics() {
     template: globals.get('CONFIG.template'),
   };
   const timing = globals.get('TIMING');
-  if (timing) {
-    timing.end('page');
-    data.timing = timing.toJSON();
-  }
+  timing.end('page');
+  data.timing = timing.toJSON();
 
   statsService.statistics(data)
     .then(() => console.info('post statistics success'))

@@ -11,19 +11,18 @@ html(lang='zh-CN')
     meta(name='author',content='Tree.Xie')
     title #{title}
     include ./inlinejs
+    script.
     //CSS_FILES_CONTAINER
-  - importer.import('/bundle/vendor.js', '/bundle/utils.js')
+    //JS_FILES_CONTAINER
+    script.
+      TIMING.end('js');
+      TIMING.start('html');
+  - importer.import('/bundle/vendor.js', '/bundle/react-base.js')
+  - importer.import('/bundle/material.js')
+  - importer.import('/bundle/utils.js')
   - importer.import('/bundle/base-css.js')
   body
     block bodyContainer
 
-  if viewData && viewData.globals
-    script.
-      window.JT_GLOBALS = !{JSON.stringify(viewData.globals)};
-
   script.
     TIMING.end('html')
-    TIMING.start('js')
-  //JS_FILES_CONTAINER
-  script.
-    TIMING.end('js')

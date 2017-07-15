@@ -5,6 +5,7 @@ const template = localRequire('helpers/template');
 const viewConfigs = [
   // name tempalte
   'home home',
+  'admin admin',
 ];
 const templateParser = {};
 _.forEach(viewConfigs, (config) => {

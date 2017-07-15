@@ -1,3 +1,4 @@
+/* eslint import/no-extraneous-dependencies:0 */
 import * as request from 'superagent';
 import * as _ from 'lodash';
 import HTTPTiming from 'http-timing';
