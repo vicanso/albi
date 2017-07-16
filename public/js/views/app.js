@@ -1,4 +1,6 @@
+/* eslint import/no-extraneous-dependencies:0 */
 import * as _ from 'lodash';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import * as globals from '../helpers/globals';
 import * as statsService from '../services/stats';
@@ -43,4 +45,5 @@ function statistics() {
 _.defer(() => {
   globarErrorCatch();
   statistics();
+  injectTapEventPlugin();
 });

@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import * as ReactRedux from 'react-redux';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider } from 'material-ui/styles';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 
 import * as globals from '../helpers/globals';
@@ -12,6 +13,7 @@ import store from '../store';
 import navigationReducer from '../reducers/navigation';
 import userReducer from '../reducers/user';
 import AppBar from '../widgets/app-bar';
+import LoginDalog from '../widgets/login-dialog';
 import * as userAction from '../actions/user';
 
 
@@ -38,13 +40,20 @@ class App extends Component {
   render() {
     const {
       user,
+      dispatch,
     } = this.props;
     return (
       <MuiThemeProvider>
-        <AppBar
-          user={user}
-          title={'My Test'}
-        />
+        <div>
+          <AppBar
+            dispatch={dispatch}
+            user={user}
+            title={'My Test'}
+          />
+          <LoginDalog
+            open={user.status === 'login'}
+          />
+        </div>
       </MuiThemeProvider>
     );
   }
@@ -86,5 +95,6 @@ function initRender() {
 }
 
 _.defer(() => {
+  injectTapEventPlugin();
   initRender();
 });

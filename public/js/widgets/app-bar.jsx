@@ -9,6 +9,9 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 
+import {
+  USER_LOGIN,
+} from '../constants/action-type';
 
 const styleSheet = createStyleSheet('CustomAppBar', {
   root: {
@@ -26,12 +29,19 @@ class CustomAppBar extends Component {
       title: '',
     };
   }
+  handleLogin() {
+    const dispatch = this.props.dispatch;
+    dispatch({
+      type: USER_LOGIN,
+    });
+  }
   render() {
     const {
       classes,
       title,
       user,
     } = this.props;
+    const fetching = user.status === 'fetching';
     return (
       <div className={classes.root}>
         <AppBar
@@ -48,7 +58,15 @@ class CustomAppBar extends Component {
             >
               {title}
             </Typography>
-            <Button color="contrast">Login</Button>
+            {
+              fetching && <span>fetching...</span>
+            }
+            {
+              !fetching && !user.account && <Button
+                color="contrast"
+                onClick={() => this.handleLogin()}
+              >Login</Button>
+            }
           </Toolbar>
         </AppBar>
       </div>
@@ -63,6 +81,7 @@ CustomAppBar.propTypes = {
   }).isRequired,
   title: PropTypes.string,
   user: PropTypes.shape(),
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default withStyles(styleSheet)(CustomAppBar);
