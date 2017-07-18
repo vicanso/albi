@@ -8,10 +8,16 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
+import {
+  Link,
+} from 'react-router-dom';
 
 import {
   USER_LOGIN,
 } from '../constants/action-type';
+import {
+  VIEW_LOGIN,
+} from '../constants/urls';
 
 const styleSheet = createStyleSheet('CustomAppBar', {
   root: {
@@ -19,6 +25,10 @@ const styleSheet = createStyleSheet('CustomAppBar', {
   },
   flex: {
     flex: 1,
+  },
+  login: {
+    color: '#fff',
+    'text-decoration': 'none',
   },
 });
 
@@ -64,8 +74,15 @@ class CustomAppBar extends Component {
             {
               !fetching && !user.account && <Button
                 color="contrast"
-                onClick={() => this.handleLogin()}
-              >Login</Button>
+              >
+                <Link
+                  to={VIEW_LOGIN}
+                  className={classes.login}
+                >Login</Link>
+              </Button>
+            }
+            {
+              user.account && <span>{user.account}</span>
             }
           </Toolbar>
         </AppBar>

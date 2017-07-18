@@ -5,15 +5,24 @@ import ReactDOM from 'react-dom';
 import * as ReactRedux from 'react-redux';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider } from 'material-ui/styles';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom';
 
 
+import {
+  VIEW_LOGIN,
+  VIEW_REGISTER,
+  VIEW_ADMIN,
+} from '../constants/urls';
+import bootstrap from '../bootstrap';
 import * as globals from '../helpers/globals';
 import store from '../store';
 import navigationReducer from '../reducers/navigation';
 import userReducer from '../reducers/user';
 import AppBar from '../widgets/app-bar';
-import LoginDalog from '../widgets/login-dialog';
+import LoginRegisterDalog from '../widgets/login-register-dialog';
 import * as userAction from '../actions/user';
 
 
@@ -28,32 +37,53 @@ class App extends Component {
     const {
       dispatch,
     } = props;
-    globals.set('onpopstate', () => {
-      console.dir('onpopstate');
-    });
-    dispatch(userAction.me()).then(() => {
-
-    }).catch((err) => {
+    dispatch(userAction.me()).catch((err) => {
       console.error(err);
     });
   }
-  render() {
+  renderAppBar() {
     const {
+      dispatch,
       user,
+    } = this.props;
+    return (
+      <AppBar
+        dispatch={dispatch}
+        user={user}
+        title={'Admin'}
+      />
+    );
+  }
+  renderLoginRegisterDialog(type) {
+    const {
       dispatch,
     } = this.props;
     return (
+      <LoginRegisterDalog
+        type={type}
+        dispatch={dispatch}
+      />
+    );
+  }
+  render() {
+    return (
       <MuiThemeProvider>
-        <div>
-          <AppBar
-            dispatch={dispatch}
-            user={user}
-            title={'My Test'}
-          />
-          <LoginDalog
-            open={user.status === 'login'}
-          />
-        </div>
+        <Router>
+          <div>
+            <Route
+              path={VIEW_ADMIN}
+              component={() => this.renderAppBar()}
+            />
+            <Route
+              path={VIEW_LOGIN}
+              component={() => this.renderLoginRegisterDialog('login')}
+            />
+            <Route
+              path={VIEW_REGISTER}
+              component={() => this.renderLoginRegisterDialog('register')}
+            />
+          </div>
+        </Router>
       </MuiThemeProvider>
     );
   }
@@ -95,6 +125,6 @@ function initRender() {
 }
 
 _.defer(() => {
-  injectTapEventPlugin();
   initRender();
+  bootstrap();
 });

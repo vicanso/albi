@@ -16,7 +16,7 @@ const plugins = [
   }),
   new CleanWebpackPlugin([assetsPath]),
   new webpack.optimize.CommonsChunkPlugin({
-    name: ['vendor', 'react-base', 'material', 'utils', 'base-css'].reverse(),
+    name: ['vendor', 'react-base', 'material', 'utils'].reverse(),
   }),
   new webpack.SourceMapDevToolPlugin({
     test: /\.js$/,
@@ -51,12 +51,14 @@ module.exports = {
     ],
     // react 相关的一些模块
     'react-base': [
-      'prop-types',
       'react',
+      'prop-types',
       'react-dom',
       'redux-logger',
       'react-redux',
       'redux-thunk',
+      'react-tap-event-plugin',
+      'react-router-dom',
     ],
     material: [
       'material-ui',
@@ -68,6 +70,7 @@ module.exports = {
       getJsFile('helpers/debug.js'),
       getJsFile('helpers/globals.js'),
       getJsFile('helpers/request.js'),
+      getJsFile('helpers/utils.js'),
     ],
     // 基础css类库
     'base-css': [

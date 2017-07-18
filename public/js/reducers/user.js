@@ -1,6 +1,5 @@
 import {
   USER_INFO,
-  USER_LOGIN,
 } from '../constants/action-type';
 
 const defaultStates = {
@@ -17,11 +16,6 @@ export default function user(state = defaultStates, action) {
       }
       return Object.assign({}, state, data, {
         status,
-      });
-    }
-    case USER_LOGIN: {
-      return Object.assign({}, state, {
-        status: 'login',
       });
     }
     default:
