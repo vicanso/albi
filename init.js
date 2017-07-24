@@ -1,27 +1,9 @@
-const path = require('path');
-const Joi = require('joi');
-const stringify = require('simple-stringify');
 const als = require('async-local-storage');
+const Joi = require('joi');
 const Logger = require('timtam-logger');
+const stringify = require('simple-stringify');
 
-
-/**
- * 用于引入项目中的模块，使用相对于项目根目录的相对路径
- *
- * @example
- * const influx = localRequire('helpers/influx');
- * @param  {String} name 该模块在项目中的相对路径
- * @return {Object} 返回该模块的引用
- */
-function localRequire(name) {
-  const ch = name[0];
-  if (!ch || ch === '.' || ch === '/') {
-    throw new Error(`the ${name} is invalid`);
-  }
-  const file = path.join(__dirname, name);
-  /* eslint import/no-dynamic-require:0 global-require:0 */
-  return require(file);
-}
+const configs = require('./configs');
 
 /**
  * 增加校验数据出错抛出异常的处理，参数参考Joi.validate，如果校验出错，使用errors生成自定义出错，code为albi-99999。
@@ -51,8 +33,6 @@ function validateThrow(...args) {
 
 Joi.validateThrow = validateThrow;
 
-global.localRequire = localRequire;
-
 global.Promise = require('bluebird');
 
 // set stringify mask
@@ -63,7 +43,6 @@ stringify.isSecret = (key) => {
 
 als.enable();
 
-const configs = localRequire('configs');
 
 if (configs.logger) {
   const logger = new Logger({

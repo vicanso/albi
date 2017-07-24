@@ -1,10 +1,11 @@
 const _ = require('lodash');
 const router = require('koa-router-parser');
 
-const debug = localRequire('helpers/debug');
-const middlewares = localRequire('middlewares');
-const routes = localRequire('routes');
-const views = localRequire('views');
+const debug = require('./helpers/debug');
+const middlewares = require('./middlewares');
+const routes = require('./routes');
+const views = require('./views');
+const controllers = require('./controllers');
 
 
 function getRouter(descList) {
@@ -31,7 +32,7 @@ function addToRouter(category, fns) {
 
 router.addDefault('common', middlewares.common.routeStats());
 
-addToRouter('c', localRequire('controllers'));
+addToRouter('c', controllers);
 addToRouter('m.noQuery', middlewares.common.noQuery());
 addToRouter('m.noCache', middlewares.common.noCache());
 addToRouter('m.auth.admin', middlewares.auth.admin());

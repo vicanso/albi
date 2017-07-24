@@ -2,12 +2,12 @@ const assert = require('assert');
 const Joi = require('joi');
 const _ = require('lodash');
 
-localRequire('app');
+require('../../app');
 const {
   selfRequest,
   delay,
-} = localRequire('helpers/utils');
-const setting = localRequire('configs/setting');
+} = require('../../helpers/utils');
+const setting = require('../../configs/setting');
 
 describe('controllers/system', () => {
   const randomLevel = _.random(5);

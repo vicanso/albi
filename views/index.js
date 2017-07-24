@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const template = localRequire('helpers/template');
+const template = require('../helpers/template');
 
 const viewConfigs = [
   // name tempalte

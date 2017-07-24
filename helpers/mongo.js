@@ -2,20 +2,20 @@
  * 此模块做mongoose model的相关初始化操作
  * @module models
  */
-const path = require('path');
-const mongoose = require('mongoose');
 const _ = require('lodash');
-const requireTree = require('require-tree');
 const bluebird = require('bluebird');
+const mongoose = require('mongoose');
+const path = require('path');
+const requireTree = require('require-tree');
 
-const configs = localRequire('configs');
-const statsPlugin = localRequire('plugins/mongo-stats');
-const updatePlugin = localRequire('plugins/mongo-update');
-const savePlugin = localRequire('plugins/mongo-save');
+const configs = require('../configs');
+const savePlugin = require('../plugins/mongo-save');
+const statsPlugin = require('../plugins/mongo-stats');
+const updatePlugin = require('../plugins/mongo-update');
+
 const Schema = mongoose.Schema;
 mongoose.Promise = bluebird;
 
-// mongoose.plugin(localRequire('plugins/mongo-stats'));
 
 /**
  * 初始化models，根据配置的model path，读取所有配置的model，初始化。

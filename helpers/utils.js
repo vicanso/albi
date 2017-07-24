@@ -5,7 +5,7 @@
 
 const request = require('superagent');
 
-const configs = localRequire('configs');
+const configs = require('../configs');
 
 /**
  * 从参数列表中获取第一个符合条件的参数返回，如果都不符合，则使用默认值返回

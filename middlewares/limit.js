@@ -4,7 +4,7 @@
  */
 const limit = require('koa-connection-limit');
 
-const globals = localRequire('helpers/globals');
+const globals = require('../helpers/globals');
 
 /**
  * 设置不同的connectiong数量级别，不同的连接数对应不同的状态。

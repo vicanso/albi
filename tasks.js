@@ -1,4 +1,4 @@
-const setting = localRequire('configs/setting');
+const setting = require('./configs/setting');
 
 setInterval(() => {
   setting.update();

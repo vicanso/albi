@@ -1,8 +1,8 @@
 /**
  * 用于生成根据当前系统运行级别而处理的中间件
  */
-const errors = localRequire('helpers/errors');
-const setting = localRequire('configs/setting');
+const errors = require('../helpers/errors');
+const setting = require('../configs/setting');
 
 /**
  * 对于某些非重要接口，可以设置不同的系统级别以上才做响应，如果系统运行级别低于设置级别，则直接返回出错。

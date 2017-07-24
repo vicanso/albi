@@ -2,8 +2,8 @@
  * @module middlewares/auth
  */
 
-const errors = localRequire('helpers/errors');
-const setting = localRequire('configs/setting');
+const errors = require('../helpers/errors');
+const setting = require('../configs/setting');
 
 /**
  * admin的校验中间件，从Header中获取`Auth-Token`，通过sha1生成字符串与`adminToken`对比，

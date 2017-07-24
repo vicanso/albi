@@ -5,7 +5,6 @@
   },
   "globals": {
     "describe": true,
-    "it": true,
-    "localRequire": true
+    "it": true
   }
 }

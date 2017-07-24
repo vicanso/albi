@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const request = localRequire('helpers/request');
+const request = require('../../helpers/request');
 
 describe('request', () => {
   it('get', (done) => {

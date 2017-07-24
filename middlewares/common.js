@@ -5,8 +5,8 @@
 const _ = require('lodash');
 const url = require('url');
 
-const errors = localRequire('helpers/errors');
-const influx = localRequire('helpers/influx');
+const errors = require('../helpers/errors');
+const influx = require('../helpers/influx');
 
 /**
  * 对于url中的querystring检验，如果有querystring则校验不通过，返回出错。

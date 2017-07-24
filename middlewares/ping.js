@@ -3,8 +3,8 @@
  * @module middlewares/ping
  */
 
-const globals = localRequire('helpers/globals');
-const errors = localRequire('helpers/errors');
+const errors = require('../helpers/errors');
+const globals = require('../helpers/globals');
 
 /**
  * 根据应用状态对设置的ping请求做出响应，如果应用不是处于`running`状态，

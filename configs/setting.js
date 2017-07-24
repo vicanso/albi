@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const mongo = localRequire('helpers/mongo');
+const mongo = require('../helpers/mongo');
 
 const applicationSetting = {
   adminToken: 'my-token',

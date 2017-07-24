@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const utils = localRequire('helpers/utils');
+const utils = require('../../helpers/utils');
 
 describe('utils', () => {
   it('get param', () => {

@@ -2,12 +2,12 @@
  * 此模块主要做出错的响应处理
  * @module middlewares/error
  */
-const url = require('url');
 const _ = require('lodash');
 const stringify = require('simple-stringify');
+const url = require('url');
 
-const configs = localRequire('configs');
-const influx = localRequire('helpers/influx');
+const configs = require('../configs');
+const influx = require('../helpers/influx');
 
 /**
  * HTTP请求出错中间件处理，根据出错的Error对象，记录出错的url,code,userToken,

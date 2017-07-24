@@ -2,12 +2,13 @@ const assert = require('assert');
 const shortid = require('shortid');
 const crypto = require('crypto');
 
-const configs = localRequire('configs');
+const configs = require('../configs');
 
-localRequire('app');
+require('../../app');
 const {
   selfRequest,
-} = localRequire('helpers/utils');
+} = require('../../helpers/utils');
+
 const getHash = str => crypto.createHash('sha256').update(str).digest('hex');
 const account = shortid();
 const password = getHash(`${account}-${getHash('abcd')}-${configs.app}`);

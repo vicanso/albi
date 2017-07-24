@@ -2,13 +2,13 @@
  * 此模块添加各类公共函数到`ctx.state`中，主要用于模板渲染之类
  * @module middlewares/state
  */
-const urlJoin = require('url-join');
-const Importer = require('jtfileimporter');
 const _ = require('lodash');
+const Importer = require('jtfileimporter');
 const moment = require('moment');
 const path = require('path');
+const urlJoin = require('url-join');
 
-const configs = localRequire('configs');
+const configs = require('../configs');
 
 /**
  * 生成图片地址

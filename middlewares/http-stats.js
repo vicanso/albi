@@ -6,7 +6,7 @@
 const _ = require('lodash');
 const httpStats = require('koa-http-stats');
 
-const influx = localRequire('helpers/influx');
+const influx = require('../helpers/influx');
 
 /**
  * 对HTTP的响应时间、状态码等生成统计指标，返回的统计指标如下：

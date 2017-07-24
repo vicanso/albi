@@ -6,9 +6,9 @@ const Joi = require('joi');
 const _ = require('lodash');
 const shortid = require('shortid');
 
-const errors = localRequire('helpers/errors');
-const userService = localRequire('services/user');
-const configs = localRequire('configs');
+const configs = require('../configs');
+const errors = require('../helpers/errors');
+const userService = require('../services/user');
 
 
 /**

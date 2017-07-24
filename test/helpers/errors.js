@@ -1,7 +1,7 @@
 const assert = require('assert');
 
-const errors = localRequire('helpers/errors');
-const configs = localRequire('configs');
+const errors = require('../../helpers/errors');
+const configs = require('../../configs');
 
 describe('errors', () => {
   it('get error', () => {

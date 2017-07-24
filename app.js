@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 require('./init');
 
-const configs = localRequire('configs');
-const globals = localRequire('helpers/globals');
-const createServer = localRequire('helpers/server');
-const performance = localRequire('schedules/performance');
-const influx = localRequire('helpers/influx');
+const configs = require('./configs');
+const createServer = require('./helpers/server');
+const globals = require('./helpers/globals');
+const influx = require('./helpers/influx');
+const performance = require('./schedules/performance');
 
-localRequire('tasks');
+require('./tasks');
 
 function gracefulExit() {
   console.info('the application will be restart');

@@ -1,6 +1,6 @@
 const path = require('path');
 
-const pkg = localRequire('package');
+const pkg = require('../package');
 
 exports.port = parseInt(process.env.PORT, 10) || 5018;
 

@@ -1,10 +1,10 @@
 const Joi = require('joi');
 
 require('../init');
+const configs = require('../configs');
 
 describe('configs', () => {
   it('check configs data', (done) => {
-    const configs = localRequire('configs');
     const result = Joi.validate(configs, {
       env: Joi.string(),
       version: Joi.string(),

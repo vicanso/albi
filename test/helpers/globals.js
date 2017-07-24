@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const globals = localRequire('helpers/globals');
+const globals = require('../../helpers/globals');
 
 describe('globals', () => {
   it('change the application status', () => {

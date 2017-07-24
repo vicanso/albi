@@ -3,11 +3,11 @@
  * @module helpers/template
  */
 
-const path = require('path');
 const _ = require('lodash');
+const path = require('path');
 const pug = require('pug');
 
-const configs = localRequire('configs');
+const configs = require('../configs');
 
 /**
  * 模板render

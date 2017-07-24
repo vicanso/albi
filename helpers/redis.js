@@ -1,7 +1,8 @@
 const Redis = require('ioredis');
 const _ = require('lodash');
 
-const configs = localRequire('configs');
+const configs = require('../configs');
+
 const client = new Redis(configs.redisUri);
 
 const delayLog = _.throttle((message, type) => {

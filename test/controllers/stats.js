@@ -1,9 +1,9 @@
 const assert = require('assert');
 
-localRequire('app');
+require('../../app');
 const {
   selfRequest,
-} = localRequire('helpers/utils');
+} = require('../../helpers/utils');
 
 describe('controllers/stats', () => {
   it('ajax stats', () => selfRequest('post', '/api/stats/ajax')

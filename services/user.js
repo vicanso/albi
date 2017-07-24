@@ -4,14 +4,14 @@
  * 在此模块中，对于传入参数都是认为符合条件的，由conroller中对参数校验
  * @module services/user
  */
-const crypto = require('crypto');
 const _ = require('lodash');
 const als = require('async-local-storage');
+const crypto = require('crypto');
 
-const mongo = localRequire('helpers/mongo');
-const errors = localRequire('helpers/errors');
-const location = localRequire('helpers/location');
-const influx = localRequire('helpers/influx');
+const mongo = require('../helpers/mongo');
+const errors = require('../helpers/errors');
+const location = require('../helpers/location');
+const influx = require('../helpers/influx');
 
 /**
  * 检测当前条件的用户是否已存在

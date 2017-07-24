@@ -4,14 +4,14 @@
  * @module helpers/influx
  */
 
-const Influx = require('influxdb-nodejs');
 const _ = require('lodash');
+const Influx = require('influxdb-nodejs');
 const stringify = require('simple-stringify');
 
-const configs = localRequire('configs');
-const utils = localRequire('helpers/utils');
-const debug = localRequire('helpers/debug');
-const schemas = localRequire('influx-schemas');
+const configs = require('../configs');
+const debug = require('../helpers/debug');
+const schemas = require('../influx-schemas');
+const utils = require('../helpers/utils');
 
 const client = configs.influx ? new Influx(configs.influx) : null;
 const maxQueueLength = 100;

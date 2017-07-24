@@ -2,8 +2,8 @@
 
 const createError = require('http-errors');
 
-const errors = localRequire('errors');
-const configs = localRequire('configs');
+const errors = require('../errors');
+const configs = require('../configs');
 
 function getErrorByCode(code, lang = 'en') {
   const item = errors[code] || {

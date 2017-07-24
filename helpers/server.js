@@ -1,25 +1,28 @@
+const _ = require('lodash');
+const als = require('async-local-storage');
+const bodyparser = require('koa-bodyparser');
+const etag = require('koa-etag');
 const Koa = require('koa');
 const koaLog = require('koa-log');
-const _ = require('lodash');
-const mount = require('koa-mounting');
-const staticServe = require('koa-static-serve');
-const als = require('async-local-storage');
-const Timing = require('supertiming');
-const shortid = require('shortid');
 const methodoverride = require('koa-methodoverride');
-const bodyparser = require('koa-bodyparser');
+const mount = require('koa-mounting');
 const restVersion = require('koa-rest-version');
-const etag = require('koa-etag');
+const shortid = require('shortid');
+const staticServe = require('koa-static-serve');
+const Timing = require('supertiming');
 
 
-const configs = localRequire('configs');
+const configs = require('../configs');
+const middlewares = require('../middlewares');
+const router = require('../router');
+const versions = require('../versions');
 
 function createServer(port) {
   const app = new Koa();
   // trust proxy
   app.proxy = true;
   app.keys = ['cuttle-fish', 'tree.xie'];
-  localRequire('middlewares/session').init(app);
+  middlewares.session.init(app);
 
   app.use((ctx, next) => {
     const id = ctx.get('X-Request-Id') || shortid();
@@ -29,19 +32,19 @@ function createServer(port) {
   });
 
   // error handler
-  app.use(localRequire('middlewares/error')());
+  app.use(middlewares.error());
 
-  app.use(localRequire('middlewares/entry')(configs.app, configs.appUrlPrefix));
+  app.use(middlewares.entry(configs.app, configs.appUrlPrefix));
 
   // timeout
-  app.use(localRequire('middlewares/timeout')({
+  app.use(middlewares.timeout({
     timeout: 3000,
     // 如果query中设置了disableTimeout，则跳过timeout处理
     pass: ctx => _.has(ctx.query, 'disableTimeout'),
   }));
 
   // health check
-  app.use(localRequire('middlewares/ping')('/ping'));
+  app.use(middlewares.ping('/ping'));
 
   // http log
   /* istanbul ignore if */
@@ -54,11 +57,11 @@ function createServer(port) {
   }
 
   // http stats
-  app.use(localRequire('middlewares/http-stats')());
+  app.use(middlewares['http-stats']());
 
   // http connection limit
   const limitOptions = configs.connectLimitOptions;
-  app.use(localRequire('middlewares/limit')(_.omit(limitOptions, 'interval'),
+  app.use(middlewares.limit(_.omit(limitOptions, 'interval'),
     limitOptions.interval));
 
   const staticOptions = configs.staticOptions;
@@ -77,13 +80,13 @@ function createServer(port) {
 
   app.use(restVersion());
 
-  app.use(localRequire('middlewares/common').fresh());
+  app.use(middlewares.common.fresh());
 
   app.use(etag());
 
-  app.use(localRequire('middlewares/state')(localRequire('versions')));
+  app.use(middlewares.state(versions));
 
-  app.use(localRequire('router').routes());
+  app.use(router.routes());
 
   app.on('error', _.noop);
 

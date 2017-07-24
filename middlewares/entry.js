@@ -4,10 +4,10 @@
  */
 
 const _ = require('lodash');
-const ms = require('ms');
 const als = require('async-local-storage');
+const ms = require('ms');
 
-const globals = localRequire('helpers/globals');
+const globals = require('../helpers/globals');
 
 /**
  * HTTP请求入口的中间件处理，包括：

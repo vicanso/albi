@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const stringify = require('simple-stringify');
 
-const influx = localRequire('helpers/influx');
+const influx = require('../helpers/influx');
 
 function writeStats(data) {
   const keys = ['model', 'op'];

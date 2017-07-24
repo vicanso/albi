@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
-const errors = localRequire('helpers/errors');
-const request = localRequire('helpers/request');
+const errors = require('../helpers/errors');
+const request = require('../helpers/request');
 
 exports.byIP = function getLocationByIP(ip) {
   const url = 'http://ip.taobao.com/service/getIpInfo.php';

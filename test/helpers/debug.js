@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const debug = localRequire('helpers/debug');
+const debug = require('../../helpers/debug');
 
 describe('debug', () => {
   it('debug function', () => {

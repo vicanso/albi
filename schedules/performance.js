@@ -3,11 +3,11 @@
  * @module schedules/performance
  */
 
-const performance = require('performance-nodejs');
 const _ = require('lodash');
+const performance = require('performance-nodejs');
 
-const globals = localRequire('helpers/globals');
-const influx = localRequire('helpers/influx');
+const globals = require('../helpers/globals');
+const influx = require('../helpers/influx');
 
 /**
  * 创建定时收集应用程序相关性能指标的timer

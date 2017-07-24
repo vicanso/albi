@@ -1,6 +1,6 @@
 const request = require('superagent');
 
-const httpStats = localRequire('plugins/http-stats');
+const httpStats = require('../plugins/http-stats');
 
 exports.timeout = 5 * 1000;
 

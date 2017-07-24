@@ -3,15 +3,15 @@
  * @module middlewares/session
  */
 const _ = require('lodash');
-const koaSession = require('koa-session');
 const als = require('async-local-storage');
+const koaSession = require('koa-session');
 
-const configs = localRequire('configs');
-const errors = localRequire('helpers/errors');
-const influx = localRequire('helpers/influx');
+const configs = require('../configs');
+const errors = require('../helpers/errors');
+const influx = require('../helpers/influx');
 const {
   sessionStore,
-} = localRequire('helpers/redis');
+} = require('../helpers/redis');
 
 let sessionMiddleware = null;
 exports.init = (app) => {

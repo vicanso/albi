@@ -5,7 +5,7 @@
 const _ = require('lodash');
 const stringify = require('simple-stringify');
 
-const influx = localRequire('helpers/influx');
+const influx = require('../helpers/influx');
 
 /**
  * 记录用户的行为日志到influxdb中

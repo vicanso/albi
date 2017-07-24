@@ -4,19 +4,19 @@
  */
 
 
-const BlueBird = require('bluebird');
-const path = require('path');
-const moment = require('moment');
 const _ = require('lodash');
+const BlueBird = require('bluebird');
+const moment = require('moment');
+const path = require('path');
 
 const fs = BlueBird.promisifyAll(require('fs'));
 
-const configs = localRequire('configs');
-const globals = localRequire('helpers/globals');
-const setting = localRequire('configs/setting');
+const configs = require('../configs');
+const globals = require('../helpers/globals');
+const setting = require('../configs/setting');
 const {
   delay,
-} = localRequire('helpers/utils');
+} = require('../helpers/utils');
 
 /**
  * 获取系统当前运行的版本package.json与读取文件package.json的版本号，
