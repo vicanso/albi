@@ -60,4 +60,4 @@ exports.staticOptions = {
 exports.trackCookie = '_jt';
 
 // app url prefix for all request
-exports.appUrlPrefix = env === 'development' ? '' : `/${pkg.name}`;
+exports.appUrlPrefix = '/api';

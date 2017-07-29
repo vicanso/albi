@@ -4,7 +4,6 @@ const router = require('koa-router-parser');
 const debug = require('./helpers/debug');
 const middlewares = require('./middlewares');
 const routes = require('./routes');
-const views = require('./views');
 const controllers = require('./controllers');
 
 
@@ -39,7 +38,6 @@ addToRouter('m.auth.admin', middlewares.auth.admin());
 addToRouter('m.session', middlewares.session.writable());
 addToRouter('m.session.login', middlewares.session.login());
 
-addToRouter('v', views);
 
 addToRouter('level', middlewares.level);
 addToRouter('version', middlewares.common.version);

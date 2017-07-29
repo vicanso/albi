@@ -15,7 +15,6 @@ const Timing = require('supertiming');
 const configs = require('../configs');
 const middlewares = require('../middlewares');
 const router = require('../router');
-const versions = require('../versions');
 
 function createServer(port) {
   const app = new Koa();
@@ -78,13 +77,14 @@ function createServer(port) {
   app.use(methodoverride());
   app.use(bodyparser());
 
-  app.use(restVersion());
+  app.use(restVersion({
+    override: true,
+  }));
 
   app.use(middlewares.common.fresh());
 
   app.use(etag());
 
-  app.use(middlewares.state(versions));
 
   app.use(router.routes());
 

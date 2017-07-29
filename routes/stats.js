@@ -1,5 +1,5 @@
 module.exports = [
-  '[POST] [/api/stats/ajax] [c.stats.ajax]',
-  '[POST] [/api/stats/exception] [c.stats.exception]',
-  '[POST] [/api/stats/statistics] [c.stats.statistics]',
+  '[POST] [/stats/ajax] [c.stats.ajax]',
+  '[POST] [/stats/exception] [c.stats.exception]',
+  '[POST] [/stats/statistics] [c.stats.statistics]',
 ];

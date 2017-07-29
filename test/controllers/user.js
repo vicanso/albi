@@ -62,7 +62,7 @@ describe('controllers/use', () => {
       assert.equal(res.status, 204);
     }));
 
-  it('like', () => selfRequest('post', '/v3/api/users/like')
+  it('like', () => selfRequest('post', '/api/v3/users/like')
     .set('Cookie', currentCookies)
     .then((res) => {
       assert.equal(res.status, 200);

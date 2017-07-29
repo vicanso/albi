@@ -28,8 +28,6 @@ module.exports = (processName, appUrlPrefix) => (ctx, next) => {
   const currentPath = ctx.path;
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
     /* eslint no-param-reassign:0 */
-    ctx.orginalPath = currentPath;
-    /* eslint no-param-reassign:0 */
     ctx.path = currentPath.substring(appUrlPrefix.length) || '/';
   }
   ctx.setCache = (ttl, sMaxAge) => {
