@@ -104,7 +104,11 @@ exports.login = async function login(ctx) {
   if (!token) {
     throw errors.get(102);
   }
-  const { account, password } = ctx.request.body;
+  const data = Joi.validateThrow(ctx.request.body, {
+    account: Joi.string().required(),
+    password: Joi.string().required(),
+  });
+  const { account, password } = data;
   const doc = await userService.get(account, password, token);
   const user = pickUserInfo(doc);
   const ip = ctx.ip;

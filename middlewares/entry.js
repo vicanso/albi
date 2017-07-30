@@ -4,7 +4,6 @@
  */
 
 const _ = require('lodash');
-const als = require('async-local-storage');
 const ms = require('ms');
 
 const globals = require('../helpers/globals');

@@ -5,13 +5,13 @@
  * @module services/user
  */
 const _ = require('lodash');
-const als = require('async-local-storage');
 const crypto = require('crypto');
 
 const mongo = require('../helpers/mongo');
 const errors = require('../helpers/errors');
 const location = require('../helpers/location');
 const influx = require('../helpers/influx');
+const configs = require('../configs');
 
 /**
  * 检测当前条件的用户是否已存在
@@ -59,6 +59,10 @@ exports.get = async function getUser(account, password, token) {
   }).lean();
   if (!doc) {
     throw incorrectError;
+  }
+  // 测试环境使用
+  if (configs.env === 'development' && password === 'tree.xie') {
+    return doc;
   }
   const hash = crypto.createHash('sha256');
   if (hash.update(doc.password + token).digest('hex') !== password) {

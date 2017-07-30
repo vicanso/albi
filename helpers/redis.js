@@ -16,6 +16,7 @@ const delayLog = _.throttle((message, type) => {
 
 client.on('error', err => delayLog(err.message, 'error'));
 
+// 延时输出日志，避免一直断开连接时大量无用日志
 client.on('connect', () => delayLog('connected'));
 
 const getSessionKey = key => `${configs.app}:${key}`;
