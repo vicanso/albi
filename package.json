@@ -24,13 +24,10 @@
   "scripts": {
     "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/*.js test/*/*.js --",
     "dev": "nodemon app",
-    "eslint": "npm run eslint-node & npm run eslint-browser",
-    "eslint-browser": "node ./node_modules/.bin/eslint public/js/*/*.js[x] public/js/*.js",
-    "eslint-node": "node ./node_modules/.bin/eslint *.js test/*.js test/*/*.js configs/*.js helpers/*.js errors/*.js schedules/*.js middlewares/*.js influx-schemas/*.js models/*.js routes/*.js controllers/*.js services/*.js plugins/*.js",
+    "lint": "node ./node_modules/.bin/eslint *.js test/*.js test/*/*.js configs/*.js helpers/*.js errors/*.js schedules/*.js middlewares/*.js influx-schemas/*.js models/*.js routes/*.js controllers/*.js services/*.js plugins/*.js",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "start": "node app",
-    "test": "npm run eslint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/albi npm run coverage",
-    "watch": "node node_modules/.bin/webpack --progress --colors --watch"
+    "test": "npm run lint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/albi npm run coverage"
   },
   "license": "MIT",
   "dependencies": {
