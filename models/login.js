@@ -22,6 +22,10 @@ module.exports = {
       type: String,
       required: true,
     },
+    track: {
+      type: String,
+      required: true,
+    },
     country: String,
     region: String,
     city: String,

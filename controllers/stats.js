@@ -66,4 +66,6 @@ exports.route = function route(ctx) {
   _.forEach(ctx.request.body, (item) => {
     console.info(`vue route ${stringify.json(item)}`);
   });
+  /* eslint no-param-reassign:0 */
+  ctx.status = 201;
 };

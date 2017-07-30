@@ -2,7 +2,7 @@ const path = require('path');
 
 const pkg = require('../package');
 
-exports.port = parseInt(process.env.PORT, 10) || 5018;
+exports.port = Number.parseInt(process.env.PORT, 10) || 5018;
 
 // the env of the applcation
 const env = process.env.NODE_ENV || 'development';
@@ -15,8 +15,6 @@ exports.env = env;
 exports.version = pkg.version;
 
 exports.app = pkg.name;
-
-exports.viewPath = path.join(appPath, 'views');
 
 // http log format type
 exports.httpLogFormat = ':request-id :method :url :status :length :response-time ms ":referrer"';

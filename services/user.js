@@ -40,9 +40,7 @@ exports.add = async function addUser(data) {
   const date = new Date().toISOString();
   userData.lastLoginedAt = date;
   userData.loginCount = 1;
-  const end = als.get('timing').start('addUser');
   const doc = await (new User(userData)).save();
-  end();
   return doc.toJSON();
 };
 
@@ -56,11 +54,9 @@ exports.add = async function addUser(data) {
 exports.get = async function getUser(account, password, token) {
   const User = mongo.get('User');
   const incorrectError = errors.get(106);
-  const end = als.get('timing').start('getUser');
   const doc = await User.findOne({
     account,
   }).lean();
-  end();
   if (!doc) {
     throw incorrectError;
   }
@@ -92,7 +88,6 @@ exports.update = async function updateUserInfo(id, data) {
 exports.addLoginRecord = async function addLoginRecord(data) {
   const Login = mongo.get('Login');
   /* eslint no-param-reassign:0 */
-  data.createdAt = (new Date()).toISOString();
   const reg = /\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/;
   const result = reg.exec(data.ip);
   const ip = _.get(result, '[0]');

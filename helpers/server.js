@@ -25,7 +25,10 @@ function createServer(port) {
 
   app.use((ctx, next) => {
     const id = ctx.get('X-Request-Id') || shortid();
-    als.set('timing', new Timing());
+    const timing = new Timing();
+    ctx.state.timing = timing;
+    ctx.set('X-Response-Id', id);
+    als.set('timing', timing);
     als.set('id', id);
     return next();
   });

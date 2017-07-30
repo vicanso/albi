@@ -125,6 +125,7 @@ exports.login = async function login(ctx) {
     token: user.token,
     userAgent: ctx.get('User-Agent'),
     ip,
+    track: ctx.cookies.get(configs.trackCookie),
   });
 };
 
