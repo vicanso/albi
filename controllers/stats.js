@@ -56,3 +56,14 @@ exports.statistics = function statistics(ctx) {
   /* eslint no-param-reassign:0 */
   ctx.status = 201;
 };
+
+/**
+ * 用于记录前端收集的路由性能统计
+ * @param {Method} POST
+ * @param {Array} request.body 路由相关性能统计 [{from: xxx, to: xxx, use: xxx, startedAt: xxx}]
+ */
+exports.route = function route(ctx) {
+  _.forEach(ctx.request.body, (item) => {
+    console.info(`vue route ${stringify.json(item)}`);
+  });
+};
