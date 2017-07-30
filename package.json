@@ -1,7 +1,7 @@
 {
   "name": "albi",
   "description": "backend framework base on koa",
-  "version": "6.0.0",
+  "version": "7.1.1",
   "author": "Tree Xie <vicansocanbico@gmail.com>",
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "lint": "node ./node_modules/.bin/eslint *.js test/*.js test/*/*.js configs/*.js helpers/*.js errors/*.js schedules/*.js middlewares/*.js influx-schemas/*.js models/*.js routes/*.js controllers/*.js services/*.js plugins/*.js",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "start": "node app",
-    "test": "npm run lint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/albi npm run coverage"
+    "test": "npm run lint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/albi npm run coverage",
+    "update": "node build/update"
   },
   "license": "MIT",
   "dependencies": {
