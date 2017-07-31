@@ -1,0 +1,1 @@
+rm /root/.npm/* -rf
