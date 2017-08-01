@@ -36,7 +36,7 @@ function createServer(port) {
   // error handler
   app.use(middlewares.error());
 
-  app.use(middlewares.entry(configs.app, configs.appUrlPrefix));
+  app.use(middlewares.entry(`${configs.app}-${configs.version}`, configs.appUrlPrefix));
 
   // timeout
   app.use(middlewares.timeout({
