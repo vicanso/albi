@@ -1,3 +1,4 @@
+const httpPerf = require('http-performance');
 const mongoose = require('mongoose');
 
 require('./init');
@@ -23,6 +24,11 @@ function gracefulExit() {
     process.exit(0);
   }, 10 * 1000).unref();
 }
+
+httpPerf.disable('response');
+httpPerf.on('stats', (stats) => {
+  console.dir(stats);
+});
 
 process.on('unhandledRejection', (err) => {
   console.error(`unhandledRejection:${err.message}, stack:${err.stack}`);
