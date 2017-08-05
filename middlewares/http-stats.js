@@ -40,5 +40,5 @@ module.exports = options => httpStats(options, (performance, statsData, ctx) => 
   }
   const tags = _.pick(statsData, tagKeys);
   tags.method = ctx.method;
-  influx.write('http', fields, tags);
+  influx.write('response', fields, tags);
 });

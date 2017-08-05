@@ -1,5 +1,6 @@
 const httpPerf = require('http-performance');
 const mongoose = require('mongoose');
+const _ = require('lodash');
 
 require('./init');
 
@@ -27,7 +28,23 @@ function gracefulExit() {
 
 httpPerf.disable('response');
 httpPerf.on('stats', (stats) => {
-  console.dir(stats);
+  const tags = _.pick(stats, [
+    'category',
+    'type',
+    'method',
+    'host',
+  ]);
+  const fields = _.extend(_.pick(stats, [
+    'requesting',
+    'url',
+    'status',
+    'bytes',
+  ]), stats.timing);
+  if (stats.dns) {
+    fields.ip = stats.dns.ip;
+  }
+  tags.spdy = _.sortedIndex([100, 300, 1000, 3000], fields.all);
+  influx.write('http', fields, tags);
 });
 
 process.on('unhandledRejection', (err) => {

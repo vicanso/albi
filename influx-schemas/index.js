@@ -70,7 +70,7 @@ const schemas = {
       stripUnknown: true,
     },
   },
-  http: {
+  response: {
     fields: {
       connecting: 'i',
       total: 'i',
@@ -155,6 +155,29 @@ const schemas = {
         'findOneAndRemove',
         'save',
       ],
+    },
+  },
+  http: {
+    tags: {
+      category: ['request', 'response'],
+      type: '12345'.split(''),
+      method: '*',
+      host: '*',
+      spdy: '01234'.split(''),
+    },
+    fields: {
+      requesting: 'i',
+      url: 's',
+      status: 'i',
+      bytes: 'i',
+      socket: 'i',
+      dns: 'i',
+      tcp: 'i',
+      tls: 'i',
+      processing: 'i',
+      transfer: 'i',
+      all: 'i',
+      ip: 's',
     },
   },
 };
