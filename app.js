@@ -1,6 +1,5 @@
-const httpPerf = require('http-performance');
+
 const mongoose = require('mongoose');
-const _ = require('lodash');
 
 require('./init');
 
@@ -9,6 +8,9 @@ const createServer = require('./helpers/server');
 const globals = require('./helpers/globals');
 const influx = require('./helpers/influx');
 const performance = require('./schedules/performance');
+const mongo = require('./helpers/mongo');
+const redis = require('./helpers/redis');
+const httpPref = require('./helpers/http-pref');
 
 require('./tasks');
 
@@ -26,26 +28,17 @@ function gracefulExit() {
   }, 10 * 1000).unref();
 }
 
-httpPerf.disable('response');
-httpPerf.on('stats', (stats) => {
-  const tags = _.pick(stats, [
-    'category',
-    'type',
-    'method',
-    'host',
-  ]);
-  const fields = _.extend(_.pick(stats, [
-    'requesting',
-    'url',
-    'status',
-    'bytes',
-  ]), stats.timing);
-  if (stats.dns) {
-    fields.ip = stats.dns.ip;
-  }
-  tags.spdy = _.sortedIndex([100, 300, 1000, 3000], fields.all);
-  influx.write('http', fields, tags);
-});
+function waitForReady() {
+  let count = 0;
+  const ready = () => {
+    count += 1;
+    if (count === 2) {
+      globals.start();
+    }
+  };
+  mongo.client.once('connected', ready);
+  redis.client.once('connect', ready);
+}
 
 process.on('unhandledRejection', (err) => {
   console.error(`unhandledRejection:${err.message}, stack:${err.stack}`);
@@ -63,3 +56,5 @@ if (configs.env !== 'development') {
 
 createServer(configs.port);
 performance(2000);
+httpPref.start();
+waitForReady();

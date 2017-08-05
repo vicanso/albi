@@ -8,7 +8,7 @@ const client = new Redis(configs.redisUri);
 const delayLog = _.throttle((message, type) => {
   const maskUri = configs.redisUri.replace(/:\S+@/, '//:***@');
   if (type === 'error') {
-    console.error(`${maskUri} error, ${message})`);
+    console.alert(`${maskUri} error, ${message})`);
   } else {
     console.info(`${maskUri} ${message}`);
   }

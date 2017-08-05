@@ -65,17 +65,17 @@ function initClient(uri, options) {
   });
   client.on('disconnected', () => {
     /* istanbul ignore next */
-    console.error(`${maskUri} disconnected`);
+    console.alert(`${maskUri} disconnected`);
   });
   client.on('reconnected', _.debounce(() => {
     /* istanbul ignore next */
-    console.error(`${maskUri} reconnected`);
+    console.info(`${maskUri} reconnected`);
   }, 3000));
   client.on('connecting', () => {
     /* istanbul ignore next */
-    console.error(`${maskUri} connecting`);
+    console.info(`${maskUri} connecting`);
   });
-  client.on('error', err => console.error(`${maskUri} error, %s`, err));
+  client.on('error', err => console.alert(`${maskUri} error, %s`, err));
   initModels(client, path.join(__dirname, '../models'));
   return client;
 }
@@ -89,3 +89,8 @@ const client = initClient(configs.mongoUri);
  * @return {Model} mongoose model
  */
 exports.get = name => client.model(name);
+
+/**
+ * Get the mongodb client
+ */
+exports.client = client;
