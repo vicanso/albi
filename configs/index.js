@@ -17,7 +17,7 @@ exports.version = pkg.version;
 exports.app = pkg.name;
 
 // http log format type
-exports.httpLogFormat = ':request-id :method :url :status :length :response-time ms ":referrer"';
+exports.httpLogFormat = ':request-id :account :method :url :status :length :response-time ms ":referrer"';
 
 // http://user:pass@127.0.0.1:8086/mydatabase
 exports.influx = process.env.INFLUX;

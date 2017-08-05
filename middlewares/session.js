@@ -59,6 +59,7 @@ const normal = (ctx, next) => {
     const use = Date.now() - startedAt;
     const account = _.get(ctx, 'session.user.account', 'unknown');
     als.set('account', account);
+    ctx.state.account = account;
     influx.write('session', {
       account,
       use,

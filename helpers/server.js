@@ -54,7 +54,8 @@ function createServer(port) {
     app.use(koaLog('dev'));
   } else {
     /* istanbul ignore next */
-    koaLog.morgan.token('request-id', ctx => ctx.get('X-Request-Id') || 'unknown');
+    koaLog.morgan.token('request-id', ctx => ctx.get('X-Request-Id') || '0');
+    koaLog.morgan.token('account', ctx => ctx.state.account || 'anonymous');
     app.use(koaLog(configs.httpLogFormat));
   }
 
