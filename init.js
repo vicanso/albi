@@ -25,7 +25,7 @@ function validateThrow(...args) {
   if (result.error) {
     const err = new Error(result.error);
     err.status = 400;
-    err.code = 'albi-99999';
+    err.code = `${configs.app}-99999`;
     throw err;
   }
   return result.value;
