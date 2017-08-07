@@ -33,7 +33,9 @@ module.exports = () => (ctx, next) => next().catch((err) => {
     expected: false,
   };
   _.forEach(error, (v, k) => {
-    data[k] = v;
+    if (!_.isObject(v)) {
+      data[k] = v;
+    }
   });
   /* istanbul ignore else */
   if (configs.env !== 'production') {
