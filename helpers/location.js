@@ -14,12 +14,16 @@ exports.byIP = function getLocationByIP(ip) {
       try {
         const info = JSON.parse(res.text);
         if (info.code !== 0) {
-          throw errors.get(7);
+          throw errors.get('common.ipLocationFail');
         }
-        return _.pick(info.data, ['country', 'region', 'city', 'isp']);
+        const result = {};
+        _.forEach(['country', 'region', 'city', 'isp'], (key) => {
+          result[key] = info.data[key] || '-';
+        });
+        return result;
       } catch (err) {
         console.error(`parse ip info fail, ${err.message}`);
-        throw errors.get(7);
+        throw errors.get('common.ipLocationFail');
       }
     });
 };

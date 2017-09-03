@@ -4,7 +4,6 @@
  */
 
 
-const _ = require('lodash');
 const BlueBird = require('bluebird');
 const moment = require('moment');
 const path = require('path');
@@ -13,7 +12,6 @@ const fs = BlueBird.promisifyAll(require('fs'));
 
 const configs = require('../configs');
 const globals = require('../helpers/globals');
-const setting = require('../configs/setting');
 const {
   delay,
 } = require('../helpers/utils');
@@ -36,10 +34,9 @@ async function getVersion() {
  * 设置系统状态为`pause`，此时系统对于`/ping`的响应会返回出错，
  * 主要用于可以让前置的反向代理不再往当前系统转发请求，用于graceful shutdown之类
  * @param {Method} PUT
- * @param {Header} Auth-Token 认证TOEKN
- * @prop {Middleware} auth.admin 验证token是否admin
- * @prop {Route} /api/sys/pause
- * @return {Object} 如果成功，返回null
+ * @prop {Middleware} admin
+ * @prop {Route} /sys/pause
+ * @return {Object} nobody 204
  */
 exports.pause = function pause(ctx) {
   globals.pause();
@@ -50,10 +47,9 @@ exports.pause = function pause(ctx) {
 /**
  * 重置系统状态为`running`，此时系统对于`/ping`的响应会正常返回
  * @param {Method} PUT
- * @param {Header} Auth-Token 认证TOEKN
- * @prop {Middleware} auth.admin 验证token是否admin
- * @prop {Route} /api/sys/resume
- * @return {Object} 如果成功，返回null
+ * @prop {Middleware} admin
+ * @prop {Route} /sys/resume
+ * @return {Body} nobody 204
  */
 exports.resume = function resume(ctx) {
   globals.start();
@@ -65,8 +61,9 @@ exports.resume = function resume(ctx) {
  * 获取当前系统的状态，包括当前连接数，系统状态，版本，运行时长等
  * @param {Method} GET
  * @prop {Middleware} noQuery
- * @prop {Route} /api/sys/status
- * @return {Object} {
+ * @prop {Route} /sys/status
+ * @example curl -XGET 'http://127.0.0.1:5018/sys/status'
+ * @return {Body} {
  * connectingTotal: Integer,
  * status: String,
  * version: Object,
@@ -88,52 +85,49 @@ exports.status = async function status(ctx) {
 };
 
 /**
+ * 获取当前系统的性能统计
+ *
+ * @param {Method} GET
+ * @prop {Middleware} noQuery
+ * @prop {Route} /sys/stats
+ * @example curl -XGET 'http://127.0.0.1:5018/sys/stats'
+ * @return {Body} {}
+ */
+exports.stats = async function stats(ctx) {
+  const performance = globals.getPerformance();
+  const data = {
+    app: configs.app,
+    uptime: Math.ceil(process.uptime()),
+    pid: process.pid,
+  };
+  if (performance) {
+    Object.assign(data, {
+      connecting: performance.connectingCount,
+      cpu: performance.cpuUsageUsedPercent,
+      memory: performance.memoryUsageRss,
+    });
+  }
+  ctx.body = data;
+};
+
+/**
  * 此函数只是退出当前应用，如果有守护进程之类可用于graceful reload`
  * @param {Method} PUT
- * @param {Header} Auth-Token 认证TOEKN
- * @prop {Middleware} auth.admin
- * @prop {Route} /api/sys/exit
- * @return {Object} 如果成功，返回null
+ * @prop {Middleware} admin
+ * @prop {Route} /sys/exit
+ * @return {Body} nobody 204
  */
 exports.exit = function exit(ctx) {
   process.emit('SIGQUIT');
   ctx.body = null;
 };
 
-/**
- * 设置当前系统的`level`级别，部分路由的处理会设置低于某个`level`时，直接返回出错
- * @param {Method} PUT
- * @param {Header} Auth-Token 认证TOEKN
- * @prop {Middleware} auth.admin
- * @prop {Route} /api/sys/level
- * @return {Object} 如果成功，返回null
- */
-exports.setLevel = async function setLevel(ctx) {
-  const level = _.get(ctx, 'request.body.level');
-  if (level) {
-    await setting.set('level', level);
-  }
-  ctx.body = null;
-};
-
-/**
- * 获取当前系统的`level`级别
- * @param {Method} GET
- * @prop {Route} /api/sys/level
- * @return {Object} {level: Integer}
- */
-exports.level = function getLevel(ctx) {
-  ctx.setCache('10s');
-  ctx.body = {
-    level: setting.get('level'),
-  };
-};
 
 /**
  * MOCK 请求，用于测试使用
  * @param {Method} POST
  * @prop {Route} /api/sys/mock
- * @return {Object} {...}
+ * @return {Body} {...}
  */
 exports.mock = async function mock(ctx) {
   const data = ctx.request.body;

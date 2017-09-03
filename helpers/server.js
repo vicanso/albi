@@ -10,6 +10,7 @@ const restVersion = require('koa-rest-version');
 const shortid = require('shortid');
 const staticServe = require('koa-static-serve');
 const Timing = require('supertiming');
+const path = require('path');
 
 
 const configs = require('../configs');
@@ -25,18 +26,25 @@ function createServer(port) {
 
   app.use((ctx, next) => {
     const id = ctx.get('X-Request-Id') || shortid();
+    const lang = ctx.query.lang || 'en';
     const timing = new Timing();
+    delete ctx.query.lang;
     ctx.state.timing = timing;
+    ctx.state.lang = lang;
     ctx.set('X-Response-Id', id);
+    // als设置的参数
     als.set('timing', timing);
     als.set('id', id);
+    als.set('lang', lang);
     return next();
   });
 
   // error handler
   app.use(middlewares.error());
 
-  app.use(middlewares.entry(`${configs.app}-${configs.version}`, configs.appUrlPrefix));
+  app.use(middlewares['response-logger']());
+
+  app.use(middlewares.entry(`${configs.version} ${configs.app}`, configs.appUrlPrefix));
 
   // timeout
   app.use(middlewares.timeout({
@@ -54,7 +62,7 @@ function createServer(port) {
     app.use(koaLog('dev'));
   } else {
     /* istanbul ignore next */
-    koaLog.morgan.token('request-id', ctx => ctx.get('X-Request-Id') || '0');
+    koaLog.morgan.token('request-id', ctx => ctx.get('X-Request-Id') || '-');
     koaLog.morgan.token('account', ctx => ctx.state.account || 'anonymous');
     app.use(koaLog(configs.httpLogFormat));
   }
@@ -64,19 +72,18 @@ function createServer(port) {
 
   // http connection limit
   const limitOptions = configs.connectLimitOptions;
-  app.use(middlewares.limit(_.omit(limitOptions, 'interval'),
+  app.use(middlewares.limit.connection(_.omit(limitOptions, 'interval'),
     limitOptions.interval));
 
-  const staticOptions = configs.staticOptions;
-  const denyQuerystring = configs.env !== 'development';
-  // static file
-  app.use(mount(
-    staticOptions.urlPrefix,
-    staticServe(staticOptions.path, {
-      denyQuerystring,
-      maxAge: staticOptions.maxAge,
-      headers: staticOptions.headers,
-    })));
+
+  if (configs.env !== 'production') {
+    app.use(mount(
+      '/docs',
+      staticServe(path.resolve(__dirname, '../docs'), {
+        maxAge: 0,
+      })));
+  }
+
 
   app.use(methodoverride());
   app.use(bodyparser());
@@ -88,6 +95,10 @@ function createServer(port) {
   app.use(middlewares.common.fresh());
 
   app.use(etag());
+  // 测试环境才需要使用到mock
+  if (configs.env !== 'production') {
+    app.use(middlewares.mock());
+  }
 
 
   app.use(router.routes());

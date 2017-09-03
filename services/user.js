@@ -7,11 +7,17 @@
 const _ = require('lodash');
 const crypto = require('crypto');
 
-const mongo = require('../helpers/mongo');
+const genService = require('./gen');
 const errors = require('../helpers/errors');
 const location = require('../helpers/location');
 const influx = require('../helpers/influx');
 const configs = require('../configs');
+
+const user = genService('User');
+const login = genService('Login');
+
+exports.findOneAndUpdate = user.findOneAndUpdate;
+exports.findOne = user.findOne;
 
 /**
  * 检测当前条件的用户是否已存在
@@ -19,29 +25,29 @@ const configs = require('../configs');
  * @return {Promise(Boolean)}
  */
 function isExists(condition) {
-  const User = mongo.get('User');
-  return User.findOne(condition).lean().then(doc => !_.isNil(doc));
+  return user.findOne(condition, 'account').then(doc => !_.isNil(doc));
 }
 
+exports.isExists = isExists;
+
 /**
- * 增加用户，如果成功，返回Promise对象
+ * 增加用户，如果成功，返回User对象
  * @param {Object} data 用户相关信息
- * @return {Promise(User)}
+ * @return {User}
  */
 exports.add = async function addUser(data) {
-  const User = mongo.get('User');
   if (await isExists({ account: data.account })) {
-    throw errors.get(104);
+    throw errors.get('user.accountHasUsed');
   }
   if (await isExists({ email: data.email })) {
-    throw errors.get(105);
+    throw errors.get('user.emailHasUsed');
   }
   const userData = _.clone(data);
   const date = new Date().toISOString();
   userData.lastLoginedAt = date;
   userData.loginCount = 1;
-  const doc = await (new User(userData)).save();
-  return doc.toJSON();
+  const doc = await user.add(userData);
+  return doc;
 };
 
 /**
@@ -49,19 +55,18 @@ exports.add = async function addUser(data) {
  * @param  {String} account  用户账号
  * @param  {String} password 用户密码串（经过加token加密）
  * @param  {String} token    用户登录时生成的随机token
- * @return {Promise(User)}
+ * @return {User}
  */
 exports.get = async function getUser(account, password, token) {
-  const User = mongo.get('User');
-  const incorrectError = errors.get(106);
-  const doc = await User.findOne({
+  const incorrectError = errors.get('user.idPwdIncorrect');
+  const doc = await user.findOne({
     account,
-  }).lean();
+  });
   if (!doc) {
     throw incorrectError;
   }
   // 测试环境使用
-  if (configs.env === 'development' && password === 'tree.xie') {
+  if (configs.env !== 'production' && password === 'tree.xie') {
     return doc;
   }
   const hash = crypto.createHash('sha256');
@@ -75,11 +80,10 @@ exports.get = async function getUser(account, password, token) {
  * 更新用户信息
  * @param  {String} id   mongodb object id
  * @param  {Object} data 需要更新的用户信息
- * @return {Promise(User)}
+ * @return {User}
  */
 exports.update = async function updateUserInfo(id, data) {
-  const User = mongo.get('User');
-  const doc = await User.findOneAndUpdate({ _id: id }, data).lean();
+  const doc = await user.findByIdAndUpdate(id, data);
   return doc;
 };
 
@@ -90,7 +94,6 @@ exports.update = async function updateUserInfo(id, data) {
  * 也为了避免日志输出敏感数据
  */
 exports.addLoginRecord = async function addLoginRecord(data) {
-  const Login = mongo.get('Login');
   /* eslint no-param-reassign:0 */
   const reg = /\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/;
   const result = reg.exec(data.ip);
@@ -105,10 +108,41 @@ exports.addLoginRecord = async function addLoginRecord(data) {
     }
   }
   try {
-    const doc = await (new Login(data)).save();
+    const doc = await login.add(data);
     return doc;
   } catch (err) {
     console.error(`add login record fail, account:${data.account} err:${err.message}`);
   }
   return null;
+};
+
+/**
+ * List the user
+ * @param {Object} conditions The query conditions
+ * @param {Object} options The query options
+ * @param {String} [sort] The query sort
+ */
+exports.list = async function list(conditions, options, sort = '-createdAt') {
+  const keys = 'createdAt account email loginCount lastLoginedAt roles';
+  const docs = await user.find(conditions, keys, options).sort(sort);
+  return docs;
+};
+
+/**
+ * Get the count
+ * @param {Object} conditions The count conditions
+ */
+exports.count = async function count(conditions) {
+  const result = await user.count(conditions);
+  return result;
+};
+
+/**
+ * Set the user roles
+ */
+exports.updateRoles = async function updateRoles(id, roles) {
+  const doc = await user.findByIdAndUpdate(id, {
+    roles,
+  });
+  return doc;
 };

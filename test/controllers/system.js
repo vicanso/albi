@@ -1,35 +1,23 @@
 const assert = require('assert');
 const Joi = require('joi');
-const _ = require('lodash');
 
 require('../../app');
 const {
   selfRequest,
-  delay,
 } = require('../../helpers/utils');
-const setting = require('../../configs/setting');
+const User = require('../supports/user');
+const {
+  getUrl,
+} = require('../supports/utils');
 
 describe('controllers/system', () => {
-  const randomLevel = _.random(5);
-  it('set system level', () => selfRequest('put', '/api/sys/level')
-    .send({
-      level: randomLevel,
-    })
-    .set('Auth-Token', setting.get('adminToken')).then((res) => {
-      assert.equal(res.status, 204);
-      return delay(300);
-    }));
+  const user = new User({
+    account: 'vicanso',
+  });
 
-  it('get system level', () => selfRequest('get', '/api/sys/level')
-    .then((res) => {
-      assert.equal(res.status, 200);
-      assert.equal(res.body.level, randomLevel);
-      return selfRequest('put', '/api/sys/level')
-        .send({
-          level: 5,
-        })
-        .set('Auth-Token', setting.get('adminToken'));
-    }));
+  it('init', async () => {
+    await user.login();
+  });
 
   it('get system status', () => selfRequest('get', '/api/sys/status')
     .then((res) => {
@@ -43,21 +31,16 @@ describe('controllers/system', () => {
       assert(!result.error);
     }));
 
-  it('resume/pause the application', () => selfRequest('put', '/api/sys/resume')
-    .set('Auth-Token', setting.get('adminToken'))
-    .then((res) => {
-      assert.equal(res.status, 204);
-      return selfRequest('get', '/api/sys/status');
-    })
-    .then((res) => {
-      assert.equal(res.body.status, 'running');
-      return selfRequest('put', '/api/sys/pause')
-        .set('Auth-Token', setting.get('adminToken'));
-    })
-    .then(() => selfRequest('get', '/api/sys/status'))
-    .then((res) => {
-      assert.equal(res.body.status, 'pause');
-    }));
+  it('resume/pause the appliction', async () => {
+    let res = await user.agent.put(getUrl('/sys/resume'));
+    assert.equal(res.status, 204);
+    res = await user.agent.get(getUrl('/api/sys/status'));
+    assert.equal(res.body.status, 'running');
+    res = await user.agent.put(getUrl('/sys/pause'));
+    assert.equal(res.status, 204);
+    res = await user.agent.get(getUrl('/api/sys/status'));
+    assert.equal(res.body.status, 'pause');
+  });
 
   it('timeout', function timeout() {
     this.timeout(10 * 1000);

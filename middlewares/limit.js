@@ -5,9 +5,10 @@
 const limit = require('koa-connection-limit');
 
 const globals = require('../helpers/globals');
+const limiterService = require('../services/limiter');
 
 /**
- * 设置不同的connectiong数量级别，不同的连接数对应不同的状态。
+ * 设置不同的connecting数量级别，不同的连接数对应不同的状态。
  * 使用koa-connection-limit，根据当前连接数，当状态变化时，触发回调函数。
  * 当系统状态达到`high`时，设置系统`status`为`pause`。当连接数降低，不再是`high`时，
  * 延时`interval`将系统重置为`running`
@@ -16,7 +17,7 @@ const globals = require('../helpers/globals');
  * @return {Function} 返回中间件处理函数
  * @see {@link https://github.com/vicanso/koa-connection-limit|GitHub}
  */
-module.exports = (options, interval) => {
+exports.connection = (options, interval) => {
   let connectionLimitTimer;
   return limit(options, (status) => {
     console.info(`connection-limit status:${status}`);
@@ -37,4 +38,13 @@ module.exports = (options, interval) => {
       connectionLimitTimer.unref();
     }
   });
+};
+
+
+/**
+ * 创建一个limiter中间件
+ */
+exports.createLimiter = (options) => {
+  const limiter = limiterService.create(options);
+  return limiter.middleware();
 };

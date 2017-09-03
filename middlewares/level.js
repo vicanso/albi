@@ -13,7 +13,7 @@ const setting = require('../configs/setting');
 module.exports = level => (ctx, next) => {
   const systemLevel = setting.get('level');
   if (systemLevel < level) {
-    const err = errors.get(3);
+    const err = errors.get('common.systemLevelLimit');
     err.message = err.message
       .replace('#{systemLevel}', systemLevel)
       .replace('#{level}', level);

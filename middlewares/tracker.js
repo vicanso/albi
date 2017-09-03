@@ -12,7 +12,7 @@ const influx = require('../helpers/influx');
  * @param  {Object} data 用户行为日志数据
  */
 function logUserTracker(data) {
-  console.info(`user tracker ${stringify.json(data)}`);
+  console.info(`user tracker ${stringify.json(data, 2)}`);
   const tags = 'category result'.split(' ');
   influx.write('userTracker', _.omit(data, tags), _.pick(data, tags));
 }
@@ -23,7 +23,7 @@ function logUserTracker(data) {
  * @param  {String} category 该用户行为分类，如：用户注册、用户收藏
  * @return {Function} 返回中间件处理函数
  */
-module.exports = category => function userTracker(ctx, next) {
+module.exports = category => async function userTracker(ctx, next) {
   const data = {
     category,
     ip: ctx.ip,
@@ -37,16 +37,21 @@ module.exports = category => function userTracker(ctx, next) {
     data.params = stringify.json(params);
   }
   const start = Date.now();
-  const delayLog = (use, result) => {
+  const resultLog = (use, result) => {
     data.result = result;
     data.use = use;
     logUserTracker(data);
   };
-  return next().then(() => {
-    setImmediate(delayLog, Date.now() - start, 'success');
-  }, (err) => {
+  let type = 'fail';
+  try {
+    await next();
+    if (ctx.status !== 404) {
+      type = 'success';
+    }
+  } catch (err) {
     data.message = err.message;
-    setImmediate(delayLog, Date.now() - start, 'fail');
     throw err;
-  });
+  } finally {
+    resultLog(Date.now() - start, type);
+  }
 };

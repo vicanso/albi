@@ -34,6 +34,7 @@ describe('configs', () => {
       },
       trackCookie: Joi.string(),
       appUrlPrefix: Joi.string(),
+      email: Joi.string(),
     }, {
       convert: false,
     });

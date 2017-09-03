@@ -33,7 +33,12 @@ function initModels(client, modelPath) {
     updatePlugin(schema);
     savePlugin(schema);
     if (model.indexes) {
-      _.forEach(model.indexes, fields => schema.index(fields));
+      _.forEach(model.indexes, (indexConfig) => {
+        const optionKeys = ['unique'];
+        const options = _.pick(indexConfig, optionKeys);
+        const fields = _.omit(indexConfig, optionKeys);
+        schema.index(fields, options);
+      });
     }
     client.model(name, schema);
   });

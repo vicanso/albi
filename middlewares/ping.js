@@ -17,7 +17,7 @@ module.exports = url => (ctx, next) => {
     return next();
   }
   if (!globals.isRunning()) {
-    throw errors.get(8);
+    throw errors.get('common.serverNotRunning');
   }
   /* eslint no-param-reassign:0 */
   ctx.body = 'pong';

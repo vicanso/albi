@@ -41,3 +41,13 @@ exports.setConnectingCount = (count) => {
  * Get the concurrency
  */
 exports.getConcurrency = () => map.get('concurrency') || 'low';
+
+/**
+ * Set the performance
+ */
+exports.setPerformance = value => map.set('performance', value);
+
+/**
+ * Get the performance
+ */
+exports.getPerformance = () => map.get('performance');

@@ -7,6 +7,7 @@ const url = require('url');
 
 const errors = require('../helpers/errors');
 const influx = require('../helpers/influx');
+const captchaService = require('../services/captcha');
 
 /**
  * 对于url中的querystring检验，如果有querystring则校验不通过，返回出错。
@@ -18,7 +19,7 @@ exports.noQuery = () => (ctx, next) => {
   if (_.isEmpty(ctx.query)) {
     return next();
   }
-  throw errors.get(2);
+  throw errors.get('common.queryMustEmpty');
 };
 
 /**
@@ -51,10 +52,11 @@ exports.noCache = () => (ctx, next) => {
   if ((method !== 'GET' && method !== 'HEAD')
     || ctx.get('Cache-Control') === 'no-cache'
     || ctx.query['cache-control'] === 'no-cache') {
+    delete ctx.query['cache-control'];
     ctx.set('Cache-Control', 'no-cache, max-age=0');
     return next();
   }
-  throw errors.get(4);
+  throw errors.get('common.requestMustNoCache');
 };
 
 /**
@@ -71,16 +73,16 @@ exports.version = (v, t) => {
   const tp = t || 'json';
   const typeList = _.isArray(tp) ? tp : [tp];
   return (ctx, next) => {
-    const version = _.get(ctx, 'versionConfig.version', 1);
+    const version = _.get(ctx, 'state.versionConfig.version', 1);
     if (_.indexOf(versions, version) === -1) {
-      const err = errors.get(5);
+      const err = errors.get('common.versionInvalid');
       err.message = err.message
         .replace('#{version}', versions.join(','));
       throw err;
     }
-    const type = _.get(ctx, 'versionConfig.type', 'json');
+    const type = _.get(ctx, 'state.versionConfig.type', 'json');
     if (_.indexOf(typeList, type) === -1) {
-      const err = errors.get(6);
+      const err = errors.get('common.typeInvalid');
       err.message = err.message
         .replace('#{type}', typeList.join(','));
       throw err;
@@ -147,4 +149,33 @@ exports.routeStats = () => (ctx, next) => {
     complete();
     throw err;
   });
+};
+
+/**
+ * 生成captcha中间件
+ * @param {Boolean} [once=true] 是否校验一次之后则失效
+ * @return {Function} 返回中间件处理函数
+ */
+exports.captcha = (once = true) => async (ctx, next) => {
+  const id = ctx.get('X-Captcha-Id');
+  const code = ctx.get('X-Captcha-Code');
+  if (!id || !code) {
+    throw errors.get('common.captchaIsNull');
+  }
+  const result = await captchaService.validate(id, code, once);
+  if (!result) {
+    throw errors.get('common.captchaInvalid');
+  }
+  return next();
+};
+
+/**
+ * admin toke校验中间件
+ */
+exports.adminToken = (token = 'Zn0PlJNb') => (ctx, next) => {
+  const authTOken = ctx.get('X-Auth-Token');
+  if (authTOken !== token) {
+    throw errors.get('common.authTokenInvalid');
+  }
+  return next();
 };

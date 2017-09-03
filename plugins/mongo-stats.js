@@ -22,16 +22,18 @@ function stats(schema, model) {
   function addQueryStats(data) {
     const use = Date.now() - this.startedAt;
     // 该操作修改(查询)的数量
-    let length = data ? 1 : 0;
-    if (_.isArray(data)) {
-      length = data.length;
+    let size = data ? 1 : 0;
+    if (this.op === 'count') {
+      size = data;
+    } else if (_.isArray(data)) {
+      size = data.length;
     }
     const result = {
       op: this.op,
       model,
       options: stringify.json(this.options),
       use,
-      length,
+      size,
     };
     _.forEach(['_conditions', '_fields', '_update'], (key) => {
       const value = _.get(this, key);
@@ -46,6 +48,7 @@ function stats(schema, model) {
     'findOne',
     'findOneAndUpdate',
     'findOneAndRemove',
+    'count',
   ];
   _.forEach(fns, (fn) => {
     schema.pre(fn, addStartedAt);

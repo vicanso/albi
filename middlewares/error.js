@@ -22,6 +22,9 @@ module.exports = () => (ctx, next) => next().catch((err) => {
   if (!err.code) {
     error.code = 'unknown';
   }
+  if (!_.isString(err.code)) {
+    err.code = err.code.toString();
+  }
   const {
     code,
     message,

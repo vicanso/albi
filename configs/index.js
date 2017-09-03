@@ -1,5 +1,3 @@
-const path = require('path');
-
 const pkg = require('../package');
 
 exports.port = Number.parseInt(process.env.PORT, 10) || 5018;
@@ -7,7 +5,6 @@ exports.port = Number.parseInt(process.env.PORT, 10) || 5018;
 // the env of the applcation
 const env = process.env.NODE_ENV || 'development';
 
-const appPath = path.join(__dirname, '..');
 
 exports.env = env;
 
@@ -17,7 +14,7 @@ exports.version = pkg.version;
 exports.app = pkg.name;
 
 // http log format type
-exports.httpLogFormat = ':request-id :account :method :url :status :length :response-time ms ":referrer"';
+exports.httpLogFormat = ':account :request-id :method :url :status :length :response-time ms ":referrer"';
 
 // http://user:pass@127.0.0.1:8086/mydatabase
 exports.influx = process.env.INFLUX;
@@ -34,7 +31,7 @@ exports.redisUri = process.env.REDIS || 'redis://127.0.0.1/';
 // cookie name
 exports.session = {
   key: pkg.name,
-  maxAge: 7 * 24 * 3600 * 1000,
+  maxAge: 1 * 24 * 3600 * 1000,
 };
 
 // http connection limit options
@@ -44,18 +41,12 @@ exports.connectLimitOptions = {
   interval: 5000,
 };
 
-exports.staticOptions = {
-  urlPrefix: '/static',
-  path: path.join(appPath, 'assets'),
-  maxAge: env === 'development' ? 0 : 365 * 24 * 3600,
-  headers: {
-    Vary: 'Accept-Encoding',
-  },
-  host: process.env.STATIC_HOST || '',
-};
 
 // user track cookie
-exports.trackCookie = '_jt';
+exports.trackCookie = 'jt';
 
 // app url prefix for all request
 exports.appUrlPrefix = '/api';
+
+
+exports.email = process.env.EMAIL || 'mail://treexie:jenny123456@aliyun.com';

@@ -83,7 +83,7 @@ const schemas = {
     },
     // 根据koa-http-stats配置的指定
     tags: {
-      status: '12345'.split(''),
+      type: '12345'.split(''),
       spdy: '012345'.split(''),
       size: '012345'.split(''),
       busy: '01234'.split(''),
@@ -142,7 +142,7 @@ const schemas = {
       conditions: 's',
       options: 's',
       fields: 's',
-      length: 'i',
+      size: 'i',
       update: 's',
     },
     tags: {
@@ -154,6 +154,7 @@ const schemas = {
         'findOneAndUpdate',
         'findOneAndRemove',
         'save',
+        'count',
       ],
     },
   },

@@ -6,7 +6,7 @@ const {
 } = require('../../helpers/utils');
 
 describe('controllers/stats', () => {
-  it('ajax stats', () => selfRequest('post', '/api/stats/ajax')
+  it('ajax stats', () => selfRequest('post', '/stats')
     .send([
       {
         name: 'test',
@@ -17,7 +17,7 @@ describe('controllers/stats', () => {
       assert.equal(res.status, 201);
     }));
 
-  it('exception stats', () => selfRequest('post', '/api/stats/exception')
+  it('exception stats', () => selfRequest('post', '/stats/exception')
     .send([
       {
         message: 'error',
@@ -27,7 +27,7 @@ describe('controllers/stats', () => {
       assert.equal(res.status, 201);
     }));
 
-  it('statistics stats', () => selfRequest('post', '/api/stats/statistics')
+  it('statistics stats', () => selfRequest('post', '/stats/statistics')
     .send({
       screen: {
         width: 100,

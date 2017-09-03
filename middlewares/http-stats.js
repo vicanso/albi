@@ -34,11 +34,13 @@ module.exports = options => httpStats(options, (performance, statsData, ctx) => 
   const fields = _.omit(statsData, tagKeys);
   fields.ip = ctx.ip;
   fields.url = ctx.url;
-  const requestedAt = parseInt(ctx.get('X-Requested-At') || 0, 10);
+  const requestedAt = Number.parseInt(ctx.get('X-Requested-At') || 0, 10);
   if (requestedAt) {
     fields.request = Date.now() - requestedAt - statsData.use;
   }
   const tags = _.pick(statsData, tagKeys);
+  tags.type = tags.status;
+  delete tags.status;
   tags.method = ctx.method;
   influx.write('response', fields, tags);
 });

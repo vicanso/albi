@@ -34,6 +34,7 @@ function waitForReady() {
     count += 1;
     if (count === 2) {
       globals.start();
+      console.info('the server is running now');
     }
   };
   mongo.client.once('connected', ready);

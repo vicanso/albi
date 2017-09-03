@@ -15,11 +15,11 @@ const globals = require('../helpers/globals');
  * 3. 全局设置响应头`Cache-Control:no-cache, max-age=0`，避免请求未设置缓存属性，可以覆盖
  * 4. connectingTotal + 1 ，在请求处理完时， connectingTotal - 1
  * 5. 在请求处理完成时，根据Timing的记录生成`Server-Timing`
- * @param  {String} processName 应用名字
+ * @param  {String} appInfo 应用信息
  * @param  {String} [appUrlPrefix = ''] 应用的前缀URL，如果设置该参数，所有请求都做删除请前缀部分
  * @return {Function} 返回中间件处理函数
  */
-module.exports = (processName, appUrlPrefix) => (ctx, next) => {
+module.exports = (appInfo, appUrlPrefix) => async (ctx, next) => {
   const timing = ctx.state.timing;
   const currentPath = ctx.path;
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
@@ -41,19 +41,23 @@ module.exports = (processName, appUrlPrefix) => (ctx, next) => {
     }
     ctx.set('Cache-Control', cacheControl);
   };
-  const processList = (ctx.get('Via') || '').split(',');
-  processList.push(processName);
-  ctx.set('Via', _.compact(processList).join(','));
+  let via = ctx.get('Via');
+  if (!via) {
+    via = appInfo;
+  } else {
+    via = `${via}, ${appInfo}`;
+  }
+  ctx.set('Via', via);
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   globals.setConnectingCount(globals.getConnectingCount() + 1);
-  timing.start(processName);
-  const complete = () => {
+  timing.start(appInfo.split(' ').pop());
+  try {
+    await next();
+  } catch (err) {
+    throw err;
+  } finally {
     globals.setConnectingCount(globals.getConnectingCount() - 1);
     timing.end();
     ctx.set('Server-Timing', timing.toServerTiming(true));
-  };
-  return next().then(complete, (err) => {
-    complete();
-    throw err;
-  });
+  }
 };

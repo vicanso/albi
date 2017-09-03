@@ -1,34 +1,86 @@
 module.exports = {
-  1: {
+  tokenInvalid: {
+    code: 1,
     en: 'token is invalid',
+    zh: '令牌不合法',
     status: 403,
   },
-  2: {
+  queryMustEmpty: {
+    code: 2,
     en: 'query string must be empty',
+    zh: '查询字符串只能为空',
     status: 400,
   },
-  3: {
+  systemLevelLimit: {
+    code: 3,
     en: 'system is in level #{systemLevel} below #{level}',
+    zh: '系统当前所处级别为:#{systemLevel}，低于所接口要求的级别:#{level}',
     status: 503,
   },
-  4: {
+  requestMustNoCache: {
+    code: 4,
     en: 'request should be set no-cache',
+    zh: '请求必须设置为no-cache',
     status: 406,
   },
-  5: {
+  versionInvalid: {
+    code: 5,
     en: 'version is invalid, it should be version:#{version}',
+    zh: '版本号不合法，应该为:#{version}',
     status: 406,
   },
-  6: {
+  typeInvalid: {
+    code: 6,
     en: 'type is invalid, it should be type:#{type}',
+    zh: '数据类型不合法，应该为:#{type}',
     status: 406,
   },
-  7: {
+  ipLocationFail: {
+    code: 7,
     en: 'get location by ip fail',
+    zh: '通过IP获取定位失败',
     status: 500,
   },
-  8: {
+  serverNotRunning: {
+    code: 8,
     en: 'the server is not running now',
+    zh: '服务器不是处于运行状态',
     status: 500,
+  },
+  notFound: {
+    code: 9,
+    en: 'page not found',
+    zh: '无法获取该页面',
+    status: 404,
+  },
+  captchaIsNull: {
+    code: 10,
+    en: 'the id and code of captcha can not be null',
+    zh: '图形验证码的ID和Code都不能为空',
+    status: 400,
+  },
+  captchaInvalid: {
+    code: 11,
+    en: 'the captcha is invalid or expired',
+    zh: '图形验证码不合法或已过期',
+    status: 400,
+  },
+  exceededLimit: {
+    code: 12,
+    en: 'exceeded the limit frequency',
+    zh: '已超过系统限制频率',
+    status: 403,
+  },
+  emailFail: {
+    code: 13,
+    en: 'send email fail',
+    zh: '发送邮件失败',
+    status: 500,
+  },
+  authTokenInvalid: {
+    code: 14,
+    en: 'the auth token is invalid',
+    zh: '认证的令牌不合法',
+    status: 403,
   },
 };

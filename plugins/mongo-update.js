@@ -14,6 +14,12 @@ function update(schema) {
       next();
       return;
     }
+    if (_.has(data, '$setOnInsert.__v')) {
+      delete data.$setOnInsert.__v;
+    }
+    if (_.isEmpty(data.$setOnInsert)) {
+      delete data.$setOnInsert;
+    }
     if (data.$inc) {
       data.$inc.__v = 1;
     } else {

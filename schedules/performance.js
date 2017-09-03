@@ -47,7 +47,7 @@ module.exports = (interval) => {
       'heapSpaceMapSpaceUsedSize',
       'heapSpaceLargeObjectSpaceUsedSize',
     ];
-
+    globals.setPerformance(data);
     influx.write('performance', _.pick(data, fields), tags);
   }, interval, 'MB');
 };

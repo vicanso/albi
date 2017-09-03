@@ -50,8 +50,9 @@ const normal = (ctx, next) => {
   }
   const method = ctx.method;
   if ((method === 'GET' || method === 'HEAD') && ctx.get('Cache-Control') !== 'no-cache' && ctx.query['cache-control'] !== 'no-cache') {
-    throw errors.get(4);
+    throw errors.get('common.requestMustNoCache');
   }
+  delete ctx.query['cache-control'];
   const startedAt = Date.now();
   const timing = ctx.state.timing;
   const end = timing.start('session');
@@ -83,7 +84,33 @@ exports.writable = () => normal;
  */
 exports.login = () => (ctx, next) => normal(ctx, () => {
   if (!_.get(ctx, 'session.user.account')) {
-    throw errors.get(107);
+    throw errors.get('user.mustLogined');
   }
   return next();
 });
+
+function roleValidate(roles) {
+  return () => (ctx, next) => normal(ctx, () => {
+    if (!_.get(ctx, 'session.user.account')) {
+      throw errors.get('user.mustLogined');
+    }
+    const user = ctx.session.user;
+    const rolesDesc = roles.join(' ');
+    if (!_.find(user.roles, role => rolesDesc.indexOf(role) !== -1)) {
+      throw errors.get('user.forbidden');
+    }
+    return next();
+  });
+}
+
+/**
+ * Admin权限校验中间件，判断用户是否已登录而且为admin
+ * @return {Function} 返回中间件处理函数
+ */
+exports.admin = roleValidate(['admin', 'su']);
+
+/**
+ * su权限校验中间件，判断用户是否已登录而且为admin
+ * @return {Function} 返回中间件处理函数
+ */
+exports.su = roleValidate(['su']);

@@ -4,11 +4,7 @@
   },
   "source": {
     "include": [
-      "./helpers",
-      "./errors",
-      "./influx-schemas",
-      "./controllers",
-      "./middlewares"
+      "./controllers"
     ],
     "includePattern": ".js$"
   },
@@ -16,7 +12,6 @@
     "plugins/markdown"
   ],
   "opts": {
-    "template": "node_modules/docdash",
     "encoding": "utf8",
     "destination": "docs/",
     "recurse": true,
