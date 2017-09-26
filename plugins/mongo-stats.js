@@ -61,7 +61,7 @@ function stats(schema, model) {
       model,
       op: 'save',
       use: Date.now() - doc.startedAt,
-      length: 1,
+      size: 1,
     });
   });
 }
