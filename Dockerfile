@@ -9,5 +9,5 @@ RUN cd /app \
   && npm run docs \
   && rm -rf node_modules \
   && npm i --production \
-  && sh ./clear.sh
+  && npm cache clean --force
 CMD ["node", "/app/app"]
