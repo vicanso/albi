@@ -6,6 +6,9 @@ const _ = require('lodash');
 const stringify = require('simple-stringify');
 
 const influx = require('../helpers/influx');
+const {
+  initAlsSetting,
+} = require('../helpers/utils');
 
 /**
  * 记录用户的行为日志到influxdb中
@@ -24,6 +27,7 @@ function logUserTracker(data) {
  * @return {Function} 返回中间件处理函数
  */
 module.exports = category => async function userTracker(ctx, next) {
+  initAlsSetting(ctx);
   const data = {
     category,
     ip: ctx.ip,

@@ -8,6 +8,9 @@ const url = require('url');
 
 const configs = require('../configs');
 const influx = require('../helpers/influx');
+const {
+  initAlsSetting,
+} = require('../helpers/utils');
 
 /**
  * HTTP请求出错中间件处理，根据出错的Error对象，记录出错的url,code,userToken,
@@ -16,6 +19,7 @@ const influx = require('../helpers/influx');
  * @return {Function} 返回中间件处理函数
  */
 module.exports = () => (ctx, next) => next().catch((err) => {
+  initAlsSetting(ctx);
   const urlInfo = url.parse(ctx.url);
   ctx.set('Cache-Control', 'no-cache, max-age=0');
   const error = _.isError(err) ? err : new Error(err);
@@ -42,7 +46,7 @@ module.exports = () => (ctx, next) => next().catch((err) => {
   });
   /* istanbul ignore else */
   if (configs.env !== 'production') {
-    data.stack = error.stack;
+    data.stack = error.stack.replace(/\n/g, '');
   }
   const logList = [];
   if (data.expected) {

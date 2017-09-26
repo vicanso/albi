@@ -2,38 +2,9 @@
  * 获取captcha相关信息与校验
  */
 const shortid = require('shortid');
-const Balancer = require('superagent-load-balancer');
-
 const request = require('../helpers/request');
 const cacheService = require('./cache');
-const settingService = require('./setting');
-
-let balancerPlugin = null;
-
-/**
- * 获取captcha的balancer
- *
- */
-async function initBalancerPlugin() {
-  const servers = await settingService.getCaptchaServers();
-  const balancer = new Balancer(servers);
-  const ping = (backend) => {
-    const url = `http://${backend.host}/ping`;
-    return request.get(url).timeout(300);
-  };
-  balancer.startHealthCheck({
-    ping,
-  });
-  balancerPlugin = balancer.plugin();
-  return balancerPlugin;
-}
-
-setImmediate(() => {
-  initBalancerPlugin().catch((err) => {
-    console.error(`init captcha server balancer fail, ${err.message}`);
-  });
-});
-
+const configs = require('../configs');
 /**
  * 获取captcha
  *
@@ -43,13 +14,12 @@ setImmediate(() => {
  * }
  */
 exports.get = async function get() {
-  if (!balancerPlugin) {
-    return null;
-  }
+  const url = `${configs.gateWay}/captchas`;
   const {
     body,
-  } = await request.get('/captchas')
-    .use(balancerPlugin);
+  } = await request.get(url)
+    .set('X-Service', 'Captcha')
+    .set('Token', '6VR3NrdFPp');
   const id = shortid();
   await cacheService.setCaptcha(id, body.code);
   return {
@@ -57,7 +27,6 @@ exports.get = async function get() {
     data: body.data,
   };
 };
-
 /**
  * 校验captcha
  *

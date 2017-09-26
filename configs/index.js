@@ -28,6 +28,8 @@ exports.mongoUri = process.env.MONGO || 'mongodb://127.0.0.1/albi';
 // redis connection uri
 exports.redisUri = process.env.REDIS || 'redis://127.0.0.1/';
 
+exports.gateWay = process.env.GATE_WAY || 'http://127.0.0.1';
+
 // cookie name
 exports.session = {
   key: pkg.name,

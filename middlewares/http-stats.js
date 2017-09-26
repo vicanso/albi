@@ -7,6 +7,9 @@ const _ = require('lodash');
 const httpStats = require('koa-http-stats');
 
 const influx = require('../helpers/influx');
+const {
+  initAlsSetting,
+} = require('../helpers/utils');
 
 /**
  * 对HTTP的响应时间、状态码等生成统计指标，返回的统计指标如下：
@@ -30,6 +33,7 @@ const influx = require('../helpers/influx');
  * @see {@link https://github.com/vicanso/koa-http-stats|GitHub}
  */
 module.exports = options => httpStats(options, (performance, statsData, ctx) => {
+  initAlsSetting(ctx);
   const tagKeys = 'status spdy size busy'.split(' ');
   const fields = _.omit(statsData, tagKeys);
   fields.ip = ctx.ip;

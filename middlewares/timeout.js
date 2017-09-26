@@ -6,6 +6,10 @@
 
 const _ = require('lodash');
 
+const {
+  initAlsSetting,
+} = require('../helpers/utils');
+
 /**
  * timeout中间件，可以配置超时时间与pass函数
  * @param  {Object} [options={}] options.timeout：超时间隔，单位ms；
@@ -13,6 +17,7 @@ const _ = require('lodash');
  * @return {Function} 返回中间件处理函数
  */
 module.exports = (options = {}) => function timeout(ctx, next) {
+  initAlsSetting(ctx);
   const pass = options.pass || _.noop;
   const ms = options.timeout || 5000;
   if (pass(ctx)) {

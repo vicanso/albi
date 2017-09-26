@@ -6,7 +6,12 @@
 const _ = require('lodash');
 const stringify = require('simple-stringify');
 
+const {
+  initAlsSetting,
+} = require('../helpers/utils');
+
 module.exports = (level = 3) => async (ctx, next) => {
+  initAlsSetting(ctx);
   await next();
   if (!ctx.state.ignoreResponseLogger && ctx.body && _.isObject(ctx.body)) {
     console.info(`response: ${stringify.json(ctx.body, level)}`);

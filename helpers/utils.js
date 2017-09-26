@@ -4,6 +4,7 @@
  */
 
 const request = require('superagent');
+const als = require('async-local-storage');
 
 const configs = require('../configs');
 
@@ -45,6 +46,21 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/**
+ * 设置als的相关属性
+ *
+ * @param {any} ctx
+ */
+function initAlsSetting(ctx) {
+  if (!als.get('id')) {
+    als.set('id', ctx.state.id);
+  }
+  if (!als.get('account') && ctx.state.account) {
+    als.set('account', ctx.state.account);
+  }
+}
+
 exports.getParam = getParam;
 exports.selfRequest = selfRequest;
 exports.delay = delay;
+exports.initAlsSetting = initAlsSetting;

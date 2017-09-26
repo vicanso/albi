@@ -7,6 +7,9 @@ const _ = require('lodash');
 const ms = require('ms');
 
 const globals = require('../helpers/globals');
+const {
+  initAlsSetting,
+} = require('../helpers/utils');
 
 /**
  * HTTP请求入口的中间件处理，包括：
@@ -20,6 +23,7 @@ const globals = require('../helpers/globals');
  * @return {Function} 返回中间件处理函数
  */
 module.exports = (appInfo, appUrlPrefix) => async (ctx, next) => {
+  initAlsSetting(ctx);
   const timing = ctx.state.timing;
   const currentPath = ctx.path;
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
