@@ -10,7 +10,7 @@ const {
   initAlsSetting,
 } = require('../helpers/utils');
 
-module.exports = (level = 3) => async (ctx, next) => {
+module.exports = (level = 1) => async (ctx, next) => {
   initAlsSetting(ctx);
   await next();
   if (!ctx.state.ignoreResponseLogger && ctx.body && _.isObject(ctx.body)) {
