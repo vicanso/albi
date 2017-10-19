@@ -25,7 +25,8 @@ describe('controllers/mock', () => {
         },
       });
     const data = res.body;
-    id = data._id; // eslint-disable-line no-underscore-dangle
+    // eslint-disable-next-line
+    id = data._id;
     assert.equal(data.url, url);
   });
 

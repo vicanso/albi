@@ -27,7 +27,8 @@ describe('controllers/i18n', () => {
     const data = res.body;
     assert.equal(res.status, 201);
     assert.equal(data.name, name);
-    id = data._id; // eslint-disable-line
+    // eslint-disable-next-line
+    id = data._id;
   });
 
   it('get i18n by id', async () => {

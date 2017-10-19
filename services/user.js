@@ -94,7 +94,7 @@ exports.update = async function updateUserInfo(id, data) {
  * 也为了避免日志输出敏感数据
  */
 exports.addLoginRecord = async function addLoginRecord(data) {
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   const reg = /\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/;
   const result = reg.exec(data.ip);
   const ip = _.get(result, '[0]');

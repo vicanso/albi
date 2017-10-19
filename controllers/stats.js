@@ -24,7 +24,7 @@ exports.add = function add(ctx) {
   _.forEach(ctx.request.body, (item) => {
     console.info(`browser-ajax ${stringify.json(item)}`);
   });
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.status = 201;
 };
 
@@ -46,7 +46,7 @@ exports.exception = function exception(ctx) {
   _.forEach(ctx.request.body, (item) => {
     console.error(`browser-exception ${stringify.json(item)}`);
   });
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.status = 201;
 };
 
@@ -74,7 +74,7 @@ exports.statistics = function statistics(ctx) {
   const data = ctx.request.body;
   console.info(`browser-screen:${stringify.json(data.screen)}`);
   console.info(`browser-timing:${stringify.json(data.timing)}`);
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.status = 201;
 };
 
@@ -95,6 +95,6 @@ exports.route = function route(ctx) {
   _.forEach(ctx.request.body, (item) => {
     console.info(`vue route ${stringify.json(item)}`);
   });
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.status = 201;
 };

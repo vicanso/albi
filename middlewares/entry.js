@@ -27,7 +27,7 @@ module.exports = (appInfo, appUrlPrefix) => async (ctx, next) => {
   const timing = ctx.state.timing;
   const currentPath = ctx.path;
   if (appUrlPrefix && currentPath.indexOf(appUrlPrefix) === 0) {
-    /* eslint no-param-reassign:0 */
+    // eslint-disable-next-line
     ctx.path = currentPath.substring(appUrlPrefix.length) || '/';
   }
   ctx.setCache = (ttl, sMaxAge) => {

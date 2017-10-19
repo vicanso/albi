@@ -19,7 +19,7 @@ module.exports = url => (ctx, next) => {
   if (!globals.isRunning()) {
     throw errors.get('common.serverNotRunning');
   }
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.body = 'pong';
   return Promise.resolve();
 };

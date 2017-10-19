@@ -53,7 +53,7 @@ const pickUserInfo = (userInfos) => {
  * @return {Body} 用户信息，如果未登录，只有date字段，如果已登录返回`pickUserInfo`的数据
  */
 exports.me = function getUserInfo(ctx) {
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.body = pickUserInfo(ctx.session.user || {});
   if (!ctx.cookies.get(configs.trackCookie)) {
     ctx.cookies.set(configs.trackCookie, shortid(), {
@@ -74,7 +74,7 @@ exports.me = function getUserInfo(ctx) {
  */
 exports.logout = (ctx) => {
   delete ctx.session.user;
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.body = null;
 };
 
@@ -96,7 +96,7 @@ exports.loginToken = function getLoginToken(ctx) {
   };
   session.user = user;
   ctx.set('Cache-Control', 'no-store');
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.body = user;
 };
 
@@ -142,11 +142,11 @@ exports.login = async function login(ctx) {
   const ip = ctx.ip;
   user.token = shortid();
   user.loginCount += 1;
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.session.user = user;
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.body = pickUserInfo(user);
-  /* eslint no-underscore-dangle:0 */
+  // eslint-disable-next-line
   userService.update(doc._id, {
     lastLoginedAt: (new Date()).toISOString(),
     loginCount: user.loginCount,
@@ -203,10 +203,10 @@ exports.register = async function register(ctx) {
   const doc = await userService.add(data);
   doc.token = shortid();
   const user = pickUserInfo(doc);
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.session.user = user;
   ctx.status = 201;
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.body = user;
   userService.addLoginRecord({
     account: user.account,

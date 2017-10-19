@@ -21,7 +21,7 @@ function httpStats(req) {
     req.emit('stats', stats);
   });
   req.once('request', () => {
-    /* eslint no-underscore-dangle:0 */
+    // eslint-disable-next-line
     const sendData = req._data;
     Object.assign(stats, {
       host: req.host,

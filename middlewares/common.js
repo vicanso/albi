@@ -110,7 +110,7 @@ exports.fresh = () => (ctx, next) => next().then(() => {
     cache = status >= 200 && status < 300;
   }
   if (cache && ctx.fresh) {
-    /* eslint no-param-reassign:0 */
+    // eslint-disable-next-line
     ctx.status = 304;
     ctx.remove('Content-Type');
     ctx.remove('Content-Length');

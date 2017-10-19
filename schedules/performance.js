@@ -18,7 +18,7 @@ module.exports = (interval) => {
   performance.camelCase = true;
   performance.flatten = true;
   return performance((data) => {
-    /* eslint no-param-reassign:0 */
+    // eslint-disable-next-line
     data.connectingCount = globals.getConnectingCount();
     const memoryList = [100, 200, 500];
     const cpuList = [20, 50];

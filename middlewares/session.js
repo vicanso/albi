@@ -25,10 +25,10 @@ exports.init = (app) => {
     beforeSave: (ctx, session) => {
       // session中不要添加 createdAt 与 updatedAt 字段
       if (!session.createdAt) {
-        /* eslint no-param-reassign:0 */
+        // eslint-disable-next-line
         session.createdAt = new Date().toISOString();
       }
-      /* eslint no-param-reassign:0 */
+      // eslint-disable-next-line
       session.updatedAt = new Date().toISOString();
     },
   });

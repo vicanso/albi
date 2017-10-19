@@ -26,7 +26,8 @@ describe('controllers/setting', () => {
       });
     assert.equal(res.status, 201);
     const data = res.body;
-    id = data._id; // eslint-disable-line no-underscore-dangle
+    // eslint-disable-next-line
+    id = data._id;
     assert.equal(data.data.top, 100);
   });
 

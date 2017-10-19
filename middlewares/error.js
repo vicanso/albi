@@ -27,6 +27,7 @@ module.exports = () => (ctx, next) => next().catch((err) => {
     error.code = 'unknown';
   }
   if (!_.isString(err.code)) {
+    // eslint-disable-next-line
     err.code = err.code.toString();
   }
   const {
@@ -70,12 +71,12 @@ module.exports = () => (ctx, next) => next().catch((err) => {
   console.error(logList.join(' '));
 
   const status = parseInt(error.status || err.statusCode, 10);
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   if (_.isNaN(status)) {
     ctx.status = 500;
   } else {
     ctx.status = status;
   }
-  /* eslint no-param-reassign:0 */
+  // eslint-disable-next-line
   ctx.body = data;
 });
