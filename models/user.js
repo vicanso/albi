@@ -52,10 +52,4 @@ module.exports = {
     // mongodb-update 的plugin会自动增加该字段
     updatedAt: String,
   },
-  // model的index配置
-  indexes: [
-    {
-      account: 1,
-    },
-  ],
 };

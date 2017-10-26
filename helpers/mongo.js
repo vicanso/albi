@@ -34,8 +34,10 @@ function initModels(client, modelPath) {
     savePlugin(schema);
     if (model.indexes) {
       _.forEach(model.indexes, (indexConfig) => {
-        const optionKeys = ['unique'];
-        const options = _.pick(indexConfig, optionKeys);
+        const optionKeys = ['unique', 'expireAfterSeconds'];
+        const options = _.extend({
+          background: true,
+        }, _.pick(indexConfig, optionKeys));
         const fields = _.omit(indexConfig, optionKeys);
         schema.index(fields, options);
       });

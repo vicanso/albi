@@ -12,5 +12,6 @@ stringify.isSecret = (key) => {
   const reg = /password/gi;
   return reg.test(key);
 };
+stringify.addFormat('_id', v => v.toString());
 
 als.enable();

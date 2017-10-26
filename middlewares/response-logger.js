@@ -10,10 +10,11 @@ const {
   initAlsSetting,
 } = require('../helpers/utils');
 
-module.exports = (level = 1) => async (ctx, next) => {
+module.exports = (level = 2) => async (ctx, next) => {
   initAlsSetting(ctx);
   await next();
-  if (!ctx.state.ignoreResponseLogger && ctx.body && _.isObject(ctx.body)) {
-    console.info(`response: ${stringify.json(ctx.body, level)}`);
+  if (ctx.state.logResponse && ctx.body && _.isObject(ctx.body)) {
+    const logLevel = _.get(ctx, 'state.logResponseLevel', level);
+    console.info(`response: ${stringify.json(ctx.body, logLevel)}`);
   }
 };
