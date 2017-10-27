@@ -80,7 +80,7 @@ function createServer(port) {
     app.use(mount(
       '/docs',
       staticServe(path.resolve(__dirname, '../docs'), {
-        maxAge: 0,
+        maxAge: 300,
       })));
   }
 
