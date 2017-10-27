@@ -19,7 +19,7 @@ exports.get = async function get() {
     body,
   } = await request.get(url)
     .set('X-Service', 'Captcha')
-    .set('Token', '6VR3NrdFPp');
+    .set('X-Token', '6VR3NrdFPp');
   const id = shortid();
   await cacheService.setCaptcha(id, body.code);
   return {

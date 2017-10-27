@@ -5,6 +5,7 @@
 const Joi = require('joi');
 
 const captchaServce = require('../services/captcha');
+const debug = require('../helpers/debug');
 
 /**
  * 获取验证码(暂只支持图形验证码)
@@ -20,6 +21,7 @@ exports.getCaptcha = async function getCaptcha(ctx) {
     type: Joi.string().default('image').valid(['image']),
   });
   const data = await captchaServce.get();
+  debug('get captcha:%j', data);
   ctx.body = data;
 };
 

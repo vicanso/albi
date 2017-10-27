@@ -7,6 +7,7 @@ const Joi = require('joi');
 const _ = require('lodash');
 
 const i18nService = require('../services/i18n');
+const debug = require('../helpers/debug');
 
 const validateSchema = {
   name: Joi.string().max(100),
@@ -82,6 +83,7 @@ exports.list = async function list(ctx) {
     result.count = await i18nService.count(conditions);
   }
   ctx.setCache('5s');
+  debug('list i18n conditions:%j, result:%j', conditions, result);
   ctx.body = result;
 };
 
@@ -119,6 +121,7 @@ exports.selectByLang = async function selectByLang(ctx) {
     }
     result[cat][item.name] = item[lang];
   });
+  debug('select langs of %s, result:%j', category, result);
   ctx.setCache('10m', '1m');
   ctx.body = result;
 };
