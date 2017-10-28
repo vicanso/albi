@@ -1,5 +1,6 @@
 /**
  * 此模块主要是系统相关配置
+ * @module controllers/setting
  */
 
 const Joi = require('joi');

@@ -15,9 +15,11 @@
     "encoding": "utf8",
     "destination": "docs/",
     "recurse": true,
+    "template": "node_modules/tui-jsdoc-template",
     "verbose": true
   },
   "templates": {
+    "name": "ALBI",
     "cleverLinks": false,
     "monospaceLinks": false
   },
