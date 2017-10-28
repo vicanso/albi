@@ -1,0 +1,124 @@
+[
+  {
+    "category": "user",
+    "name": "account",
+    "en": "account",
+    "zh": "账户",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "password",
+    "en": "password",
+    "zh": "密码",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "email",
+    "en": "email",
+    "zh": "邮箱",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "loginTitle",
+    "en": "Login Your Account",
+    "zh": "用户登录",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "login",
+    "en": "login",
+    "zh": "登录",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "registerTitle",
+    "en": "Register Your Account",
+    "zh": "用户注册",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "register",
+    "en": "register",
+    "zh": "注册",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "accountEmpty",
+    "en": "Account can not be empty",
+    "zh": "账号不能为空",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "passwordEmpty",
+    "en": "Password can not be empty",
+    "zh": "密码不能为空",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "emailEmpty",
+    "en": "Email address can not be empty",
+    "zh": "邮箱地址不能为空",
+    "creator": "vicanso"
+  }, {
+    "category": "user",
+    "name": "passwordNotMatch",
+    "en": "Password not match",
+    "zh": "密码不匹配",
+    "creator": "vicanso"
+  },
+  {
+    "name": "aboutUs",
+    "category": "basic",
+    "en": "about us",
+    "zh": "关于我们",
+    "creator": "vicanso"
+  }, {
+    "name": "home",
+    "category": "basic",
+    "en": "home",
+    "zh": "首页",
+    "creator": "vicanso"
+  }, {
+    "category": "basic",
+    "name": "register",
+    "en": "register",
+    "zh": "注册",
+    "creator": "vicanso"
+  }, {
+    "category": "basic",
+    "name": "login",
+    "en": "login",
+    "zh": "登录",
+    "creator": "vicanso"
+  }, {
+    "category": "basic",
+    "name": "logout",
+    "en": "logout",
+    "zh": "登出",
+    "creator": "vicanso"
+  }, {
+    "category": "basic",
+    "name": "news",
+    "en": "news",
+    "zh": "新闻",
+    "creator": "vicanso"
+  }, {
+    "category": "basic",
+    "name": "toggleColumn",
+    "en": "show/hide column",
+    "zh": "显示/隐藏表格列",
+    "creator": "vicanso"
+  }, {
+    "category": "basic",
+    "name": "sell",
+    "en": "sell",
+    "zh": "销售",
+    "creator": "vicanso"
+  }, {
+    "category": "basic",
+    "name": "searchPlaceHolder",
+    "en": "please input the search keyword",
+    "zh": "请输入要搜索的关键字",
+    "creator": "vicanso"
+  }
+]

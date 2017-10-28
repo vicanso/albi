@@ -12,4 +12,11 @@ module.exports = [
       'c.i18n.update',
     ],
   ],
+  [
+    'POST',
+    '/i18ns/init',
+    [
+      'c.i18n.init',
+    ],
+  ],
 ];

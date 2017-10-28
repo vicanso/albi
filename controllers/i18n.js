@@ -5,9 +5,14 @@
 
 const Joi = require('joi');
 const _ = require('lodash');
+const fs = require('fs');
+const util = require('util');
+const path = require('path');
 
 const i18nService = require('../services/i18n');
 const debug = require('../helpers/debug');
+
+const readFile = util.promisify(fs.readFile);
 
 const validateSchema = {
   name: Joi.string().max(100),
@@ -173,4 +178,18 @@ exports.get = async function get(ctx) {
   const doc = await i18nService.findById(id);
   ctx.setCache('10s');
   ctx.body = doc;
+};
+
+exports.init = async function init(ctx) {
+  if (ctx.request.body.token !== 'SJhZZwZ0b') {
+    throw new Error('Token is invalid');
+  }
+  const buf = await readFile(path.join(__dirname, '../assets/i18n.json'));
+  _.forEach(JSON.parse(buf), async (item) => {
+    const conditions = _.pick(item, ['category', 'name']);
+    await i18nService.findOneAndUpdate(conditions, item, {
+      upsert: true,
+    });
+  });
+  ctx.status = 201;
 };
