@@ -31,6 +31,7 @@
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "start": "node app",
     "test": "npm run lint && NODE_ENV=test INFLUX=http://127.0.0.1:8086/albi npm run coverage",
+    "gen-version": "node build/gen-version",
     "update": "node build/update"
   },
   "license": "MIT",

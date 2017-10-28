@@ -19,14 +19,13 @@ const {
 /**
  * 获取系统当前运行的版本package.json与读取文件package.json的版本号，
  * 正常情况下两者一致，但是如果更新了版本，但是没有重启就会不一致
- * @return {Object} 返回版本号信息 {code: 读取文件的版本号, exec: 内部中加载的版本号}
+ * @return {Object} 返回版本号信息 {pkg: 程序版本号, gen: 生成镜像的时间版本号}
  */
 async function getVersion() {
-  const buf = await fs.readFileAsync(path.join(__dirname, '../package.json'));
-  const pkg = JSON.parse(buf);
+  const buf = await fs.readFileAsync(path.join(__dirname, '../assets/version'));
   return {
-    code: pkg.version,
-    exec: configs.version,
+    pkg: configs.version,
+    gen: buf.toString(),
   };
 }
 

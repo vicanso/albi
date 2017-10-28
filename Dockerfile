@@ -7,6 +7,7 @@ ADD ./ /app
 RUN cd /app \
   && npm i \
   && npm run docs \
+  && npm run gen-version \
   && rm -rf node_modules \
   && npm i --production \
   && npm cache clean --force
