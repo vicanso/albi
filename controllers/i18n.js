@@ -180,6 +180,12 @@ exports.get = async function get(ctx) {
   ctx.body = doc;
 };
 
+
+/**
+ * 初始化多语言配置
+ *
+ * @param {any} ctx
+ */
 exports.init = async function init(ctx) {
   if (ctx.request.body.token !== 'SJhZZwZ0b') {
     throw new Error('Token is invalid');
