@@ -93,6 +93,28 @@ exports.list = async function list(ctx) {
 };
 
 /**
+ * 获取i18n的分类
+ * @param {Method} GET
+ * @prop {Middleware} noQuery
+ * @prop {Route} /i18ns/categories
+ * @example curl -XGET 'http://127.0.0.1:5018/i18ns/categories'
+ * @return {Body} {items: []}
+ */
+exports.listCategory = async function listCategory(ctx) {
+  const items = await i18nService.find({}).select('category');
+  const categories = [];
+  _.forEach(items, (item) => {
+    if (!_.includes(categories, item.category)) {
+      categories.push(item.category);
+    }
+  });
+  ctx.setCache('5m');
+  ctx.body = {
+    items: categories,
+  };
+};
+
+/**
  * 根据选择语言返回对应的语言配置
  *
  * @param {Method} GET
