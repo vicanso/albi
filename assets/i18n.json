@@ -1,124 +1,140 @@
 [
   {
+    "category": "basic",
+    "name": "loginFirst",
+    "en": "Please login first",
+    "zh": "请先登录"
+  },
+  {
+    "category": "basic",
+    "name": "systemSetting",
+    "en": "System Setting",
+    "zh": "系统配置"
+  },
+  {
+    "category": "basic",
+    "name": "testSetting",
+    "en": "Test Setting",
+    "zh": "测试配置"
+  },
+  {
+    "category": "basic",
+    "name": "i18n",
+    "en": "I18N",
+    "zh": "多语言"
+  },
+  {
+    "category": "basic",
+    "name": "name",
+    "en": "name",
+    "zh": "名称"
+  },
+  {
+    "category": "basic",
+    "name": "english",
+    "en": "english",
+    "zh": "英文"
+  },
+  {
+    "category": "basic",
+    "name": "chinese",
+    "en": "chinese",
+    "zh": "中文"
+  },
+  {
+    "category": "basic",
+    "name": "category",
+    "en": "category",
+    "zh": "类别"
+  },
+  {
+    "category": "basic",
+    "name": "operation",
+    "en": "operation",
+    "zh": "操作"
+  },
+  {
+    "category": "basic",
+    "name": "update",
+    "en": "update",
+    "zh": "更新"
+  },
+  {
+    "category": "basic",
+    "name": "edit",
+    "en": "edit",
+    "zh": "编辑"
+  },
+  {
+    "category": "basic",
+    "name": "cancel",
+    "en": "cancel",
+    "zh": "取消"
+  },
+  {
+    "category": "basic",
+    "name": "save",
+    "en": "save",
+    "zh": "保存"
+  },
+  {
+    "category": "basic",
+    "name": "add",
+    "en": "add",
+    "zh": "新增"
+  },
+  {
+    "category": "user",
+    "name": "loginTitle",
+    "en": "Please Login Your Account",
+    "zh": "请登录您的账号"
+  },
+  {
     "category": "user",
     "name": "account",
     "en": "account",
-    "zh": "账户",
-    "creator": "vicanso"
-  }, {
+    "zh": "账号"
+  },
+  {
     "category": "user",
     "name": "password",
     "en": "password",
-    "zh": "密码",
-    "creator": "vicanso"
-  }, {
+    "zh": "密码"
+  },
+  {
     "category": "user",
     "name": "email",
     "en": "email",
-    "zh": "邮箱",
-    "creator": "vicanso"
-  }, {
-    "category": "user",
-    "name": "loginTitle",
-    "en": "Login Your Account",
-    "zh": "用户登录",
-    "creator": "vicanso"
-  }, {
+    "zh": "邮箱"
+  },
+  {
     "category": "user",
     "name": "login",
     "en": "login",
-    "zh": "登录",
-    "creator": "vicanso"
-  }, {
-    "category": "user",
-    "name": "registerTitle",
-    "en": "Register Your Account",
-    "zh": "用户注册",
-    "creator": "vicanso"
-  }, {
-    "category": "user",
-    "name": "register",
-    "en": "register",
-    "zh": "注册",
-    "creator": "vicanso"
-  }, {
+    "zh": "登录"
+  },
+  {
     "category": "user",
     "name": "accountEmpty",
-    "en": "Account can not be empty",
-    "zh": "账号不能为空",
-    "creator": "vicanso"
-  }, {
+    "en": "Account can't be empty",
+    "zh": "账号不能为空"
+  },
+  {
+    "category": "user",
+    "name": "emailEmpty",
+    "en": "Email address can't be empty",
+    "zh": "邮箱地址不能为空"
+  },
+  {
     "category": "user",
     "name": "passwordEmpty",
     "en": "Password can not be empty",
-    "zh": "密码不能为空",
-    "creator": "vicanso"
-  }, {
-    "category": "user",
-    "name": "emailEmpty",
-    "en": "Email address can not be empty",
-    "zh": "邮箱地址不能为空",
-    "creator": "vicanso"
-  }, {
-    "category": "user",
-    "name": "passwordNotMatch",
-    "en": "Password not match",
-    "zh": "密码不匹配",
-    "creator": "vicanso"
+    "zh": "密码不能为空"
   },
   {
-    "name": "aboutUs",
-    "category": "basic",
-    "en": "about us",
-    "zh": "关于我们",
-    "creator": "vicanso"
-  }, {
-    "name": "home",
-    "category": "basic",
-    "en": "home",
-    "zh": "首页",
-    "creator": "vicanso"
-  }, {
-    "category": "basic",
-    "name": "register",
-    "en": "register",
-    "zh": "注册",
-    "creator": "vicanso"
-  }, {
-    "category": "basic",
-    "name": "login",
-    "en": "login",
-    "zh": "登录",
-    "creator": "vicanso"
-  }, {
-    "category": "basic",
-    "name": "logout",
-    "en": "logout",
-    "zh": "登出",
-    "creator": "vicanso"
-  }, {
-    "category": "basic",
-    "name": "news",
-    "en": "news",
-    "zh": "新闻",
-    "creator": "vicanso"
-  }, {
-    "category": "basic",
-    "name": "toggleColumn",
-    "en": "show/hide column",
-    "zh": "显示/隐藏表格列",
-    "creator": "vicanso"
-  }, {
-    "category": "basic",
-    "name": "sell",
-    "en": "sell",
-    "zh": "销售",
-    "creator": "vicanso"
-  }, {
-    "category": "basic",
-    "name": "searchPlaceHolder",
-    "en": "please input the search keyword",
-    "zh": "请输入要搜索的关键字",
-    "creator": "vicanso"
+    "category": "user",
+    "name": "registerTitle",
+    "en": "Register Your Account",
+    "zh": "用户注册"
   }
 ]

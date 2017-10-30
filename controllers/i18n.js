@@ -214,6 +214,8 @@ exports.init = async function init(ctx) {
   }
   const buf = await readFile(path.join(__dirname, '../assets/i18n.json'));
   _.forEach(JSON.parse(buf), async (item) => {
+    // eslint-disable-next-line
+    item.creator = 'vicanso';
     const conditions = _.pick(item, ['category', 'name']);
     await i18nService.findOneAndUpdate(conditions, item, {
       upsert: true,
