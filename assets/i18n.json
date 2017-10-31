@@ -25,6 +25,12 @@
   },
   {
     "category": "basic",
+    "name": "mock",
+    "en": "mock",
+    "zh": "mock"
+  },
+  {
+    "category": "basic",
     "name": "name",
     "en": "name",
     "zh": "名称"
@@ -82,6 +88,54 @@
     "name": "add",
     "en": "add",
     "zh": "新增"
+  },
+  {
+    "category": "basic",
+    "name": "account",
+    "en": "account",
+    "zh": "账号"
+  },
+  {
+    "category": "basic",
+    "name": "url",
+    "en": "url",
+    "zh": "地址"
+  },
+  {
+    "category": "basic",
+    "name": "status",
+    "en": "status",
+    "zh": "状态码"
+  },
+  {
+    "category": "basic",
+    "name": "response",
+    "en": "response",
+    "zh": "响应数据"
+  },
+  {
+    "category": "basic",
+    "name": "description",
+    "en": "description",
+    "zh": "描述"
+  },
+  {
+    "category": "basic",
+    "name": "disabled",
+    "en": "disabled",
+    "zh": "禁用"
+  },
+  {
+    "category": "basic",
+    "name": "yes",
+    "en": "yes",
+    "zh": "是"
+  },
+  {
+    "category": "basic",
+    "name": "no",
+    "en": "no",
+    "zh": "否"
   },
   {
     "category": "user",
