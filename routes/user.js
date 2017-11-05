@@ -9,8 +9,17 @@ module.exports = [
     '/users/:id/roles',
     [
       'm.admin',
-      'm.tracker("updateRoles")',
+      'm.tracker("updateUserRoles")',
       'c.user.updateRoles',
+    ],
+  ],
+  [
+    'PATCH',
+    '/users/me/infos',
+    [
+      'm.login',
+      'm.tracker("updateUserInfos")',
+      'c.user.update',
     ],
   ],
   ['GET', '/users/me', 'm.session & c.user.me'],

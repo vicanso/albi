@@ -218,12 +218,22 @@ exports.register = async function register(ctx) {
 
 
 /**
- * 列出用户
+ * 获取所有用户
  * @param {Method} GET
  * @prop {Middleware} admin
  * @prop {Route} /users
  * @example curl -XGET 'http://127.0.0.1:5018/users?cache-control=no-cache'
- * @return {Body} 返回用户信息
+ * @return {Body} {
+ *  "items": [
+ *    "_id": "59ff04f90a809f0001126cec",
+ *    "createdAt": "2017-10-29T01:23:11.247Z",
+ *    "account": "vicanso",
+ *    "email": "vicansocanbico@gmail.com",
+ *    "loginCount": 10,
+ *    "roles": [ "admin" ],
+ *    "lastLoginedAt": "2017-11-05T11:58:44.412Z"
+ *  ]
+ * }
  */
 exports.list = async function list(ctx) {
   const options = Joi.validate(ctx.query, {
@@ -260,7 +270,7 @@ exports.list = async function list(ctx) {
  * @example curl -XPATCH -d '{
  *  "roles": ["admin", "seller"]
  * }' 'http://127.0.0.1:5018/users/59885ffd4046790a00c14ea8/roles'
- * @return {Body} 更新用户角色
+ * @return {Body} 204
  */
 exports.updateRoles = async function updateRoles(ctx) {
   const data = Joi.validate(ctx.request.body, {
@@ -274,6 +284,29 @@ exports.updateRoles = async function updateRoles(ctx) {
     throw errors.get('user.forbidSetAdmin');
   }
   await userService.updateRoles(ctx.params.id, roles);
+  ctx.body = null;
+};
+
+/**
+ * 更新用户信息
+ * @param {Method} PATCH
+ * @param {String} body.email 邮箱地址
+ * @param {String} body.wechat 微信ID
+ * @prop {Middleware} login
+ * @prop {Route} /users/me/infos
+ * @example curl -XPATCH -d '{
+ *  "email": "vicanso@gmail.com",
+ *  "wechat": "vicanso"
+ * }' 'http://127.0.0.1:5018/users/me/infos'
+ */
+exports.update = async function update(ctx) {
+  const data = Joi.validate(ctx.request.body, {
+    email: defaultSchema.email,
+  });
+  const account = _.get(ctx, 'session.user.account');
+  await userService.findOneAndUpdate({
+    account,
+  }, data);
   ctx.body = null;
 };
 
