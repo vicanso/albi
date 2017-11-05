@@ -17,7 +17,11 @@ let mockDict = {};
  *
  */
 async function updateMock() {
-  const docs = await mockService.find({});
+  const docs = await mockService.find({
+    disabled: {
+      $ne: true,
+    },
+  });
   const result = {};
   _.forEach(docs, (item) => {
     result[item.url] = _.pick(item, ['status', 'response', 'account']);
