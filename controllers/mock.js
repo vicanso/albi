@@ -4,6 +4,7 @@
  */
 
 const Joi = require('joi');
+const _ = require('lodash');
 
 const mockService = require('../services/mock');
 
@@ -83,7 +84,7 @@ exports.list = async function list(ctx) {
   const mocks = await mockService.find({});
   ctx.setCache('5s');
   ctx.body = {
-    items: mocks,
+    items: _.sortBy(mocks, item => item.url),
   };
 };
 

@@ -82,7 +82,7 @@ exports.list = async function list(ctx) {
   }
   const items = await i18nService.find(conditions);
   const result = {
-    items,
+    items: _.sortBy(items, item => item.category + item.name),
   };
   if (count) {
     result.count = await i18nService.count(conditions);
