@@ -41,7 +41,7 @@
     "debug": "^3.1.0",
     "http-errors": "^1.6.2",
     "http-performance": "^1.0.2",
-    "influxdb-nodejs": "^2.7.4",
+    "influxdb-nodejs": "^2.7.5",
     "ioredis": "^3.2.1",
     "joi": "^13.0.1",
     "koa": "^2.3.0",
