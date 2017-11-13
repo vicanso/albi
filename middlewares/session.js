@@ -9,6 +9,7 @@ const koaSession = require('koa-session');
 const configs = require('../configs');
 const errors = require('../helpers/errors');
 const influx = require('../helpers/influx');
+const utils = require('../helpers/utils');
 const {
   sessionStore,
 } = require('../helpers/redis');
@@ -48,8 +49,7 @@ const normal = (ctx, next) => {
   if (ctx.session) {
     return next();
   }
-  const method = ctx.method;
-  if ((method === 'GET' || method === 'HEAD') && ctx.get('Cache-Control') !== 'no-cache' && ctx.query['cache-control'] !== 'no-cache') {
+  if (!utils.isNoCache(ctx)) {
     throw errors.get('common.requestMustNoCache');
   }
   delete ctx.query['cache-control'];

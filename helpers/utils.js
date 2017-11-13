@@ -60,7 +60,20 @@ function initAlsSetting(ctx) {
   }
 }
 
+/**
+ * 该请求是否不可以缓存
+ * @param {Context} ctx
+ */
+function isNoCache(ctx) {
+  const method = ctx.method;
+  if ((method === 'GET' || method === 'HEAD') && ctx.get('Cache-Control') !== 'no-cache' && ctx.query['cache-control'] !== 'no-cache') {
+    return false;
+  }
+  return true;
+}
+
 exports.getParam = getParam;
 exports.selfRequest = selfRequest;
 exports.delay = delay;
 exports.initAlsSetting = initAlsSetting;
+exports.isNoCache = isNoCache;

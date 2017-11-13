@@ -3,11 +3,11 @@
  */
 
 const _ = require('lodash');
-const { URL } = require('url');
 
 const mockService = require('../services/mock');
 const configs = require('../configs');
 const cacheService = require('../services/cache');
+const utils = require('../helpers/utils');
 
 let isStartUpdate = false;
 let mockDict = {};
@@ -24,7 +24,20 @@ async function updateMock() {
   });
   const result = {};
   _.forEach(docs, (item) => {
-    result[item.url] = _.pick(item, ['status', 'response', 'account']);
+    const url = item.url;
+    if (!result[url]) {
+      result[url] = [];
+    }
+    result[url].push(_.pick(item, ['status', 'response', 'account']));
+  });
+  _.forEach(result, (items, url) => {
+    result[url] = _.sortBy(items, (item) => {
+      const account = item.account;
+      if (!account || account === '*') {
+        return null;
+      }
+      return account;
+    });
   });
   mockDict = result;
 }
@@ -37,19 +50,43 @@ module.exports = () => {
     isStartUpdate = true;
   }
   return async function mockMiddleware(ctx, next) {
-    const urlInfo = new URL(ctx.url, 'http://127.0.0.1');
-    const mock = mockDict[urlInfo.pathname];
+    // eslint-disable-next-line
+    const urlInfo = ctx.req._parsedUrl
+    const mocks = mockDict[urlInfo.pathname];
+    if (!mocks) {
+      return next();
+    }
+    let mock = null;
+    const lastMock = _.last(mocks);
+    // 由于已根据是否配置账号排序
+    // 如果最后一个mock没有定义账号，设置为默认
+    if (!lastMock.account || lastMock.account === '*') {
+      mock = lastMock;
+    }
+    let hasMockAccount = false;
+    _.forEach(mocks, (item) => {
+      if (item.account) {
+        hasMockAccount = true;
+      }
+    });
+    // 如果有定义账号信息，则从session中取信息匹配
+    if (hasMockAccount) {
+      // 如果定义了账号信息，表示该mock是需要获取 user/session
+      if (!utils.isNoCache(ctx)) {
+        return next();
+      }
+      const key = ctx.cookies.get(configs.session.key);
+      const userInfo = await cacheService.getSession(key);
+      const currentAccount = _.get(userInfo, 'user.account');
+      const found = _.find(mocks, item => item.account === currentAccount);
+      if (found) {
+        mock = found;
+      }
+    }
     if (!mock) {
       return next();
     }
-    // 如果有定义账号信息，则从session中取信息匹配
-    if (mock.account) {
-      const key = ctx.cookies.get(configs.session.key);
-      const userInfo = await cacheService.getSession(key);
-      if (mock.account !== _.get(userInfo, 'user.account')) {
-        return next();
-      }
-    }
+
     // 返回配置的mock信息
     ctx.status = mock.status || 500;
     ctx.body = mock.response;

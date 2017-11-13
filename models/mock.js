@@ -13,7 +13,6 @@ module.exports = {
     url: {
       type: String,
       required: true,
-      unique: true,
     },
     status: {
       type: Number,
@@ -36,4 +35,11 @@ module.exports = {
     // mongodb-update 的plugin会自动增加该字段
     updatedAt: String,
   },
+  indexes: [
+    {
+      url: 1,
+      account: 1,
+      unique: true,
+    },
+  ],
 };

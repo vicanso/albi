@@ -95,10 +95,7 @@ function createServer(port) {
   app.use(middlewares.common.fresh());
 
   app.use(etag());
-  // 测试环境才需要使用到mock
-  if (configs.env !== 'production') {
-    app.use(middlewares.mock());
-  }
+  app.use(middlewares.mock());
 
 
   app.use(router.routes());
