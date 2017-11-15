@@ -1,3 +1,5 @@
+const shortid = require('shortid');
+
 const pkg = require('../package');
 
 exports.port = Number.parseInt(process.env.PORT, 10) || 5018;
@@ -5,6 +7,7 @@ exports.port = Number.parseInt(process.env.PORT, 10) || 5018;
 // the env of the applcation
 const env = process.env.NODE_ENV || 'development';
 
+exports.server = shortid();
 
 exports.env = env;
 

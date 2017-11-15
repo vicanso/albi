@@ -75,6 +75,7 @@ exports.status = async function status(ctx) {
   const uptime = moment(Date.now() - (Math.ceil(process.uptime()) * 1000));
   ctx.setCache('10s');
   ctx.body = {
+    server: configs.server,
     connectingTotal: globals.getConnectingCount(),
     status: globals.isRunning() ? 'running' : 'pause',
     version,

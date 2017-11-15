@@ -9,6 +9,7 @@ describe('configs', () => {
       env: Joi.string(),
       version: Joi.string(),
       app: Joi.string(),
+      server: Joi.string(),
       viewPath: Joi.string(),
       httpLogFormat: Joi.string(),
       influx: Joi.string().optional(),

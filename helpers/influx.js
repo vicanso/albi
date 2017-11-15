@@ -49,6 +49,13 @@ if (client) {
       debounceFlush();
     }
   });
+  client.on('queue', ({ type, data }) => {
+    // 全局增加server field
+    if (type === 'write') {
+      // eslint-disable-next-line
+      data.fields.server = configs.server;
+    }
+  });
 
   client.on('invalid-fields', (data) => {
     console.error(`influx invalid fields:${stringify.json(data, 3)}`);
