@@ -7,6 +7,12 @@
   },
   {
     "category": "basic",
+    "name": "userManagement",
+    "en": "User Management",
+    "zh": "用户管理"
+  },
+  {
+    "category": "basic",
     "name": "systemSetting",
     "en": "System Setting",
     "zh": "系统配置"
@@ -16,6 +22,12 @@
     "name": "testSetting",
     "en": "Test Setting",
     "zh": "测试配置"
+  },
+  {
+    "category": "basic",
+    "name": "user",
+    "en": "User",
+    "zh": "用户"
   },
   {
     "category": "basic",
@@ -91,12 +103,6 @@
   },
   {
     "category": "basic",
-    "name": "account",
-    "en": "account",
-    "zh": "账号"
-  },
-  {
-    "category": "basic",
     "name": "url",
     "en": "url",
     "zh": "地址"
@@ -163,6 +169,12 @@
   },
   {
     "category": "user",
+    "name": "roles",
+    "en": "roles",
+    "zh": "角色"
+  },
+  {
+    "category": "user",
     "name": "login",
     "en": "login",
     "zh": "登录"
@@ -190,5 +202,17 @@
     "name": "registerTitle",
     "en": "Register Your Account",
     "zh": "用户注册"
+  },
+  {
+    "category": "user",
+    "name": "register",
+    "en": "register",
+    "zh": "注册"
+  },
+  {
+    "category": "user",
+    "name": "lastLoginedAt",
+    "en": "last login",
+    "zh": "最近登录时间"
   }
 ]

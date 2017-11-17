@@ -275,7 +275,7 @@ exports.list = async function list(ctx) {
 exports.updateRoles = async function updateRoles(ctx) {
   const data = Joi.validate(ctx.request.body, {
     roles: Joi.array().items(
-      Joi.string().valid(['admin', 'buyer', 'seller']),
+      Joi.string().valid(['admin', 'tester']),
     ),
   });
   const userRoles = ctx.session.user.roles;
