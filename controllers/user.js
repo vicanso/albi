@@ -278,12 +278,22 @@ exports.updateRoles = async function updateRoles(ctx) {
       Joi.string().valid(['admin', 'tester']),
     ),
   });
+  const id = ctx.params.id;
   const userRoles = ctx.session.user.roles;
   const roles = data.roles;
-  if (_.indexOf(roles, 'admin') !== -1 && _.indexOf(userRoles, 'su') === -1) {
-    throw errors.get('user.forbidSetAdmin');
+  const doc = await userService.findById(id);
+  // 如果当前是超级用户操作，不用判断权限
+  if (!_.includes(userRoles, 'su')) {
+    // 如果要增加admin权限，需要su用户才可以
+    if (_.includes(roles, 'admin')
+      && !_.includes(doc.roles, 'admin')) {
+      throw errors.get('user.forbidSetAdmin');
+    }
   }
-  await userService.updateRoles(ctx.params.id, roles);
+  if (_.includes(doc.roles, 'su')) {
+    roles.unshift('su');
+  }
+  await userService.updateRoles(id, roles);
   ctx.body = null;
 };
 

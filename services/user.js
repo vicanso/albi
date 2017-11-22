@@ -18,6 +18,7 @@ const login = genService('Login');
 
 exports.findOneAndUpdate = user.findOneAndUpdate;
 exports.findOne = user.findOne;
+exports.findById = user.findById;
 
 /**
  * 检测当前条件的用户是否已存在
