@@ -38,7 +38,7 @@ module.exports = category => async function userTracker(ctx, next) {
   }
   const params = _.extend({}, ctx.query, ctx.request.body, ctx.params);
   if (!_.isEmpty(params)) {
-    data.params = stringify.json(params);
+    data.params = stringify.json(params, 2);
   }
   const start = Date.now();
   const resultLog = (use, result) => {

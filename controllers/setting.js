@@ -4,6 +4,7 @@
  */
 
 const Joi = require('joi');
+const _ = require('lodash');
 
 const settingService = require('../services/setting');
 
@@ -16,20 +17,16 @@ const settingService = require('../services/setting');
  * @prop {Middleware} admin
  * @prop {Route} /settings
  * @example curl -XPOST -d '{
- *  "category": "app",
+ *  "name": "limitLevel",
  *  "data": {
  *    "level": 100
  *  }
  * }' 'http://127.0.0.1:5018/settings'
- * @return {Body} {
- *  "category": String,
- *  "level": Number,
- *  "_id": ObjectId,
- * }
+ * @return {Body} {Setting}
  */
 exports.add = async function add(ctx) {
   const data = Joi.validate(ctx.request.body, {
-    category: Joi.string().max(30).required(),
+    name: Joi.string().max(30).required(),
     data: Joi.object(),
   });
   data.creator = ctx.session.user.account;
@@ -92,6 +89,12 @@ exports.get = async function get(ctx) {
  */
 exports.update = async function update(ctx) {
   const id = Joi.attempt(ctx.params.id, Joi.objectId());
-  await settingService.findByIdAndUpdate(id, ctx.request.body);
+  const data = Joi.validate(ctx.request.body, {
+    disabled: Joi.boolean(),
+    data: Joi.object(),
+  });
+  if (!_.isEmpty(data)) {
+    await settingService.findByIdAndUpdate(id, data);
+  }
   ctx.body = null;
 };

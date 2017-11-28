@@ -3,7 +3,7 @@
  */
 
 const errors = require('../helpers/errors');
-const setting = require('../configs/setting');
+const settingServices = require('../services/setting');
 
 /**
  * admin的校验中间件，从Header中获取`Auth-Token`，通过sha1生成字符串与`adminToken`对比，
@@ -12,7 +12,7 @@ const setting = require('../configs/setting');
  * @return {Function} 返回中间件处理函数
  */
 exports.admin = () => (ctx, next) => {
-  const adminToken = setting.get('adminToken');
+  const adminToken = settingServices.get('adminToken');
   const token = ctx.get('Auth-Token');
   if (token && token === adminToken) {
     return next();

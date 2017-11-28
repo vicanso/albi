@@ -12,19 +12,28 @@ const genService = require('./gen');
 Object.assign(exports, genService('Setting'));
 
 const {
-  findOne,
   find,
 } = exports;
 
+let applicationSetting = null;
+
 /**
- * 获取应用配置信息
+ * Get the value of applcation setting
+ */
+exports.get = key => _.get(applicationSetting, key);
+
+/**
+ * 更新应用配置信息
  *
  */
-exports.getAppSetting = async function getAppSetting() {
-  const doc = await findOne({
-    category: 'app',
+exports.updateSettings = async function updateSettings() {
+  const docs = await find({
+    disabled: false,
   });
-  return doc;
+  applicationSetting = {};
+  _.forEach(docs, (item) => {
+    applicationSetting[item.name] = item.data;
+  });
 };
 
 /**

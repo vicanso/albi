@@ -7,14 +7,19 @@ const {
 
 module.exports = {
   schema: {
-    // 应用配置，category用于区分不同的配置
-    category: {
+    // 应用配置名称，用于区分不同的配置
+    name: {
       type: String,
-      required: true,
+      unique: true,
     },
     createdAt: {
       type: String,
       default: () => (new Date()).toISOString(),
+    },
+    // 该配置是否禁用状态
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     data: Mixed,
     creator: {
