@@ -8,6 +8,12 @@ const _ = require('lodash');
 
 const settingService = require('../services/setting');
 
+const validateSchema = {
+  name: Joi.string().max(30).required(),
+  data: Joi.object(),
+  disabled: Joi.boolean(),
+  description: Joi.string(),
+};
 
 /**
  * 增加一个系统配置
@@ -25,10 +31,7 @@ const settingService = require('../services/setting');
  * @return {Body} {Setting}
  */
 exports.add = async function add(ctx) {
-  const data = Joi.validate(ctx.request.body, {
-    name: Joi.string().max(30).required(),
-    data: Joi.object(),
-  });
+  const data = Joi.validate(ctx.request.body, validateSchema);
   data.creator = ctx.session.user.account;
   const doc = await settingService.add(data);
   ctx.status = 201;
@@ -89,10 +92,9 @@ exports.get = async function get(ctx) {
  */
 exports.update = async function update(ctx) {
   const id = Joi.attempt(ctx.params.id, Joi.objectId());
-  const data = Joi.validate(ctx.request.body, {
-    disabled: Joi.boolean(),
-    data: Joi.object(),
-  });
+  const data = Joi.validate(ctx.request.body, _.extend({
+    name: Joi.string().max(30),
+  }, _.omit(validateSchema, ['name'])));
   if (!_.isEmpty(data)) {
     await settingService.findByIdAndUpdate(id, data);
   }

@@ -43,6 +43,12 @@
   },
   {
     "category": "basic",
+    "name": "setting",
+    "en": "setting",
+    "zh": "配置"
+  },
+  {
+    "category": "basic",
     "name": "name",
     "en": "name",
     "zh": "名称"
@@ -148,6 +154,12 @@
     "name": "loginTitle",
     "en": "Please Login Your Account",
     "zh": "请登录您的账号"
+  },
+  {
+    "category": "user",
+    "name": "notAllowAcess",
+    "en": "This feature does not allow the current user to use",
+    "zh": "此功能不允许当前用户使用"
   },
   {
     "category": "user",

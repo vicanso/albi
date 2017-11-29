@@ -28,5 +28,6 @@ module.exports = {
     },
     // mongodb-update 的plugin会自动增加该字段
     updatedAt: String,
+    description: String,
   },
 };
