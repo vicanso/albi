@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const dnsCache = require('dnscache');
 
 require('./init');
 
@@ -11,6 +12,7 @@ const mongo = require('./helpers/mongo');
 const redis = require('./helpers/redis');
 const httpPref = require('./helpers/http-pref');
 const settingService = require('./services/setting');
+const dnsHelper = require('./helpers/dns');
 
 require('./tasks');
 
@@ -57,6 +59,11 @@ if (configs.env !== 'development') {
   process.on('SIGQUIT', gracefulExit);
 }
 
+// 设置DNS解析的缓存，减少DNS查询
+dnsCache({
+  enable: true,
+  ttl: 300,
+});
 createServer(configs.port);
 performance(2000);
 httpPref.start();
@@ -66,6 +73,7 @@ Promise.all([
   redisReady(),
   settingService.updateSettings(),
 ]).then(() => {
+  dnsHelper.start();
   globals.start();
   console.info('the server is running now');
 }).catch((err) => {
