@@ -9,10 +9,10 @@ const _ = require('lodash');
 const settingService = require('../services/setting');
 
 const validateSchema = {
-  name: Joi.string().max(30).required(),
+  name: Joi.string().trim().max(30),
   data: Joi.object(),
   disabled: Joi.boolean(),
-  description: Joi.string(),
+  description: Joi.string().trim(),
 };
 
 /**
@@ -31,7 +31,9 @@ const validateSchema = {
  * @return {Body} {Setting}
  */
 exports.add = async function add(ctx) {
-  const data = Joi.validate(ctx.request.body, validateSchema);
+  const data = Joi.validate(ctx.request.body, _.defaults({
+    name: validateSchema.name.required(),
+  }, validateSchema));
   data.creator = ctx.session.user.account;
   const doc = await settingService.add(data);
   ctx.status = 201;
@@ -92,9 +94,7 @@ exports.get = async function get(ctx) {
  */
 exports.update = async function update(ctx) {
   const id = Joi.attempt(ctx.params.id, Joi.objectId());
-  const data = Joi.validate(ctx.request.body, _.extend({
-    name: Joi.string().max(30),
-  }, _.omit(validateSchema, ['name'])));
+  const data = Joi.validate(ctx.request.body, validateSchema);
   if (!_.isEmpty(data)) {
     await settingService.findByIdAndUpdate(id, data);
   }

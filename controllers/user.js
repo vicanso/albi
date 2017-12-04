@@ -14,10 +14,13 @@ const cacheService = require('../services/cache');
 const mailService = require('../services/mail');
 
 
-const defaultSchema = {
-  account: Joi.string().min(4).max(32).required(),
-  password: Joi.string().required(),
-  email: Joi.string().email().max(64).required(),
+const validateSchema = {
+  account: Joi.string().trim().min(4).max(32),
+  password: Joi.string().trim(),
+  email: Joi.string().trim().email().max(64),
+  roles: Joi.array().items(
+    Joi.string().valid(['admin', 'tester']),
+  ),
 };
 
 /**
@@ -123,8 +126,8 @@ exports.login = async function login(ctx) {
     throw errors.get('user.tokenIsNull');
   }
   const data = Joi.validate(ctx.request.body, {
-    account: Joi.string().required(),
-    password: Joi.string().required(),
+    account: validateSchema.account.required(),
+    password: validateSchema.password.required(),
   });
   const { account, password } = data;
   const loginFailCount = await limiterService.getLoginFailCount(account);
@@ -191,9 +194,9 @@ exports.refreshSession = function refreshSession(ctx) {
  */
 exports.register = async function register(ctx) {
   const data = Joi.validate(ctx.request.body, {
-    account: Joi.string().min(4).required(),
-    password: Joi.string().required(),
-    email: Joi.string().email().required(),
+    account: validateSchema.account.required(),
+    password: validateSchema.password.required(),
+    email: validateSchema.email.required(),
   });
   if (_.get(ctx, 'session.user.account')) {
     throw errors.get('user.hasLogined');
@@ -274,9 +277,7 @@ exports.list = async function list(ctx) {
  */
 exports.updateRoles = async function updateRoles(ctx) {
   const data = Joi.validate(ctx.request.body, {
-    roles: Joi.array().items(
-      Joi.string().valid(['admin', 'tester']),
-    ),
+    roles: validateSchema.roles,
   });
   const id = ctx.params.id;
   const userRoles = ctx.session.user.roles;
@@ -311,12 +312,14 @@ exports.updateRoles = async function updateRoles(ctx) {
  */
 exports.update = async function update(ctx) {
   const data = Joi.validate(ctx.request.body, {
-    email: defaultSchema.email,
+    email: validateSchema.email,
   });
-  const account = _.get(ctx, 'session.user.account');
-  await userService.findOneAndUpdate({
-    account,
-  }, data);
+  if (!_.isEmpty(data)) {
+    const account = _.get(ctx, 'session.user.account');
+    await userService.findOneAndUpdate({
+      account,
+    }, data);
+  }
   ctx.body = null;
 };
 
@@ -354,7 +357,7 @@ exports.genResetPasswordToken = async function genResetPasswordToken(ctx) {
   const {
     account,
   } = Joi.validate(ctx.request.body, {
-    account: defaultSchema.account,
+    account: validateSchema.account,
   });
   const {
     lang,
@@ -398,8 +401,8 @@ exports.resetPassword = async function resetPassword(ctx) {
     account,
   } = Joi.validate(ctx.request.body, {
     token: Joi.string().trim().required(),
-    password: defaultSchema.password,
-    account: defaultSchema.account,
+    password: validateSchema.password,
+    account: validateSchema.account,
   });
   const tokenAccount = await cacheService.getResetPasswordAccount(token);
   if (!tokenAccount || tokenAccount !== account) {

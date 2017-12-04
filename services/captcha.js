@@ -4,7 +4,8 @@
 const shortid = require('shortid');
 const request = require('../helpers/request');
 const cacheService = require('./cache');
-const configs = require('../configs');
+const settingService = require('./setting');
+
 /**
  * 获取captcha
  *
@@ -14,7 +15,8 @@ const configs = require('../configs');
  * }
  */
 exports.get = async function get() {
-  const url = `${configs.gateWay}/captchas`;
+  const gateWay = settingService.get('gateWay');
+  const url = `${gateWay}/captchas`;
   const {
     body,
   } = await request.get(url)
